@@ -3,7 +3,7 @@ name: "Pull Request Docs Check"
 ## Only update on change to masters branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   docs:
@@ -16,3 +16,11 @@ jobs:
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "./"
+
+    ## Deploying the generated documents to github pages
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/html/
+
