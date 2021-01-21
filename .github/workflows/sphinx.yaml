@@ -12,10 +12,21 @@ jobs:
     ## Pulling the package
     - uses: actions/checkout@v2
 
-    ## Running sphinx
-    - uses: ammaraskar/sphinx-action@master
-      with:
-        docs-folder: "./"
+    - name: 'Install additional packages'
+      run: |
+        sudo apt-get install pandoc
+        sudo python3 -m pip install setuptools
+        sudo python3 -m pip install pygments
+        sudo python3 -m pip install nbsphinx
+        sudo python3 -m pip install ipykernel
+        make html
+
+#
+    # Running sphinx
+    #- name: 'Run sphinx'
+    #  uses: ammaraskar/sphinx-action@master
+    #  with:
+    #    docs-folder: "./"
 
     ## Deploying the generated documents to github pages
     - name: Deploy
