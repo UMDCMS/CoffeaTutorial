@@ -13,7 +13,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: 'Install additional packages'
-      run: 'sudo python3 -m pip install nbsphinx '
+      run: |
+        'sudo python3 -m pip install setuptools'
+        'sudo python3 -m pip install nbsphinx '
 
     ## Running sphinx
     - name: 'Run sphinx'
