@@ -12,8 +12,12 @@ jobs:
     ## Pulling the package
     - uses: actions/checkout@v2
 
+    - name: 'Install additional packages'
+      run: 'sudo python -m pip install nbsphinx'
+
     ## Running sphinx
-    - uses: ammaraskar/sphinx-action@master
+    - name: 'Run sphinx'
+      uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "./"
 
