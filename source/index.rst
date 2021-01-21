@@ -4,3 +4,10 @@
    contain the root `toctree` directive.
 
 .. include:: ../Readme.rst
+
+.. toctree::
+   :maxdepth: 2
+
+   installation
+   awkwardintro
+   contribute
