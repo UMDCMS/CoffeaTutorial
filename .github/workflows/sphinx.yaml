@@ -14,8 +14,8 @@ jobs:
 
     - name: 'Install additional packages'
       run: |
-        'sudo python3 -m pip install setuptools'
-        'sudo python3 -m pip install nbsphinx '
+        sudo python3 -m pip install setuptools
+        sudo python3 -m pip install nbsphinx
 
     ## Running sphinx
     - name: 'Run sphinx'
