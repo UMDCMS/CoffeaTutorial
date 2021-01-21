@@ -22,10 +22,10 @@ jobs:
 
 #
     # Running sphinx
-    - name: 'Run sphinx'
-      uses: ammaraskar/sphinx-action@master
-      with:
-        docs-folder: "./"
+    #- name: 'Run sphinx'
+    #  uses: ammaraskar/sphinx-action@master
+    #  with:
+    #    docs-folder: "./"
 
     ## Deploying the generated documents to github pages
     - name: Deploy
