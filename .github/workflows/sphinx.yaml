@@ -16,13 +16,14 @@ jobs:
       run: |
         sudo python3 -m pip install setuptools
         sudo python3 -m pip install nbsphinx
-        make html
+        sudo python3 -m pip install ipykernel
 
-    ## Running sphinx
-    #- name: 'Run sphinx'
-    #  uses: ammaraskar/sphinx-action@master
-    #  with:
-    #    docs-folder: "./"
+#
+    # Running sphinx
+    - name: 'Run sphinx'
+      uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "./"
 
     ## Deploying the generated documents to github pages
     - name: Deploy
