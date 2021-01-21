@@ -17,6 +17,7 @@ jobs:
         sudo python3 -m pip install setuptools
         sudo python3 -m pip install nbsphinx
         sudo python3 -m pip install ipykernel
+        make html
 
 #
     # Running sphinx
