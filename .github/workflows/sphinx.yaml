@@ -16,6 +16,7 @@ jobs:
       run: |
         sudo apt-get install pandoc
         sudo python3 -m pip install setuptools
+        sudo python3 -m pip install pygment
         sudo python3 -m pip install nbsphinx
         sudo python3 -m pip install ipykernel
         make html
