@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installing a coffea environment &#8212; Coffea Tutorial  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction to Awkward arrays" href="awkwardintro.html" />
+    <link rel="prev" title="COFFEA Tutorial" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="awkwardintro.html" title="Introduction to Awkward arrays"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="COFFEA Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Coffea Tutorial  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installing a coffea environment</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installing-a-coffea-environment">
+<h1>Installing a coffea environment<a class="headerlink" href="#installing-a-coffea-environment" title="Permalink to this headline">¶</a></h1>
+<p>Coffea is distributed as a python package that can be download by most machines.</p>
+<div class="section" id="copy-and-paste-commands">
+<h2>Copy and paste commands<a class="headerlink" href="#copy-and-paste-commands" title="Permalink to this headline">¶</a></h2>
+<p>For those who are just looking for the basic script to help initialize the environment, here are the copy and paste commands:</p>
+<div class="section" id="lcg-machines-hepcms-fnal-lxplus">
+<h3>LCG machines (<code class="docutils literal notranslate"><span class="pre">hepcms</span></code>, <code class="docutils literal notranslate"><span class="pre">fnal</span></code>, <code class="docutils literal notranslate"><span class="pre">lxplus</span></code>)<a class="headerlink" href="#lcg-machines-hepcms-fnal-lxplus" title="Permalink to this headline">¶</a></h3>
+<p>Make sure the machine is running <strong>SL7</strong>. For the installation:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir &lt;WORKING_DIR&gt;
+<span class="nb">cd</span>    &lt;WORKING_DIR&gt;
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/setup_LCG.sh
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/init.sh
+chmod +x setup_LCG.sh
+./setup_LCG.sh
+</pre></div>
+</div>
+<p>For starting the coffea session after fresh logging into a machine.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;WORKING_DIR&gt;
+<span class="nb">source</span> ./init_LCG.sh <span class="c1"># Must be ran</span>
+./jupy.sh 8XXX       <span class="c1"># Start a jupyter session, change XXX to your favorite 3-digit number</span>
+</pre></div>
+</div>
+<p>If you have want to use a remote jupyter session, make sure you have logged into
+your machine using port forwarding</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ssh -L localhost:8XXX:localhost:8XXX &lt;user&gt;@&lt;machine&gt;
+</pre></div>
+</div>
+<p>or equivalent. Make you should be able to open the notebook by going to your
+browser and entering the URL <code class="docutils literal notranslate"><span class="pre">localhost:8XXX</span></code></p>
+</div>
+<div class="section" id="personal-machines">
+<h3>Personal machines<a class="headerlink" href="#personal-machines" title="Permalink to this headline">¶</a></h3>
+<p>Make sure python version running is <code class="docutils literal notranslate"><span class="pre">&gt;3.6</span></code> and  <code class="docutils literal notranslate"><span class="pre">&lt;3.9</span></code>, and the <code class="docutils literal notranslate"><span class="pre">pip</span></code> tool
+in available. Optically install jupyter is you want to run coffea interactively
+as a notebook.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir &lt;WORKING_DIR&gt;
+<span class="nb">cd</span>    &lt;WORKING_DIR&gt;
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/setup.sh
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/init.sh
+chmod +x setup.sh
+./setup.sh
+</pre></div>
+</div>
+<p>For starting a new session:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;WORKINGDIR&gt;
+<span class="nb">source</span> ./init.sh <span class="c1"># Must be run to start virtual environment</span>
+ jupyter notebook --ip <span class="m">0</span>.0.0.0 --no-browser --notebook-dir .
+</pre></div>
+</div>
+<p>Now for the more involved instructions on what there instructions are doing and
+how you may want to modify the code for your own instructions.</p>
+</div>
+</div>
+<div class="section" id="installing-coffea-the-involved-way">
+<h2>Installing coffea the involved way<a class="headerlink" href="#installing-coffea-the-involved-way" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="installing-the-tutorial">
+<h2>Installing the tutorial<a class="headerlink" href="#installing-the-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>Installing the entire tutorial as is is not advised for learning purposes, but
+for the sake of people who will want to follow along notebook by notebook:</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing a coffea environment</a><ul>
+<li><a class="reference internal" href="#copy-and-paste-commands">Copy and paste commands</a><ul>
+<li><a class="reference internal" href="#lcg-machines-hepcms-fnal-lxplus">LCG machines (<code class="docutils literal notranslate"><span class="pre">hepcms</span></code>, <code class="docutils literal notranslate"><span class="pre">fnal</span></code>, <code class="docutils literal notranslate"><span class="pre">lxplus</span></code>)</a></li>
+<li><a class="reference internal" href="#personal-machines">Personal machines</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installing-coffea-the-involved-way">Installing coffea the involved way</a></li>
+<li><a class="reference internal" href="#installing-the-tutorial">Installing the tutorial</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">COFFEA Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="awkwardintro.html"
+                        title="next chapter">Introduction to Awkward arrays</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="awkwardintro.html" title="Introduction to Awkward arrays"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="COFFEA Tutorial"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Coffea Tutorial  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installing a coffea environment</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, UMDCMS.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
