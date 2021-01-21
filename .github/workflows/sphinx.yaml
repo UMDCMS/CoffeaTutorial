@@ -1,13 +1,18 @@
 name: "Pull Request Docs Check"
+
+## Only update on change to masters branch
 on:
-  - push:
+  push:
     branches: [ master ]
 
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
+    ## Pulling the package
     - uses: actions/checkout@v2
+
+    ## Running sphinx
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "./"
