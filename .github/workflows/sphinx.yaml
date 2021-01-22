@@ -3,7 +3,7 @@ name: "Pull Request Docs Check"
 ## Only update on change to masters branch
 on:
   push:
-    branches: [ main ]
+    branches: [ main, yimuchen ]
 
 jobs:
   docs:
