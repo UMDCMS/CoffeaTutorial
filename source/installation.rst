@@ -47,8 +47,17 @@ your machine using port forwarding
   ssh -L localhost:8XXX:localhost:8XXX <user>@<machine>
 
 or equivalent. Make you should be able to open the notebook by going to your
-browser and entering the URL ``localhost:8XXX``
+browser and entering the URL ``localhost:8XXX``. When running the script
+``./jupy.sh 8XXX``, you should see some string in the format of:
 
+.. code-block:: sh
+
+  http://127.0.0.1:8XXX/?token=02d4......
+
+
+The entire string behind the ``token=`` part (should be something like 32
+characters long) is the token used for logging into the notebook server.
+Alternatively, you can paste the whole of the above into the borwser's url bar.
 
 
 Personal machines
