@@ -12,27 +12,21 @@ jobs:
     ## Pulling the package
     - uses: actions/checkout@v2
 
-    - name: 'Install additional packages'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+
+    - name: Install dependencies
       run: |
-        sudo apt-get install pandoc
-        sudo python3 -m pip install setuptools --upgrade
-        echo "Installing pygment"
-        sudo python3 -m pip install pygments>=2.7
-        echo "Installing nbsphying"
-        sudo python3 -m pip install nbsphinx
-        echo "Ipython kernets "
-        sudo python3 -m pip install ipykernel
-        echo "Running sphinx"
-        make html
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-#
-    # Running sphinx
-    #- name: 'Run sphinx'
-    #  uses: ammaraskar/sphinx-action@master
-    #  with:
-    #    docs-folder: "./"
+    - name: 'Run sphinx'
+      uses: ammaraskar/sphinx-action@master
+      run: make html
 
-    ## Deploying the generated documents to github pages
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
