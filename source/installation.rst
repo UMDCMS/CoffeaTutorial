@@ -3,9 +3,10 @@ Installing a coffea environment
 ###############################
 
 
-Coffea is distributed as a python package that can be downloaded and installed by any machine with python version > 3.6 and < 3.9.
-
-
+Coffea is distributed as a python package that can be downloaded and installed by
+any machine with python version > 3.6 and < 3.9. Notice that the various scripts
+assumes that you have a simple bash shell. Using zsh will cause various commands
+to fail.
 
 Copy and paste commands
 =======================
@@ -31,8 +32,9 @@ For starting the coffea session after fresh logging into a machine.
 .. code-block:: sh
 
   cd <WORKING_DIR>
-  source ./init_LCG.sh # Must be ran
-  ./jupy.sh 8XXX       # Start a jupyter session, change XXX to your favorite 3-digit number
+  source ./init.sh # Must be ran
+  ./jupy.sh 8XXX   # Start a jupyter session,
+                   # change XXX to your favorite 3-digit number
 
 If you have want to use a remote jupyter session, make sure you have logged into
 your machine using port forwarding
@@ -139,12 +141,16 @@ now
   export PYTHONPATH=${PYTHONPATH}:<you/package/path>
 
 
-For install on LCG machines, the steps are similar, except we can use additional LCG tools to ensure that we have a correct python version:
+For install on LCG machines, the steps are similar, except we can use additional
+LCG tools to ensure that we have a correct python version:
 
 .. code-block::sh
 
   source /cvmfs/sft.cern.ch/lcg/views/LCG_96python3/x86_64-centos7-gcc8-opt/setup.sh
 
+You will need to source this file every time before the virtual environment is
+activated, notice that there are a couples of lines in the ``setup_LCG.sh``
+script to add the relevants lines to the ``coffeaenv/bin/activate`` script.
 
 
 
