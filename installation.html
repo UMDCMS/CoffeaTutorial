@@ -53,12 +53,15 @@ to fail.</p>
 <p>For those who are just looking for the basic script to help initialize the environment, here are the copy and paste commands:</p>
 <div class="section" id="lcg-machines-hepcms-fnal-lxplus">
 <h3>LCG machines (<code class="docutils literal notranslate"><span class="pre">hepcms</span></code>, <code class="docutils literal notranslate"><span class="pre">fnal</span></code>, <code class="docutils literal notranslate"><span class="pre">lxplus</span></code>)<a class="headerlink" href="#lcg-machines-hepcms-fnal-lxplus" title="Permalink to this headline">¶</a></h3>
-<p>Make sure the machine is running <strong>SL7</strong>. For the installation:</p>
+<p>Make sure the machine is running <strong>SL7</strong>. For the installation (<strong>warning</strong> this
+will probably take up to 10 minutes to complete):</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir &lt;WORKING_DIR&gt;
 <span class="nb">cd</span>    &lt;WORKING_DIR&gt;
 wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/setup_LCG.sh
 wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/init.sh
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/jupy.sh
 chmod +x setup_LCG.sh
+chmod +x jupy.sh
 ./setup_LCG.sh
 </pre></div>
 </div>

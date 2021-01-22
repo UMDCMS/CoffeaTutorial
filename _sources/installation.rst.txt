@@ -16,7 +16,8 @@ For those who are just looking for the basic script to help initialize the envir
 LCG machines (``hepcms``, ``fnal``, ``lxplus``)
 -----------------------------------------------
 
-Make sure the machine is running **SL7**. For the installation:
+Make sure the machine is running **SL7**. For the installation (**warning** this
+will probably take up to 10 minutes to complete):
 
 .. code-block:: sh
 
@@ -24,7 +25,9 @@ Make sure the machine is running **SL7**. For the installation:
   cd    <WORKING_DIR>
   wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/setup_LCG.sh
   wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/init.sh
+  wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/jupy.sh
   chmod +x setup_LCG.sh
+  chmod +x jupy.sh
   ./setup_LCG.sh
 
 For starting the coffea session after fresh logging into a machine.
