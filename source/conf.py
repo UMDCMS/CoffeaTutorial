@@ -16,7 +16,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Coffea Tutorial'
+project = 'Unofficial Coffea Tutorial'
 copyright = '2021, UMDCMS'
 author = 'UMDCMS'
 
