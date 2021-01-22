@@ -16,9 +16,13 @@ jobs:
       run: |
         sudo apt-get install pandoc
         sudo python3 -m pip install setuptools --upgrade
+        echo "Installing pygment"
         sudo python3 -m pip install pygments>=2.7
+        echo "Installing nbsphying"
         sudo python3 -m pip install nbsphinx
+        echo "Ipython kernets "
         sudo python3 -m pip install ipykernel
+        echo "Running sphinx"
         make html
 
 #
