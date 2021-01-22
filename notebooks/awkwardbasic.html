@@ -1,0 +1,854 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The basics of awkward arrays &#8212; Coffea Tutorial  documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Involved calcuations with awkward arrays" href="awkwardcalc.html" />
+    <link rel="prev" title="Installing a coffea environment" href="../installation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="awkwardcalc.html" title="Involved calcuations with awkward arrays"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../installation.html" title="Installing a coffea environment"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Coffea Tutorial  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The basics of awkward arrays</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="The-basics-of-awkward-arrays">
+<h1>The basics of awkward arrays<a class="headerlink" href="#The-basics-of-awkward-arrays" title="Permalink to this headline">¶</a></h1>
+<p>At the front and formost of coffea is a completely new syntax for expressing analysis computations: <code class="docutils literal notranslate"><span class="pre">awkward</span> <span class="pre">arrays</span></code> and it’s index based notation. For people coming from a more traditional loop-based programming syntax, the syntax will take some getting use to, but this tutorial can hopefully help you understand how to understand the syntax and how to understand the various method.</p>
+<p>Let use begin by first understanding what you need to explore the contents of a typical ntuple file using coffea related tools. First you can download the dummy ntuples file and the corresponding schema files from the main repository to your working directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>   &lt;WORKINGDIRECTORY&gt;
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummy_nanoevents.root
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummyschema.py
+</pre></div>
+</div>
+<p>We can use the usual ROOT tools to look at the contents of the <code class="docutils literal notranslate"><span class="pre">dummy_nanoevent.root</span></code> file. But let us focus on using coffea tools alone.</p>
+<p>First import the relevent coffea objects:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
+<span class="kn">from</span> <span class="nn">dummyschema</span> <span class="kn">import</span> <span class="n">DummySchema</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">awkward1</span> <span class="k">as</span> <span class="nn">ak</span>
+</pre></div>
+</div>
+</div>
+<p>Now we can create the event list as an awkward array using coffea tools like:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:dummy_nanoevents.root&#39;</span><span class="p">,</span> <span class="c1"># The file, notice the prefix `file:` for local file operation</span>
+                                    <span class="s1">&#39;Events&#39;</span><span class="p">,</span>                       <span class="c1"># Name of the tree object to open</span>
+                                    <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>                  <span class="c1"># Limit the number of events to process, nice for small scale debugging</span>
+                                    <span class="n">schemaclass</span><span class="o">=</span><span class="n">DummySchema</span>
+<span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>The last <code class="docutils literal notranslate"><span class="pre">schemaclass</span></code> argument will be let unexplained for now, see the schema tutorials to learn more about what this is. Here we have created the events as a awkward array. To see that is stored in the array we can use:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;]
+</pre></div></div>
+</div>
+<p>Indicating the collections that are stored in the awkward array. To see how many events exists in in our file we can use the typical python method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+50
+</pre></div></div>
+</div>
+<p>The 50 here in corresponds correctly to the <code class="docutils literal notranslate"><span class="pre">entry_stop</span></code> used in to open the file. Next we can, of course, start to explore the contents of the various object collections. One can acess the fields of the event as if it was a regular data memeber</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;pt&#39;, &#39;eta&#39;, &#39;phi&#39;, &#39;mass&#39;, &#39;charge&#39;, &#39;flag&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;]
+[&#39;pt&#39;, &#39;eta&#39;, &#39;phi&#39;, &#39;energy&#39;, &#39;ID&#39;, &#39;SubjetsCounts&#39;, &#39;Subjets&#39;]
+</pre></div></div>
+</div>
+<p>Ah ha! We we are starting to see numbers we can play around with. Notice that coffea was written with High energy physics analysis in mind, so even if the electron energy doesn’t look like it is stored from the output of the fields, we can still access methods that we will typically associate with 4-vectors. In particular, notice that we can call the <code class="docutils literal notranslate"><span class="pre">energy</span></code> field of the electron collection, even though the energy field isn’t explicitly defined. Coffea is designed with 4 vectors in mind, so
+the energy collection is calculated on the fly.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[49.3, 38.1], [48.9, 43.9, 50.8, 43.9], ... [48.9, 42.9, 41.7, 56.3, 60.3, 35.5]]
+[[52.6, 41.8], [49.5, 45.1, 56.6, 44.1], ... [56.8, 44.9, 55.5, 56.7, 82.5, 35.6]]
+</pre></div></div>
+</div>
+<p>Now, looking at the output, we can begin to get a grasp of what awkward arrays are: the variable <code class="docutils literal notranslate"><span class="pre">events.Electron.pt</span></code> variable represents a N events times A objects array of floating point, the <code class="docutils literal notranslate"><span class="pre">events.Electon</span></code> variable represents and N events times A objects time K fields of <em>collection</em> of floating point arrays, and the <code class="docutils literal notranslate"><span class="pre">events</span></code> variable reprents ths N times a certain set of collections (in this case three collections: <code class="docutils literal notranslate"><span class="pre">['Electron',</span> <span class="pre">'Muon',</span> <span class="pre">and</span> <span class="pre">'Jet']</span></code>) is recorded.</p>
+<p>The “awkward” part of the array refers to two parts, first the value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is differnt for each event and for each collection. In this demonstration, our first event has 2 electrons, the second event has 4 electron and so one. The second part of each collection can have a different number of fields. In a sense, the <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">Electron</span></code> and <code class="docutils literal notranslate"><span class="pre">pt</span></code> variables are just a easy way for represting the final <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array that we might be intested in for the analysis. In our case the <code class="docutils literal notranslate"><span class="pre">N</span></code> number
+of events is whatis called as the outer most <strong>dimension</strong> or axis of the various objects, <code class="docutils literal notranslate"><span class="pre">A</span></code> is the one inner dimesion of the of array. <code class="docutils literal notranslate"><span class="pre">K</span></code> is not a true dimesion in the sense it can be though of a book keeping object used to keep track of how many awkward arrays are present, so in this sense, we can say the the <code class="docutils literal notranslate"><span class="pre">events.Electron</span></code> is a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> object/collection array, as opposed to the <code class="docutils literal notranslate"><span class="pre">events.Electron.pt</span></code> being a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> data array.</p>
+<p>We can use the usual index notation to look at a particular object of interest. For instance if we want to look at the 0-th electron of the 1-st event in our event list, we can write:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+... dzErr: 0.0284, eta: 0.149, flag: 3, mass: 0.00051, phi: 0.997, pt: 48.9}
+</pre></div></div>
+</div>
+<p>But the real power of using awkward arrays is for using awkward arrays comes in when you don’t explicily use a concrete index, and instead call calculation all in an abstract form</p>
+<div class="section" id="Basic-object-and-event-selection">
+<h2>Basic object and event selection<a class="headerlink" href="#Basic-object-and-event-selection" title="Permalink to this headline">¶</a></h2>
+<p>Let us start with the most basic example of event selection. Say we want to select event with electrons that have <span class="math notranslate nohighlight">\(p_T &gt; 50\)</span> GeV and <span class="math notranslate nohighlight">\(|\eta| &lt; 0.5\)</span>. The awkward array allows us to write something like:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mask_pt</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span>
+<span class="n">mask_eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+<span class="n">ele_mask</span> <span class="o">=</span> <span class="n">mask_pt</span> <span class="o">&amp;</span> <span class="n">mask_eta</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mask_pt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mask_eta</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ele_mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[False, False], [False, False, True, ... [False, False, False, True, True, False]]
+[[True, True], [True, True, True, True, ... [False, True, False, True, False, True]]
+[[False, False], [False, False, True, ... [False, False, False, True, False, False]]
+</pre></div></div>
+</div>
+<p>We can see that the usual logic comparision operators generate a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> boolean array telling use which electron (or more specifically which electron.pt and electron etas) pass this particular selection criteia. This particular boolean array generated from a logic operation on usual arrays is typically call a <code class="docutils literal notranslate"><span class="pre">mask</span></code>. We can use the typical boolean operation <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> operation to get the intersect of multiple masks, or maybe the <code class="docutils literal notranslate"><span class="pre">|</span></code> operator for the union. Now the problem is where can we use
+this mask? The answer is any array that has a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure and recieve these masks to create a reduced array!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="n">ele_mask</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">eta</span><span class="p">[</span><span class="n">ele_mask</span><span class="p">])</span>
+<span class="n">selectedElectrons</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="n">ele_mask</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">selectedElectrons</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[], [50.8], [68.5], [], [61], [54.7, ... 54.6, 58.9], [54.2], [], [54.5], [56.3]]
+[[], [0.472], [0.0729], [], [0.0954], ... 0.136], [0.155], [], [0.411], [0.125]]
+[[], [50.8], [68.5], [], [61], [54.7, ... 54.6, 58.9], [54.2], [], [54.5], [56.3]]
+</pre></div></div>
+</div>
+<p>Probably the most important place to put the mask is the directly in the <code class="docutils literal notranslate"><span class="pre">events.Electron</span></code> index, this generates a new collection of electrons that preserves the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure, but have verious collection instances filterd out. If you are familiar with <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, this sort if index-based array filtering look familiar. The difference is that because awkward arrays accecpt arrays of varying inner dimensions, it can truely preserve the structure of such selection, rather than having
+everything be flattend out.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span><span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span> <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">%</span><span class="k">2</span>==0])
+<span class="n">z</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">Array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">z</span><span class="o">%</span><span class="k">2</span>==0])
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[2 4 6 8 2]
+[2 4 6 8 2]
+[[2, 4], [6, 8], [2]]
+</pre></div></div>
+</div>
+<p>Now suppose we only want events that have at least 1 electron selected event. What we need are a set of functions that can reduces this <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> array to something of just dimesion <code class="docutils literal notranslate"><span class="pre">N</span></code>. Formally this is called <strong>reduction</strong> operations, and the awkward package has a large set of functions that can reduce the dimension of arrays. In our case, what we want is:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">electron_count</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">selectedElectrons</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">event_mask</span> <span class="o">=</span> <span class="n">electron_count</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">event_mask</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;bound method Array.__repr__ of &lt;Array [False, True, True, ... True, True] type=&#39;50 * bool&#39;&gt;&gt;
+</pre></div></div>
+</div>
+<p>To break this down, <code class="docutils literal notranslate"><span class="pre">ak.count</span></code>, as the method name suggests “counts” the number of elements along a certain axis, in our case, what we are intersted is the inner most dimension/axis, hence the typical python notation of <code class="docutils literal notranslate"><span class="pre">axis=-1</span></code>. Using this we can run the event selection using the usual masking notation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">selectedEvents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">event_mask</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">event_mask</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">selectedEvents</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selectedEvents</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[False, True, True, False, True, True, ... False, True, True, False, True, True]
+[[49.3, 38.1], [48.9, 43.9, 50.8, 43.9], ... [48.9, 42.9, 41.7, 56.3, 60.3, 35.5]]
+[[48.9, 43.9, 50.8, 43.9], [46.8, 56.4, ... [48.9, 42.9, 41.7, 56.3, 60.3, 35.5]]
+30
+</pre></div></div>
+</div>
+<p>Here we can confirm that the first event to pass the event selection is the 1-st event in the event list, and the 0-th instance in the <code class="docutils literal notranslate"><span class="pre">selectedEvents.Electron.pt</span></code> result of the selectedEvents indeed corresponds to the values stored in the 1-st event of the orignal event list.</p>
+</div>
+<div class="section" id="Object-storce-and-collection-creation">
+<h2>Object storce and collection creation<a class="headerlink" href="#Object-storce-and-collection-creation" title="Permalink to this headline">¶</a></h2>
+<p>Having completed the selection, we might be rather annoyed that we didn’t just store the selected Electron, since these are the objects that we are likely going to use for further calculation. Following from the code above, what we can do is add the additional selection to the <code class="docutils literal notranslate"><span class="pre">selectedElectrons</span></code> collections. This is valid since the <code class="docutils literal notranslate"><span class="pre">N</span></code> dimesional event mask “makes sense” performed on the <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> dimesional selectedElectrons object.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">our_selectedElectrons</span> <span class="o">=</span> <span class="n">selectedElectrons</span><span class="p">[</span><span class="n">event_mask</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">our_selectedElectrons</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">our_selectedElectrons</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[50.8], [68.5], [61], [54.7], [59, ... [50.9, 54.6, 58.9], [54.2], [54.5], [56.3]]
+30
+</pre></div></div>
+</div>
+<p>However, this is rather undesirable, since now we have some a whole bunch of detected collections, and event lists that we need to take care of: <code class="docutils literal notranslate"><span class="pre">selectedElectrons</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">out_selectedEvents</span></code>. And this is with just one toy object selection. One can imagine if there isn’t some sort of way to store collections into events, the analysis code will get out of hands very quick. This also ties into the topic that there might be certain physics quantities that are specific to a
+certain analysis that would might be used for the analysis object selection and would be nice to add to the electron collection if it isn’t a standard variable that is maintained by the NanoAOD development team. Here we are going to add a very artificial example of calculating the inverse of the electron pt, then selecting on the inverse pt. This very simple example will demonstrate the typical syntax used for storing variables as well as exposing one of the parculiar quirks of awkward arrays:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First attempt at adding extended variables to events&#39;</span><span class="p">)</span>
+<span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span>
+<span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron_1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_1</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Second attemp at adding extended variables to events&#39;</span><span class="p">)</span>
+<span class="n">events</span><span class="p">[</span><span class="s1">&#39;myElectron&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[:]</span>
+<span class="n">events</span><span class="o">.</span><span class="n">myElectron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">events</span><span class="o">.</span><span class="n">myElectron</span><span class="o">.</span><span class="n">pt</span>
+<span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron_2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">myElectron</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">myElectron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">myElectron</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_2</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Third attemp at adding extended variables to events&#39;</span><span class="p">)</span>
+<span class="n">myElectron</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[:]</span>
+<span class="n">myElectron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">myElectron</span><span class="o">.</span><span class="n">pt</span>
+<span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron_3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">myElectron</span><span class="p">[</span><span class="n">myElectron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myElectron</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_3</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+First attempt at adding extended variables to events
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;]
+
+
+Second attemp at adding extended variables to events
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;, &#39;myElectron&#39;, &#39;selectedElectron_2&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;]
+
+
+Third attemp at adding extended variables to events
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;, &#39;myElectron&#39;, &#39;selectedElectron_2&#39;, &#39;selectedElectron_3&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;invpt&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;invpt&#39;]
+</pre></div></div>
+</div>
+<p>Lets get the straightforward part of the code clear up. The addition of collections looks very straight forward, one can think of the <code class="docutils literal notranslate"><span class="pre">events</span></code> as something that looks like a “dictionary of collection with a common outer dimension”, so the addition of the two electron collections to the event has a very distionary-esque notation. What is strange is the persistence of the extended collection for the electrons. Logically, the operation looks identical, but the first attempt to add the new
+variable <code class="docutils literal notranslate"><span class="pre">invpt</span></code> directly to <code class="docutils literal notranslate"><span class="pre">events.Electron</span></code> fails to persist, and thus all direct extensions of <code class="docutils literal notranslate"><span class="pre">events.Electron</span></code> doesn’t include the new <code class="docutils literal notranslate"><span class="pre">invpt</span></code> field.</p>
+<p>The reason for this is rather technical regarding the mutability of objects in python and awkward. The rule-of-thumb is that collections that are directly generated from the file, (a.k.a. the collections directly obtained listed the <code class="docutils literal notranslate"><span class="pre">events.fields</span></code> immediate after opening a file) can <strong>never</strong> be altered, and therefore cannot have extended variables added to them. To create an extended variable to some collection, we will need to make some sort of copy of the original either by some trivial
+kinematic selection (ex. <code class="docutils literal notranslate"><span class="pre">myElectrons</span> <span class="pre">=</span> <span class="pre">events.Electrons[events.Electrons.pt</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code>) or some trivial splicing (<code class="docutils literal notranslate"><span class="pre">myElectrons</span> <span class="pre">=</span> <span class="pre">events.Electrons[:]</span></code>). Another feature of mutability is that once the collection is added to the event collection, it becomes immutable. That is why the third attempt is the one that adds the both the electron extended variable and the extednded electron collection to the event.</p>
+<p>Because of these quirks, it would typically be worth it to wrap the object selection into a function if the object selection is typical within an analysis, and it also helps with code readability</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">SelectElectrons</span><span class="p">(</span><span class="n">electron</span><span class="p">):</span>
+    <span class="n">electron</span> <span class="o">=</span> <span class="n">electron</span><span class="p">[</span><span class="n">electron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">]</span>
+    <span class="n">electron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">electron</span><span class="o">.</span><span class="n">pt</span>
+    <span class="k">return</span> <span class="n">electron</span>
+
+<span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron_f&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SelectElectrons</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;, &#39;myElectron&#39;, &#39;selectedElectron_2&#39;, &#39;selectedElectron_3&#39;, &#39;selectedElectron_f&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;invpt&#39;]
+</pre></div></div>
+</div>
+<p>Once the new object collection has been added to the event collection, they will persist to arbitrary levels of event selection:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">myevents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+
+<span class="n">myevents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="n">myevents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">selectedElectron_f</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;, &#39;myElectron&#39;, &#39;selectedElectron_2&#39;, &#39;selectedElectron_3&#39;, &#39;selectedElectron_f&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;invpt&#39;]
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;, &#39;myElectron&#39;, &#39;selectedElectron_2&#39;, &#39;selectedElectron_3&#39;, &#39;selectedElectron_f&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;invpt&#39;]
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;selectedElectron_1&#39;, &#39;myElectron&#39;, &#39;selectedElectron_2&#39;, &#39;selectedElectron_3&#39;, &#39;selectedElectron_f&#39;]
+[&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;flag&#39;, &#39;mass&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;invpt&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Summary-of-basics">
+<h2>Summary of basics<a class="headerlink" href="#Summary-of-basics" title="Permalink to this headline">¶</a></h2>
+<p>So to put this together into a single code block, suppose our analysis consisten of selecting events that have at least 2 electron with <span class="math notranslate nohighlight">\(p_{T} &gt; 50GeV\)</span>, <span class="math notranslate nohighlight">\(|\eta| &lt; 0.5\)</span>, and we want to calculate the average of all such electron’s iverserse <span class="math notranslate nohighlight">\(p_{T}\)</span> within the selected events. Our awkward array code would look something like:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:dummy_nanoevents.root&#39;</span><span class="p">,</span>
+                                      <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
+                                      <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                                      <span class="n">schemaclass</span><span class="o">=</span><span class="n">DummySchema</span><span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
+
+<span class="c1">## Object selection</span>
+<span class="n">selectedElectron</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span> <span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="o">&amp;</span>
+                                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.5</span><span class="p">)</span> <span class="p">]</span>
+<span class="n">selectedElectron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">pt</span>
+<span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selectedElectron</span>
+
+<span class="c1"># Event selection</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Calculating the total average</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">invpt</span><span class="p">)</span><span class="o">/</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">invpt</span><span class="p">))</span>
+
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.01744755860921499
+</pre></div></div>
+</div>
+<p>On total this is 4 statements (not counting the file reading step) used to make this analysis. Compare that with the loop based notation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:dummy_nanoevents.root&#39;</span><span class="p">,</span>
+                                      <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
+                                      <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                                      <span class="n">schemaclass</span><span class="o">=</span><span class="n">DummySchema</span><span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">suminv</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)):</span>
+    <span class="n">is_good</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Electron</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">is_good</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">is_good</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">is_good</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span><span class="mi">1</span>
+            <span class="n">suminv</span> <span class="o">+=</span> <span class="mf">1.0</span><span class="o">/</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">suminv</span><span class="o">/</span><span class="n">count</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.017447559494651994
+</pre></div></div>
+</div>
+<p>Notice the results are only difference because the 32bit to 64 bit float conversion is happening at different places. For awkward arrays, this is happening only after the sum has been performed. For the loop based approach this happening everytime the <code class="docutils literal notranslate"><span class="pre">+=</span></code> operator is called.</p>
+<p>For the loop based analysis, notice for such a simple analysis, many many lines of code are dedicated to just book keeping stuff: number of electrons passing criteria, adding a counter variable and sum variable… etc, instead of actualy analysis computation. The array based notation for expressing the analysis is much cleaner, if rather more unfamiliar to typical users.</p>
+<p>Of course, this isn’t the end. Physics analysis are typically more involved that just basic selection and counting. In the next session, we will talk about how to perform more involed calculations with awkward arrays that involves multiple collections within an event collection.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The basics of awkward arrays</a><ul>
+<li><a class="reference internal" href="#Basic-object-and-event-selection">Basic object and event selection</a></li>
+<li><a class="reference internal" href="#Object-storce-and-collection-creation">Object storce and collection creation</a></li>
+<li><a class="reference internal" href="#Summary-of-basics">Summary of basics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../installation.html"
+                        title="previous chapter">Installing a coffea environment</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="awkwardcalc.html"
+                        title="next chapter">Involved calcuations with awkward arrays</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/awkwardbasic.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="awkwardcalc.html" title="Involved calcuations with awkward arrays"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../installation.html" title="Installing a coffea environment"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Coffea Tutorial  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The basics of awkward arrays</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, UMDCMS.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

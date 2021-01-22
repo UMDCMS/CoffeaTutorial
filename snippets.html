@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Defining coffea schemas &#8212; Coffea Tutorial  documentation</title>
+    <title>Handy snippets &#8212; Coffea Tutorial  documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,8 +13,12 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Awkward array snippets" href="notebooks/snippet_awkward.html" />
+    <link rel="prev" title="Writting coffea Schema files" href="notebooks/coffeaschema.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -22,8 +26,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="notebooks/snippet_awkward.html" title="Awkward array snippets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="notebooks/coffeaschema.html" title="Writting coffea Schema files"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Coffea Tutorial  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Defining coffea schemas</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Handy snippets</a></li> 
       </ul>
     </div>  
 
@@ -32,13 +42,20 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="defining-coffea-schemas">
-<h1>Defining coffea schemas<a class="headerlink" href="#defining-coffea-schemas" title="Permalink to this headline">¶</a></h1>
-<p>Suppose that you want to use coffea for your own analysis that uses a ntuple that
-is not NANOAOD based. Now we will have to deal with the magic commands that tells
-<code class="docutils literal notranslate"><span class="pre">coffea.nanoevents</span></code> how they should the variable stored at the various branch
-names should be packed together into uniform. This is known formally known as a
-<strong>schemas</strong>, three already exist in the standard coffea installation. The <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>, which.</p>
+  <div class="section" id="handy-snippets">
+<h1>Handy snippets<a class="headerlink" href="#handy-snippets" title="Permalink to this headline">¶</a></h1>
+<p>In the notebooks below are a bunch of handy snippets that have been picked up
+throughout the analysis developements, which can serve as a good starting point
+to algorithms for your own analysis code.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/snippet_awkward.html">Awkward array snippets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/snippet_awkward.html#Object-matching">Object matching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/snippet_processor.html">Processor snippets</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -48,10 +65,16 @@ names should be packed together into uniform. This is known formally known as a
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="notebooks/coffeaschema.html"
+                        title="previous chapter">Writting coffea Schema files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="notebooks/snippet_awkward.html"
+                        title="next chapter">Awkward array snippets</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/coffeaschema.rst.txt"
+      <li><a href="_sources/snippets.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -75,8 +98,14 @@ names should be packed together into uniform. This is known formally known as a
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="notebooks/snippet_awkward.html" title="Awkward array snippets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="notebooks/coffeaschema.html" title="Writting coffea Schema files"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Coffea Tutorial  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Defining coffea schemas</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Handy snippets</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

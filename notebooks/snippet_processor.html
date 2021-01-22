@@ -5,34 +5,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The basics of awkward arrays &#8212; Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
+    <title>Processor snippets &#8212; Coffea Tutorial  documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Contributing to the tutorial repository" href="../../contribute.html" />
-    <link rel="prev" title="Introduction to Awkward arrays" href="../../awkwardintro.html" /> 
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing to the tutorial repository" href="../contribute.html" />
+    <link rel="prev" title="Awkward array snippets" href="snippet_awkward.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../contribute.html" title="Contributing to the tutorial repository"
+          <a href="../contribute.html" title="Contributing to the tutorial repository"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../../awkwardintro.html" title="Introduction to Awkward arrays"
+          <a href="snippet_awkward.html" title="Awkward array snippets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Coffea Tutorial  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../awkwardintro.html" accesskey="U">Introduction to Awkward arrays</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">The basics of awkward arrays</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Coffea Tutorial  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../snippets.html" accesskey="U">Handy snippets</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Processor snippets</a></li> 
       </ul>
     </div>  
 
@@ -289,52 +291,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="The-basics-of-awkward-arrays">
-<h1>The basics of awkward arrays<a class="headerlink" href="#The-basics-of-awkward-arrays" title="Permalink to this headline">¶</a></h1>
-<p>Let use begin by first understanding what you need to explore the contents of coffea</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello World&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Hello World
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">coffea</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;THis is a test&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-THis is a test
-</pre></div></div>
-</div>
+<div class="section" id="Processor-snippets">
+<h1>Processor snippets<a class="headerlink" href="#Processor-snippets" title="Permalink to this headline">¶</a></h1>
+<p>Here are a bunch of Processor related snippets either used for processes that work well of some specific machine.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -354,22 +313,22 @@ THis is a test
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../../awkwardintro.html"
-                        title="previous chapter">Introduction to Awkward arrays</a></p>
+  <p class="topless"><a href="snippet_awkward.html"
+                        title="previous chapter">Awkward array snippets</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../../contribute.html"
+  <p class="topless"><a href="../contribute.html"
                         title="next chapter">Contributing to the tutorial repository</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/notebooks/awkward/basic.ipynb.txt"
+      <li><a href="../_sources/notebooks/snippet_processor.ipynb.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
@@ -384,17 +343,17 @@ THis is a test
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../contribute.html" title="Contributing to the tutorial repository"
+          <a href="../contribute.html" title="Contributing to the tutorial repository"
              >next</a> |</li>
         <li class="right" >
-          <a href="../../awkwardintro.html" title="Introduction to Awkward arrays"
+          <a href="snippet_awkward.html" title="Awkward array snippets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Coffea Tutorial  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../awkwardintro.html" >Introduction to Awkward arrays</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">The basics of awkward arrays</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Coffea Tutorial  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../snippets.html" >Handy snippets</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Processor snippets</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
