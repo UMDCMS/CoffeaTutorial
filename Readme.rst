@@ -5,7 +5,7 @@ Welcome to the COFFEA tutorial, written by the CMS analysis group at the
 University of Maryland, College Park!
 
 The webpage version of this tutorial have be found `here
-<https://umdcms.github.com/CoffeaTutorial>`_ which is generated automatically
+<https://umdcms.github.io/CoffeaTutorial>`_ which is generated automatically
 from `this <https://github.com/UMDCMS/CoffeaTutorial>`_ GitHub repository.
 
 This set of documentations aims to help people coming for a traditional
