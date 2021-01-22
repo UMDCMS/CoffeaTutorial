@@ -78,7 +78,14 @@ your machine using port forwarding</p>
 </pre></div>
 </div>
 <p>or equivalent. Make you should be able to open the notebook by going to your
-browser and entering the URL <code class="docutils literal notranslate"><span class="pre">localhost:8XXX</span></code></p>
+browser and entering the URL <code class="docutils literal notranslate"><span class="pre">localhost:8XXX</span></code>. When running the script
+<code class="docutils literal notranslate"><span class="pre">./jupy.sh</span> <span class="pre">8XXX</span></code>, you should see some string in the format of:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1:8XXX/?token<span class="o">=</span>02d4......
+</pre></div>
+</div>
+<p>The entire string behind the <code class="docutils literal notranslate"><span class="pre">token=</span></code> part (should be something like 32
+characters long) is the token used for logging into the notebook server.
+Alternatively, you can paste the whole of the above into the borwser’s url bar.</p>
 </div>
 <div class="section" id="personal-machines">
 <h3>Personal machines<a class="headerlink" href="#personal-machines" title="Permalink to this headline">¶</a></h3>
