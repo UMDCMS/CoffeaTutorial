@@ -10,5 +10,5 @@ export IPYTHONDIR=${storage_dir}/.ipython
 source coffeaenv/bin/activate
 
 # Additional system paths for local packages
-export PYTHONPATH=${VIRTUAL_ENV}/lib/python*/site-packages/:${PYTHONPATH}
+export PYTHONPATH=${VIRTUAL_ENV}/lib/python3/site-packages/:${PYTHONPATH}
 export PYTHONPATH=${PYTHONPATH}:${VIRTUAL_ENV}/../
