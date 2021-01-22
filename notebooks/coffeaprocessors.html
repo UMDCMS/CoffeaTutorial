@@ -292,14 +292,225 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Coffea-processors">
 <h1>Coffea processors<a class="headerlink" href="#Coffea-processors" title="Permalink to this headline">¶</a></h1>
+<p>Previously, we have only been working with awkward arrays constructed from a single file. Coffea processers is the tool provided to scale up the calculations to arbitrary file counts. The official <a class="reference external" href="https://coffeateam.github.io/coffea/notebooks/processor.html">coffea-by-example docuemtation</a> on this topic acutally is a very complete a tutorial on how you can get started. But for the sake of the completion of this document, we will be including our own version of the tutorial, to most of the
+gritty details filtered out.</p>
+<div class="section" id="A-very-simple-processor----understanding-output">
+<h2>A very simple processor – understanding output<a class="headerlink" href="#A-very-simple-processor----understanding-output" title="Permalink to this headline">¶</a></h2>
+<p>Lets first take a look at a very simple processor that takes work flow described in the final analysis in simple calculation page, and translate into awkward syntax:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">from</span> <span class="nn">coffea</span> <span class="kn">import</span> <span class="n">processor</span><span class="p">,</span><span class="n">hist</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">awkward1</span> <span class="k">as</span> <span class="nn">ak</span>
+
+
+<span class="k">class</span> <span class="nc">DummyProcessor</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">ProcessorABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_accumulator</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">dict_accumulator</span><span class="p">({</span>
+            <span class="s2">&quot;nevent&quot;</span> <span class="p">:</span> <span class="n">processor</span><span class="o">.</span><span class="n">defaultdict_accumulator</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;invpt_sum&quot;</span><span class="p">:</span> <span class="n">processor</span><span class="o">.</span><span class="n">defaultdict_accumulator</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="n">hist</span><span class="o">.</span><span class="n">Hist</span><span class="p">(</span>
+                <span class="s2">&quot;Events&quot;</span><span class="p">,</span>
+                <span class="n">hist</span><span class="o">.</span><span class="n">Cat</span><span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;Dataset&quot;</span><span class="p">),</span>
+                <span class="n">hist</span><span class="o">.</span><span class="n">Bin</span><span class="p">(</span><span class="s2">&quot;invpt&quot;</span><span class="p">,</span> <span class="s2">&quot;$1/p_</span><span class="si">{T}</span><span class="s2">$ [1/GeV]&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">),</span>
+                <span class="n">hist</span><span class="o">.</span><span class="n">Bin</span><span class="p">(</span><span class="s2">&quot;eta&quot;</span><span class="p">,</span><span class="s1">&#39;$\eta$&#39;</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">})</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">accumulator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accumulator</span>
+
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">events</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accumulator</span><span class="o">.</span><span class="n">identity</span><span class="p">()</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>
+
+        <span class="c1"># The object selection</span>
+        <span class="n">selectedElectron</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span> <span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="o">&amp;</span>
+                                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.5</span><span class="p">)</span> <span class="p">]</span>
+        <span class="n">selectedElectron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">pt</span>
+        <span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selectedElectron</span>
+
+        <span class="c1"># Event selection</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">]</span>
+
+        <span class="c1"># Filling the accumulator</span>
+        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;nevent&#39;</span><span class="p">][</span><span class="n">dataset</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;invpt_sum&#39;</span><span class="p">][</span><span class="n">dataset</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">invpt</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+                              <span class="n">invpt</span><span class="o">=</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">invpt</span><span class="p">),</span>
+                              <span class="n">eta</span><span class="o">=</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="c1"># returning the output</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+
+    <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accumulator</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">accumulator</span>
+
+
 </pre></div>
 </div>
+</div>
+<p>The selection/filtering part of the <code class="docutils literal notranslate"><span class="pre">DummyProcessor.process</span></code> is basically entirely the same as the using awkward examples without processors class, except this time, the events has an additional <code class="docutils literal notranslate"><span class="pre">metadata</span></code> tag that can be used to identify dataset name.</p>
+<div class="line-block">
+<div class="line">The main difference is in the output parts of the processor. Here the return is what is known as <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> classes defined the <code class="docutils literal notranslate"><span class="pre">coffea.processor</span></code>. Bacially each object that is defined within the various accumulators will be added up across the multiple jobs that the processor instance will be run on. In our case, we have two floating points that will be summed across multiple jobs, and a histogram with 3 axis: 1 being what the data is, the other 2 being some variables of interest. The
+filling of the histogram uses python keywords to simplify the filling variable assignment. All argument in the fill command have to have compatibele dimensions, in our case: - dataset has exactly dimension 1 - <code class="docutils literal notranslate"><span class="pre">ak.flatten()</span></code> reduces that <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure of electron variables to a simple <code class="docutils literal notranslate"><span class="pre">L</span></code></div>
+<div class="line">lengthed array, the array inputs <code class="docutils literal notranslate"><span class="pre">invpt</span></code> and <code class="docutils literal notranslate"><span class="pre">eta</span></code> must have matching diemsions.</div>
+</div>
+<p>One can create a processor, and run on a single file for testing. (Again, if you are running this tutorial notebook as is, remember to download the provided data and schema files using the commands:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>   &lt;WORKINGDIRECTORY&gt;
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummy_nanoevents.root
+wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummyschema.py
+</pre></div>
+</div>
+<p>This will help use get a feels of what the output data is like:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
+<span class="kn">from</span> <span class="nn">dummyschema</span> <span class="kn">import</span> <span class="n">DummySchema</span>
+
+<span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:dummy_nanoevents.root&#39;</span> <span class="p">,</span>
+                                      <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
+                                      <span class="n">entry_stop</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                                      <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;Dummy&quot;</span><span class="p">},</span>
+                                      <span class="c1"># Processors expects new meta data</span>
+                                      <span class="n">schemaclass</span><span class="o">=</span><span class="n">DummySchema</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">DummyProcessor</span><span class="p">()</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+
+<span class="c1">## Exploring the output</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;nevent&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;invpt_sum&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 24.0})
+defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.9589513540267944})
+&lt;Hist (dataset,invpt,eta) instance at 0x7fa8cc1b8a00&gt;
+</pre></div></div>
+</div>
+<p>For typical analysis work, the most import object to futher explore is the plotting of the histogram objects. Again the <a class="reference external" href="https://coffeateam.github.io/coffea/notebooks/histograms.html">official tutorial</a> has excellent pages on the manipulations of the <code class="docutils literal notranslate"><span class="pre">coffea.hist</span></code> objects. Here I will just use a couple of basic examples for those who are just getting ready to explore coffea:</p>
+<p>Notice how categorical axis are automatically used as the various labeling,</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="s1">&#39;eta&#39;</span><span class="p">))</span>
+<span class="n">hist</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="s1">&#39;eta&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Hist (dataset,invpt,eta) instance at 0x7fa8cc1b8a00&gt;
+&lt;Hist (dataset,invpt) instance at 0x7fa8cc310fd0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:xlabel=&#39;$1/p_{T}$ [1/GeV]&#39;, ylabel=&#39;Events&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_coffeaprocessors_5_2.svg" src="../_images/notebooks_coffeaprocessors_5_2.svg" /></div>
+</div>
+<p>Notice how <code class="docutils literal notranslate"><span class="pre">integrate</span></code> can be used to reduce the dimensions of a histgoram. You can also provide a custom integration range if you want to performed additional selections on binned dataset. Also</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">hist</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="s1">&#39;invpt&#39;</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mf">0.015</span><span class="p">,</span><span class="mf">0.020</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:xlabel=&#39;$\\eta$&#39;, ylabel=&#39;Events&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_coffeaprocessors_7_1.svg" src="../_images/notebooks_coffeaprocessors_7_1.svg" /></div>
+</div>
+</div>
+<div class="section" id="Scaling-up-calculations----process-executors">
+<h2>Scaling up calculations – process executors<a class="headerlink" href="#Scaling-up-calculations----process-executors" title="Permalink to this headline">¶</a></h2>
+<p>Suppose you have some file set, you can define coffea to run over all file with a given metadata tag using the following</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">output</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_uproot_job</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;Dataset1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dummy_nanoevents.root&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;Dataset2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dummy_nanoevents.root&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;dummy_nanoevents.root&#39;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="n">treename</span><span class="o">=</span><span class="s2">&quot;Events&quot;</span><span class="p">,</span>
+    <span class="n">processor_instance</span><span class="o">=</span><span class="n">DummyProcessor</span><span class="p">(),</span>
+    <span class="n">executor</span><span class="o">=</span><span class="n">processor</span><span class="o">.</span><span class="n">futures_executor</span><span class="p">,</span>
+    <span class="n">executor_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">DummySchema</span><span class="p">,</span> <span class="s2">&quot;workers&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c3fcc16e23174c30af677781374c029e"}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "638a7dad407c4570b14644d288bf1ffc"}</script></div>
+</div>
+<p>Now at first glance this seems to be a very straigh forwards translation to the from what we already have in the <code class="docutils literal notranslate"><span class="pre">NanoEventsFractory</span></code> method. The magic statement that give coffea simple scalability is the use of the <code class="docutils literal notranslate"><span class="pre">executor</span></code> argument. By using the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.futures_executor.html#coffea.processor.futures_executor">processor.futures_executor</a>, you have already enabled local multithreading with a maximum of 10 parallel threads! Aside from
+the futures_executor. there is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.iterative_executor.html">iterative_executor</a> for single thread processing, which is the best for analysis debugging, since parallelism would cause the error messages to be wrapped in additional thread-related messages. Thre is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.dask_executor.html">dask_executor</a>, which submits job to the grid computing resourse available to
+machine running the notebook. If you already have the settings stored somewhere on, you can switch from a debuging to grid-level parallel programming simply by changing a couple of lines in the notebook! Examples of the configuration required to run grid-level parallelism can be found in the example <a class="reference internal" href="../snippets.html"><span class="doc">snippets</span></a>.</p>
+<p>A couple of notes on how parallelism works on the various executors: it is still file-based (a.k.a each file generates their own events awkward array to be processed), so be careful that when running the <code class="docutils literal notranslate"><span class="pre">futures_executor</span></code> during medorate testing you don’t saturate memory usage of your local machine. Because of this, if you create a histogram to keep a tally of <code class="docutils literal notranslate"><span class="pre">len(events)</span></code>, what you would get is not a single number of events for each sample, but rather the various number of events stored
+in each file. While it might be concptually helpful to think abstractly that the input <code class="docutils literal notranslate"><span class="pre">events</span></code> object to the <code class="docutils literal notranslate"><span class="pre">process</span></code> method is a massive awkward array that spans the entire data set, this is not how the the processor is actually working.</p>
+<p>Also now we can comment on how process <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> are performed across multiple jobs. The contents of each of the accumulator instances are added together via the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> oeprator. For <code class="docutils literal notranslate"><span class="pre">coffea.hist</span></code> histogram, this method is already overloaded to behave how one would expect histogram aggregation to work, but you can supply your own class with the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> operator overloaded if you really want. Right now, there is <strong>no</strong> standard class to aggregate unbinned data, since the unbinned
+data can be artibitrarily large, so in a grid-level computation settings one would want to keep the unbinned data on each worker node until they are called by the main thread for further processing, as returning all data to the main thread will likely saturate all resources on a single machine. The core developers are currently <a class="reference external" href="https://github.com/CoffeaTeam/coffea/pull/368">working</a> on this general use case which uses a different data format, but if you know that your final output data fram
+is expected to be small (ex you have a very tight background rejection selection), you can write your own accumulator class to get unbinned data.</p>
 </div>
 </div>
 
@@ -310,6 +521,15 @@ div.rendered_html tbody tr:hover {
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Coffea processors</a><ul>
+<li><a class="reference internal" href="#A-very-simple-processor----understanding-output">A very simple processor – understanding output</a></li>
+<li><a class="reference internal" href="#Scaling-up-calculations----process-executors">Scaling up calculations – process executors</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="awkwardcalc.html"
                         title="previous chapter">Involved calcuations with awkward arrays</a></p>

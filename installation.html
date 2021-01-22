@@ -44,7 +44,10 @@
             
   <div class="section" id="installing-a-coffea-environment">
 <h1>Installing a coffea environment<a class="headerlink" href="#installing-a-coffea-environment" title="Permalink to this headline">¶</a></h1>
-<p>Coffea is distributed as a python package that can be download by most machines.</p>
+<p>Coffea is distributed as a python package that can be downloaded and installed by
+any machine with python version &gt; 3.6 and &lt; 3.9. Notice that the various scripts
+assumes that you have a simple bash shell. Using zsh will cause various commands
+to fail.</p>
 <div class="section" id="copy-and-paste-commands">
 <h2>Copy and paste commands<a class="headerlink" href="#copy-and-paste-commands" title="Permalink to this headline">¶</a></h2>
 <p>For those who are just looking for the basic script to help initialize the environment, here are the copy and paste commands:</p>
@@ -61,8 +64,9 @@ chmod +x setup_LCG.sh
 </div>
 <p>For starting the coffea session after fresh logging into a machine.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;WORKING_DIR&gt;
-<span class="nb">source</span> ./init_LCG.sh <span class="c1"># Must be ran</span>
-./jupy.sh 8XXX       <span class="c1"># Start a jupyter session, change XXX to your favorite 3-digit number</span>
+<span class="nb">source</span> ./init.sh <span class="c1"># Must be ran</span>
+./jupy.sh 8XXX   <span class="c1"># Start a jupyter session,</span>
+                 <span class="c1"># change XXX to your favorite 3-digit number</span>
 </pre></div>
 </div>
 <p>If you have want to use a remote jupyter session, make sure you have logged into
@@ -96,8 +100,117 @@ chmod +x setup.sh
 how you may want to modify the code for your own instructions.</p>
 </div>
 </div>
-<div class="section" id="installing-coffea-the-involved-way">
-<h2>Installing coffea the involved way<a class="headerlink" href="#installing-coffea-the-involved-way" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-and-activating-coffea-the-involved-way">
+<h2>Installing and activating coffea the involved way<a class="headerlink" href="#installing-and-activating-coffea-the-involved-way" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-python-virtual-environment">
+<h3>The python virtual environment<a class="headerlink" href="#the-python-virtual-environment" title="Permalink to this headline">¶</a></h3>
+<p>Since coffea is a python package under very active development, it may require
+additional dependencies and packages that may or may not conflict with the python
+packages already installed by the system package manager. A python <a class="reference external" href="https://docs.python.org/3/library/venv.html">virtual
+environment</a> creates a local
+directory for store additional python packages independent of the system
+directory, allowing for desired packages to be updated to be updated without
+upsetting the system installation:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;WORKINGDIR&gt;
+python -m venv --copies coffeaenv
+</pre></div>
+</div>
+<p>Next, activating the virtual environment resets the python environment variables,
+so that it knows to install packages to our designated <code class="docutils literal notranslate"><span class="pre">coffeaenv</span></code> directory
+instead of the system directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> coffeaenv/bin/activate
+</pre></div>
+</div>
+<p>Install coffea itself, this is done by the typical <cite>pip</cite> command</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python -m pip install --no-cache-dir setuptools pip --upgrade <span class="c1"># updating</span>
+python -m pip install --no-cache-dir coffea<span class="o">[</span>dask<span class="o">]</span>
+</pre></div>
+</div>
+<p>The <cite>–no-cache-dir</cite> arguments ensures a fresh version of coffea is pulled from
+pip servers, instead of looking for a system package called coffea.  The <code class="docutils literal notranslate"><span class="pre">dask</span></code>
+argument after coffea ensures that the <code class="docutils literal notranslate"><span class="pre">dask</span></code> part of coffea is installed.</p>
+<p>Now the packages have been installed, you can start a python session with coffea
+at any time using the</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> coffeaenv/bin/activate
+</pre></div>
+</div>
+<p>command, and use</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>deactivate
+</pre></div>
+</div>
+<p>to return to the system python settings. One thing we are going to tweak that is
+included in the <code class="docutils literal notranslate"><span class="pre">init.sh</span></code> script, is that by default, virtual environments
+still prioritized looking for a package in the system package paths. This can
+cause issues with mismatching package version in the system path and our virtual
+environment. You can remedy this by setting the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>  environment, so
+that the package path within the virtual environment takes precedence. If you are
+working with some custom package for analysis, you can also add your package path
+now</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">VIRTUAL_ENV</span><span class="si">}</span>/lib/python3/site-packages/:<span class="si">${</span><span class="nv">PYTHONPATH</span><span class="si">}</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="si">}</span>:&lt;you/package/path&gt;
+</pre></div>
+</div>
+<p>For install on LCG machines, the steps are similar, except we can use additional
+LCG tools to ensure that we have a correct python version:</p>
+<p>You will need to source this file every time before the virtual environment is
+activated, notice that there are a couples of lines in the <code class="docutils literal notranslate"><span class="pre">setup_LCG.sh</span></code>
+script to add the relevants lines to the <code class="docutils literal notranslate"><span class="pre">coffeaenv/bin/activate</span></code> script.</p>
+</div>
+<div class="section" id="requirements-for-setting-up-interactive-notebooks">
+<h3>Requirements for setting up interactive notebooks<a class="headerlink" href="#requirements-for-setting-up-interactive-notebooks" title="Permalink to this headline">¶</a></h3>
+<p>Notebooks are a handy tool for quick python snippet testing. Basically the
+initialization of a notebook creates a consistent memory session where code
+snippets can be rerun without having to start from the beginning of the notebook
+itself. This is very handy for analysis, the on-going analysis steps might need
+to be re-tested and adjusted multiple times before continuing.</p>
+<p>Once activated, a notebook manager server can be initiated by the command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>jupyter notebook --ip <span class="m">0</span>.0.0.0 --no-browser --notebook-dir .
+</pre></div>
+</div>
+<p>The terminal should then output something like:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1:8888/?token<span class="o">=</span>c40c94b953f0f962cd26c4399d67417c9da2c92176178f21
+</pre></div>
+</div>
+<p>Plugging this url into for favorite browser should great you with the directory
+tree of the position of where you started the notebook server. Here you can
+create and edit notebooks!</p>
+<p>A couple of things is adjusted for remote machines. By default, notebook servers
+save temporary files in the users home directory, which is typically a bad
+practice for people logging onto grid machines. the <code class="docutils literal notranslate"><span class="pre">init.sh</span></code> script sets
+additional environment variables to make sure storage uses the current directory,
+which should be in the more flexible data directories:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">JUPYTER_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="o">}</span>/.jupyter
+<span class="nb">export</span> <span class="nv">JUPYTER_RUNTIME_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="o">}</span>/.local/share/jupyter/runtime
+<span class="nb">export</span> <span class="nv">JUPYTER_DATA_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span><span class="o">}</span>/.local/share/jupyter
+<span class="nb">export</span> <span class="nv">IPYTHONDIR</span><span class="o">=</span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>/.ipython
+</pre></div>
+</div>
+<p>Finally notice that the notebook server expects local traffic. To be able to
+access the notebook of a remote machine, link to the machine with the command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>ssh -L localhost:8XXX:localhost:8XXX  &lt;user&gt;@&lt;machine&gt;
+</pre></div>
+</div>
+<p>which indicates that any network activity on port 8XXX should be passed over to
+the remote machine on port 8XXX and vice versa. Now start the notebook server
+with a specified port:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>jupyter notebook --ip <span class="m">0</span>.0.0.0 --no-browser --notebook-dir . --port 8XXX
+</pre></div>
+</div>
+<p>And and you should be created with a similar url, execpt with the port fixed at
+your given number.</p>
+<p>A quick note on the phrase <code class="docutils literal notranslate"><span class="pre">working</span> <span class="pre">directory</span></code>, in the context of notebooks. If
+you are using the default browser interface to create notebooks, the <code class="docutils literal notranslate"><span class="pre">working</span>
+<span class="pre">directory</span></code> will follow how you navigate in the directory structure: for example.
+if you started the notebook in the <code class="docutils literal notranslate"><span class="pre">/data</span></code> directory and using the browser you
+navigate to the <cite>notebook/</cite> directory to open an example <cite>example.ipynb</cite>
+notebook. Your working directory will be <cite>/data/notebook</cite>. But if you are using
+an external client to connect to the notebooks (ex using <code class="docutils literal notranslate"><span class="pre">vscode</span>
+<span class="pre">&lt;https://code.visualstudio.com/docs/python/jupyter-support&gt;``_</span> <span class="pre">),</span> <span class="pre">the</span> <span class="pre">working</span>
+<span class="pre">directory</span> <span class="pre">will</span> <span class="pre">likely</span> <span class="pre">be</span> <span class="pre">fixed</span> <span class="pre">at</span> <span class="pre">``/data</span></code>. This is something to keep in mind if
+you are editing a custom package, and you get <code class="docutils literal notranslate"><span class="pre">cannot</span> <span class="pre">find</span> <span class="pre">package</span></code> errors when
+running <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">mypackage</span></code>. With notebooks, you can always of the <cite>os.getcwd</cite>
+method to make sure you are where you though you are.</p>
+</div>
 </div>
 <div class="section" id="installing-the-tutorial">
 <h2>Installing the tutorial<a class="headerlink" href="#installing-the-tutorial" title="Permalink to this headline">¶</a></h2>
@@ -121,7 +234,11 @@ for the sake of people who will want to follow along notebook by notebook:</p>
 <li><a class="reference internal" href="#personal-machines">Personal machines</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#installing-coffea-the-involved-way">Installing coffea the involved way</a></li>
+<li><a class="reference internal" href="#installing-and-activating-coffea-the-involved-way">Installing and activating coffea the involved way</a><ul>
+<li><a class="reference internal" href="#the-python-virtual-environment">The python virtual environment</a></li>
+<li><a class="reference internal" href="#requirements-for-setting-up-interactive-notebooks">Requirements for setting up interactive notebooks</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#installing-the-tutorial">Installing the tutorial</a></li>
 </ul>
 </li>

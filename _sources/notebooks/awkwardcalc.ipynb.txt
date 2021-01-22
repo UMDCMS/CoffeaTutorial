@@ -19,7 +19,9 @@
  "cells": [
   {
    "source": [
-    "# Involved calcuations with awkward arrays"
+    "# Involved calcuations with awkward arrays\n",
+    "\n",
+    "To be written -- assigned to Yi-Mu Chen"
    ],
    "cell_type": "markdown",
    "metadata": {}

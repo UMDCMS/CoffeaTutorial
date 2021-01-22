@@ -57,7 +57,7 @@
    "source": [
     "from coffea.nanoevents import NanoEventsFactory\n",
     "from dummyschema import DummySchema \n",
-    "import numpy as np \n",
+    "import numpy as np\n",
     "import awkward1 as ak"
    ]
   },
@@ -411,22 +411,7 @@
      "output_type": "stream",
      "name": "stdout",
      "text": [
-      "First attempt at adding extended variables to events\n",
-      "['Electron', 'Muon', 'Jet', 'selectedElectron_1']\n",
-      "['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n",
-      "['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n",
-      "\n",
-      "\n",
-      "Second attemp at adding extended variables to events\n",
-      "['Electron', 'Muon', 'Jet', 'selectedElectron_1', 'myElectron', 'selectedElectron_2']\n",
-      "['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n",
-      "['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n",
-      "\n",
-      "\n",
-      "Third attemp at adding extended variables to events\n",
-      "['Electron', 'Muon', 'Jet', 'selectedElectron_1', 'myElectron', 'selectedElectron_2', 'selectedElectron_3']\n",
-      "['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt', 'invpt']\n",
-      "['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt', 'invpt']\n"
+      "First attempt at adding extended variables to events\n['Electron', 'Muon', 'Jet', 'selectedElectron_1']\n['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n\n\nSecond attemp at adding extended variables to events\n['Electron', 'Muon', 'Jet', 'selectedElectron_1', 'myElectron', 'selectedElectron_2']\n['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt']\n\n\nThird attemp at adding extended variables to events\n['Electron', 'Muon', 'Jet', 'selectedElectron_1', 'myElectron', 'selectedElectron_2', 'selectedElectron_3']\n['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt', 'invpt']\n['charge', 'dxy', 'dxyErr', 'dz', 'dzErr', 'eta', 'flag', 'mass', 'phi', 'pt', 'invpt']\n"
      ]
     }
    ],
