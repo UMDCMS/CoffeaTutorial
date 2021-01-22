@@ -1,8 +1,8 @@
-COFFEA Tutorial
-====================
+The unofficial Coffea tutorial
+==============================
 
-Welcome to the COFFEA tutorial, written by the CMS analysis group at the
-University of Maryland, College Park!
+Welcome to the unofficial coffea tutorial, written by the CMS analysis group at
+the University of Maryland, College Park!
 
 The webpage version of this tutorial have be found `here
 <https://umdcms.github.io/CoffeaTutorial>`_ which is generated automatically
