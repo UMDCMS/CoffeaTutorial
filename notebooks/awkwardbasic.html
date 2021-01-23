@@ -296,7 +296,7 @@ div.rendered_html tbody tr:hover {
 <p>Let use begin by first understanding what you need to explore the contents of a typical ntuple file using coffea related tools. For the examples below we will be using the <a class="reference external" href="http://opendata.cern.ch/record/12354#">CMS open data</a>. Either download the file to your working directory to follow along.</p>
 <p>First import the relevent coffea objects:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -309,7 +309,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Now we can create the event list as an awkward array using coffea tools like:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -324,7 +324,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>The last <code class="docutils literal notranslate"><span class="pre">schemaclass</span></code> argument will be let unexplained for now, see the schema tutorials to learn more about what this is. Here we have created the events as a awkward array. To see that is stored in the array we can use:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -337,12 +337,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;]
 </pre></div></div>
 </div>
 <p>Indicating the collections that are stored in the awkward array. To see how many events exists in in our file we can use the typical python method:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -360,7 +360,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>The 50 here in corresponds correctly to the <code class="docutils literal notranslate"><span class="pre">entry_stop</span></code> used in to open the file. Next we can, of course, start to explore the contents of the various object collections. One can acess the fields of the event as if it was a regular data memeber</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -381,7 +381,7 @@ div.rendered_html tbody tr:hover {
 <p>Ah ha! We we are starting to see numbers we can play around with. Notice that coffea was written with High energy physics analysis in mind, so even if the electron energy doesn’t look like it is stored from the output of the fields, we can still access methods that we will typically associate with 4-vectors. In particular, notice that we can call the <code class="docutils literal notranslate"><span class="pre">energy</span></code> field of the electron collection, even though the energy field isn’t explicitly defined. Coffea is designed with 4 vectors in mind, so
 the energy collection is calculated on the fly.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -404,7 +404,7 @@ the energy collection is calculated on the fly.</p>
 <p>In our case the <code class="docutils literal notranslate"><span class="pre">N</span></code> number of events is whatis called as the outer most <strong>dimension</strong> or axis of the various objects, <code class="docutils literal notranslate"><span class="pre">A</span></code> is the one inner dimesion of the of array. One thinkg to keep in mind is that we typically refer to the dimension of <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Muon.pt</span></code> as both being <code class="docutils literal notranslate"><span class="pre">NxA</span></code>, except <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> is a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of objects (or collection), while the the <code class="docutils literal notranslate"><span class="pre">events.Electron.pt</span></code> being a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of a concrete data type (in this case a float).</p>
 <p>We can use the usual index notation to look at a particular object of interest. For instance if we want to look at the 0-th Muon of the 3-rd event in our event list, we can write:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -425,7 +425,7 @@ the energy collection is calculated on the fly.</p>
 <h2>Basic object and event selection<a class="headerlink" href="#Basic-object-and-event-selection" title="Permalink to this headline">¶</a></h2>
 <p>Let us start with the most basic example of event selection. Say we want to select event with electrons that have <span class="math notranslate nohighlight">\(p_T &gt; 30\)</span> GeV and <span class="math notranslate nohighlight">\(|\eta| &lt; 2.0\)</span>. The awkward array allows us to write something like:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -451,7 +451,7 @@ the energy collection is calculated on the fly.</p>
 <p>We can see that the usual logic comparision operators generate a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> boolean array telling use which electron (or more specifically which electron.pt and electron etas) pass this particular selection criteia. This particular boolean array generated from a logic operation on usual arrays is typically call a <code class="docutils literal notranslate"><span class="pre">mask</span></code>. We can use the typical boolean operation <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> operation to get the intersect of multiple masks, or maybe the <code class="docutils literal notranslate"><span class="pre">|</span></code> operator for the union. Now the problem is where can we use
 this mask? The answer is any array that has a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure and recieve these masks to create a reduced array!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -475,7 +475,7 @@ this mask? The answer is any array that has a <code class="docutils literal notr
 <p>Probably the most important place to put the mask is the directly in the <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> index, this generates a new collection of electrons that preserves the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure, but have verious collection instances filterd out. If you are familiar with <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, this sort if index-based array filtering look familiar. The difference is that because awkward arrays accecpt arrays of varying inner dimensions, it can truely preserve the structure of such selection, rather than having everything be
 flattend out.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -500,7 +500,7 @@ flattend out.</p>
 </div>
 <p>Now suppose we only want events that have at least 1 electron selected event. What we need are a set of functions that can reduces this <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> array to something of just dimesion <code class="docutils literal notranslate"><span class="pre">N</span></code>. Formally this is called <strong>reduction</strong> operations, and the awkward package has a large set of functions that can reduce the dimension of arrays. In our case, what we want is:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -520,7 +520,7 @@ flattend out.</p>
 </div>
 <p>To break this down, <code class="docutils literal notranslate"><span class="pre">ak.count</span></code>, as the method name suggests “counts” the number of elements along a certain axis, in our case, what we are intersted is the inner most dimension/axis, hence the typical python notation of <code class="docutils literal notranslate"><span class="pre">axis=-1</span></code>. Using this we can run the event selection using the usual masking notation:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -549,7 +549,7 @@ flattend out.</p>
 <h2>Object storce and collection creation<a class="headerlink" href="#Object-storce-and-collection-creation" title="Permalink to this headline">¶</a></h2>
 <p>Having completed the selection, we might be rather annoyed that we didn’t just store the selected Electron, since these are the objects that we are likely going to use for further calculation. Following from the code above, what we can do is add the additional selection to the <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code> collections. This is valid since the <code class="docutils literal notranslate"><span class="pre">N</span></code> dimesional event mask “makes sense” performed on the <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> dimesional selectedMuon object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -571,7 +571,7 @@ flattend out.</p>
 <p>However, this is rather undesirable, since now we have some a whole bunch of detected collections, and event lists that we need to take care of: <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">our_selectedMuons</span></code>. And this is with just one toy object selection. One can imagine if there isn’t some sort of way to store collections into events, the analysis code will get out of hands very quick. This also ties into the topic that there might be certain physics quantities that are specific to a certain
 analysis that would might be used for the analysis object selection and would be nice to add to the electron collection if it isn’t a standard variable that is maintained by the NanoAOD development team. Here we are going to add a very artificial example of calculating the inverse of the electron pt, then selecting on the inverse pt. This very simple example will demonstrate the typical syntax used for storing variables as well as exposing one of the parculiar quirks of awkward arrays:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -610,19 +610,19 @@ analysis that would might be used for the analysis object selection and would be
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 First attempt at adding extended variables to events
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;]
 
 
 Second attemp at adding extended variables to events
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;]
 
 
 Third attemp at adding extended variables to events
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
 </pre></div></div>
@@ -633,7 +633,7 @@ variable <code class="docutils literal notranslate"><span class="pre">invpt</spa
 kinematic selection (ex. <code class="docutils literal notranslate"><span class="pre">myMuons</span> <span class="pre">=</span> <span class="pre">events.Muon[events.Muon.pt</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code>) or some trivial splicing (<code class="docutils literal notranslate"><span class="pre">myMuon</span> <span class="pre">=</span> <span class="pre">events.Muons[:]</span></code>). Another feature of mutability is that once the collection is added to the event collection, it becomes immutable. That is why the third attempt is the one that adds the both the electron extended variable and the extednded electron collection to the event.</p>
 <p>Because of these quirks, it would typically be worth it to wrap the object selection into a function if the object selection is typical within an analysis, and it also helps with code readability</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -653,13 +653,13 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
 </pre></div></div>
 </div>
 <p>Once the new object collection has been added to the event collection, they will persist to arbitrary levels of event selection:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -685,11 +685,11 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
-[&#39;event&#39;, &#39;Jet&#39;, &#39;GenPart&#39;, &#39;run&#39;, &#39;MET&#39;, &#39;HLT&#39;, &#39;luminosityBlock&#39;, &#39;Tau&#39;, &#39;Muon&#39;, &#39;PV&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
+[&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;, &#39;selectedMuon_1&#39;, &#39;myMuon&#39;, &#39;selectedMuon_2&#39;, &#39;selectedMuon_3&#39;, &#39;selectedMuon_f&#39;]
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
 </pre></div></div>
 </div>
@@ -698,7 +698,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <h2>Comparing array based compuations and loop based compuatation<a class="headerlink" href="#Comparing-array-based-compuations-and-loop-based-compuatation" title="Permalink to this headline">¶</a></h2>
 <p>So to put this together into a single code block, suppose our analysis consisten of selecting events that have at least 1 electron with <span class="math notranslate nohighlight">\(p_{T} &gt; 50GeV\)</span>, <span class="math notranslate nohighlight">\(|\eta| &lt; 2.4\)</span>, and we want to calculate the average of all such electron’s iverserse <span class="math notranslate nohighlight">\(p_{T}\)</span> within the selected events. Our awkward array code would look something like:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -733,7 +733,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 </div>
 <p>On total this is 4 statements (not counting the file reading step) used to make this analysis. Compare that with the loop based notation:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -774,7 +774,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <h2>More on index notation<a class="headerlink" href="#More-on-index-notation" title="Permalink to this headline">¶</a></h2>
 <p>Let us dive in a bit more regarding the index notation, with a fresh set of events.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -793,7 +793,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 </ul>
 <p>This is very simply when the array is just <code class="docutils literal notranslate"><span class="pre">N</span></code> dimensional (a.k.a. contains a single index). Let us use the most simple example, the <code class="docutils literal notranslate"><span class="pre">events.MET.pt</span></code> object is just a list floats, with the length matching the number of events. Using this we can get:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -823,7 +823,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>There the comma in the square braces is used to seperate the first index argument that operation on the outer-most dimension (in our case the event index), while the second argument is for the inner dimension index (in which our case the object index within an event). For instance, if we want to get the leading jet’s <span class="math notranslate nohighlight">\(p_{T}\)</span> for every event, we can used the following</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -841,7 +841,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>The first argument <code class="docutils literal notranslate"><span class="pre">:</span></code> is a trivial slice operation, indicating that we want every event. The second operator indicates that we want the leading (a.k.a 0-th) jet in each event. Notice that the user is responsible to make sure a corresponding object exists. For instance, if we run the same notation using the muon collection instead:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -856,7 +856,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-32-af27855176d3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">&lt;ipython-input-22-af27855176d3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>events<span class="ansi-blue-fg">.</span>Muon<span class="ansi-blue-fg">.</span>pt<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-green-fg">~/VirtualENV/coffeaenv/lib/python3.8/site-packages/awkward1/highlevel.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, where)</span>
@@ -873,7 +873,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>We get an out of range error, since not every event has a muon. In this case, we would first need to filter on events to ensure events contain muons, and then run same notation</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -892,7 +892,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>The second argument doesn’t need to be singular either, for instance, if our analysis is only interested in the 2 leading jets within an event, what we can do is:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -912,7 +912,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>Where we have now created the collection which contains just the 2 leading jets in the event using a slicing notation. The list of index notation is also helpful if we want to reorder objects. For example if we want to find the 2 jets that are the most forward in the detector, we can use awkward1 methods to generate the required index</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -942,7 +942,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </ul>
 <p>Notice becuase of how the second line is phrased, the resulting <code class="docutils literal notranslate"><span class="pre">events.JetByEta</span></code> has an inner dimension that is the same as the the <code class="docutils literal notranslate"><span class="pre">order</span></code> variale and <em>not</em> the <code class="docutils literal notranslate"><span class="pre">events.Jet</span></code> variable. For instance, if we are only interested in the 2 least forward jets we can use:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -962,7 +962,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>Another handy application of this is the index notation is the old process of using object indices in the place of pointers. In this NanoAOD event, muons have a <code class="docutils literal notranslate"><span class="pre">genPartIdx</span></code> field, which indicates which <code class="docutils literal notranslate"><span class="pre">events.GenPart</span></code> collection it should be matched to. Notice that we will need to some some additional parsing to ensure: 1. The muons of intestest have a corresponding genPartIdx (&gt;= 0)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -984,7 +984,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>Now since the <code class="docutils literal notranslate"><span class="pre">muon_genpart</span></code> has the same dimension as that of the <code class="docutils literal notranslate"><span class="pre">events.MuonWithGen</span></code> collection, we can add the <code class="docutils literal notranslate"><span class="pre">muon_genpart</span></code> to the <code class="docutils literal notranslate"><span class="pre">MuonWithGen</span></code> collection. This makes additiona codes much more useful:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1018,7 +1018,7 @@ muon <span class="math notranslate nohighlight">\(p_{T}\)</span> array. What hap
 </ul>
 <p>Since in awkward array, the <code class="docutils literal notranslate"><span class="pre">A</span></code> dimension is a variable one, we will never encounter the case of a <code class="docutils literal notranslate"><span class="pre">A</span></code><span class="math notranslate nohighlight">\(\otimes\)</span><code class="docutils literal notranslate"><span class="pre">NxA</span></code> array. To use some concreate examples:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1043,7 +1043,7 @@ N      @ NxA : [[-17.5], [], [], [68.7, 37.4, 25, ... [42.3, 43.3, 42.3, 58.2, 5
 <p>Pretty much all calculations can be broken down into binary operations like above, coffea even provides some common HEP function such as <code class="docutils literal notranslate"><span class="pre">delta_r</span></code> so you done , the difficulty comes in mangling the array into the correct dimension. that broadcasting can take over. For instance, the calculation of the <span class="math notranslate nohighlight">\(\Delta R\)</span> of the first and second leading jets in an event is simple, this this is just a reduction of the 2 <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array to 2 <code class="docutils literal notranslate"><span class="pre">N</span></code> array via index selection, then calling a inbuild
 binary operation.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1065,7 +1065,7 @@ binary operation.</p>
 </div>
 <p>To calculated of <span class="math notranslate nohighlight">\(\Delta R\)</span> the leading jet with all muon in the event is also simple (notice how it takes on the dimension of the Muon collection)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1084,7 +1084,7 @@ binary operation.</p>
 <p>Now suppose we want to perform a jet-cone matching of the gen particles collection with the <strong>all</strong> jets in the event. How do we perform broadcasting of a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array with a <code class="docutils literal notranslate"><span class="pre">NxB</span></code> array? The answer is to expand one of the array into a <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array for the boardcast for higher dimensions can be performed. Details of how this method works can be found the awkward documentation for the <code class="docutils literal notranslate"><span class="pre">`cartesian</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.cartesian.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.cartesian.html</a>&gt;`__ and
 <code class="docutils literal notranslate"><span class="pre">`unzip</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.unzip.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.unzip.html</a>&gt;`__ method, but here is skeleton code performing object x object computations:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1106,15 +1106,11 @@ binary operation.</p>
 <p>Lets break down the code above:</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ak.unzip</span></code> and <code class="docutils literal notranslate"><span class="pre">ak.cartesian</span></code> method expands the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.Jet</span></code> array and the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.GenPart</span></code> array in to a <code class="docutils literal notranslate"><span class="pre">NxBxA</span></code> arrays (named <code class="docutils literal notranslate"><span class="pre">_</span></code> since we wouldn’t be using this) and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. The broardcast is the performed on the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jets array and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> <code class="docutils literal notranslate"><span class="pre">genpart</span></code> array to generate a delta R mask of dimension <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code>, which is then used to filter the <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. Now we can stored the <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array into the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jet collection, which is used to
 find all gen particles associated with a jet via delta R matching!</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
+<p>This is probably the most advanced that calculation that a typical analysis will need in computation: the computation of arrays of mismatch dimensions. Hopefully this introduction is enough to help people start to translate their loop based analysis calculation into array based syntaxs.</p>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
+<div class="section" id="When-all-else-fails---numba-for-loops">
+<h2>When all else fails - numba for loops<a class="headerlink" href="#When-all-else-fails---numba-for-loops" title="Permalink to this headline">¶</a></h2>
+<p>TO BE WRITTEN: assigned -Yi-Mu Chen</p>
 </div>
 </div>
 
@@ -1133,6 +1129,7 @@ find all gen particles associated with a jet via delta R matching!</p>
 <li><a class="reference internal" href="#Comparing-array-based-compuations-and-loop-based-compuatation">Comparing array based compuations and loop based compuatation</a></li>
 <li><a class="reference internal" href="#More-on-index-notation">More on index notation</a></li>
 <li><a class="reference internal" href="#Calcuation-with-objects">Calcuation with objects</a></li>
+<li><a class="reference internal" href="#When-all-else-fails---numba-for-loops">When all else fails - numba for loops</a></li>
 </ul>
 </li>
 </ul>
