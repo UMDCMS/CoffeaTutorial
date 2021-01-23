@@ -1,5 +1,508 @@
 {
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Writting coffea Schema files\n",
+    "\n",
+    "TO Be Written -- assigned Yihui Lai"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The interpretation of the TTree data is configurable via schema objects. \n",
+    "\n",
+    "Schema teachs the event processor how to group variables into collections, so operations can be run over entire collection at once. And we can also define some handy [behaviors](https://awkward-array.readthedocs.io/en/latest/ak.behavior.html) for a specific collection in schema.\n",
+    "\n",
+    "In this demo, we will create our own dummy schema and implement our own behavior. \n",
+    "\n",
+    "First, Let's look at the dummy_nanoevents root file with `BaseSchema` and see what's inside of this file. We'll show how to construct a schema that can be used to interpret this root file. \n",
+    "\n",
+    "The events object can be instantiated as follows:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['run', 'luminosityBlock', 'event', 'nMuon', 'Muon_pt', 'Muon_eta', 'Muon_phi', 'Muon_mass', 'Muon_charge', 'Muon_flag', 'Muon_dxy', 'Muon_dxyErr', 'Muon_dz', 'Muon_dzErr', 'Electron_pt', 'Electron_eta', 'Electron_phi', 'Electron_mass', 'Electron_charge', 'Electron_flag', 'Electron_dxy', 'Electron_dxyErr', 'Electron_dz', 'Electron_dzErr', 'Jet_pt', 'Jet_eta', 'Jet_phi', 'Jet_energy', 'Jet_ID', 'Jet_SubjetsCounts', 'Subjet_pt', 'Subjet_eta', 'Subjet_phi', 'Subjet_energy']\n"
+     ]
+    }
+   ],
+   "source": [
+    "from coffea.nanoevents import NanoEventsFactory, BaseSchema, NanoAODSchema\n",
+    "fname = \"file:dummy_nanoevents.root\"\n",
+    "events = NanoEventsFactory.from_root(\n",
+    "           fname, \n",
+    "           schemaclass=BaseSchema\n",
+    "         ).events()\n",
+    "print(events.fields)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we can copy the skeleton of a schema class:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class DummySchema(BaseSchema):\n",
+    "    \"\"\"\n",
+    "    \"\"\"\n",
+    "    def __init__(self, base_form):\n",
+    "        super().__init__(base_form)\n",
+    "        self._form[\"contents\"] = self._build_collections(self._form[\"contents\"])\n",
+    "\n",
+    "    def _build_collections(self, branch_forms):\n",
+    "        output = {}\n",
+    "        return output\n",
+    "\n",
+    "    @property\n",
+    "    def behavior(self):\n",
+    "        from coffea.nanoevents.methods import base, vector\n",
+    "        behavior = {}\n",
+    "        behavior.update(base.behavior)\n",
+    "        behavior.update(vector.behavior)\n",
+    "        return behavior"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As you can see, this schema is so simple and it is not useful currently. If we call the events again with our own schema, we'll find it contains nothing."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[]"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "events = NanoEventsFactory.from_root(\n",
+    "           fname, \n",
+    "           schemaclass=DummySchema\n",
+    "         ).events()\n",
+    "events.fields"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create collections\n",
+    "\n",
+    "In schema, the `branch_forms` is a python dictionary used to define branch grouping. \n",
+    "\n",
+    "By default (`BaseSchema`), it will be completely flat:\n",
+    "```python\n",
+    "branch_forms={\n",
+    "  \"particle_pt\":{},\n",
+    "  \"particle_eta\":{},\n",
+    "  \"particle_phi\":{},\n",
+    "  \"particle_mass\":{},\n",
+    "  ...\n",
+    "}\n",
+    "```\n",
+    "Just as you have seen when we open the dummy root file with `BaseSchema`, all the branches are listed when do `print(events.fields)`. \n",
+    "\n",
+    "We would like to put some branches into the same collection, as what follows:\n",
+    "\n",
+    "```python\n",
+    "new_branch_forms={\n",
+    "  \"particle\": schemas.zip_forms({\n",
+    "      \"pt\" : branch_forms[\"particle_pt\"],\n",
+    "      \"eta\" : branch_forms[\"particle_eta\"],\n",
+    "      \"phi\" : branch_forms[\"particle_phi\"],\n",
+    "      \"mass\" : branch_forms[\"particle_mass\"],\n",
+    "  })\n",
+    "}\n",
+    "```\n",
+    "So when we want to call `particle_pt`, we actually do `particle.pt`.\n",
+    "\n",
+    "All of this is to be implemented in the `Schema._build_collections` method. \n",
+    "\n",
+    "For example, let's add the `Electron` collection to our schema. To do this we also need to import `zip_forms`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from coffea.nanoevents.schemas import zip_forms, nest_jagged_forms\n",
+    "class DummySchema(BaseSchema):\n",
+    "    \"\"\"\n",
+    "    \"\"\"\n",
+    "    def __init__(self, base_form):\n",
+    "        super().__init__(base_form)\n",
+    "        self._form[\"contents\"] = self._build_collections(self._form[\"contents\"])\n",
+    "\n",
+    "    def _build_collections(self, branch_forms):\n",
+    "        output = {}\n",
+    "        output[\"Electron\"] = zip_forms(\n",
+    "            {\n",
+    "                \"pt\" : branch_forms[\"Electron_pt\"],\n",
+    "                \"eta\" : branch_forms [\"Electron_eta\"] , \n",
+    "                \"phi\": branch_forms[\"Electron_phi\"],\n",
+    "                \"mass\": branch_forms[\"Electron_mass\"],\n",
+    "                #\"xx\": branch_forms[\"Electron_xx\"],\n",
+    "            },\n",
+    "            \"Electron\",\n",
+    "        )\n",
+    "        return output\n",
+    "\n",
+    "    @property\n",
+    "    def behavior(self):\n",
+    "        from coffea.nanoevents.methods import base, vector\n",
+    "        behavior = {}\n",
+    "        behavior.update(base.behavior)\n",
+    "        behavior.update(vector.behavior)\n",
+    "        return behavior"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we successfully created a schema with one collection `Electron`. It will be able to recognize branches with name `Electron_pt, Electron_eta, Electron_phi, Electron_mass`.\n",
+    "Try to call the `events` again."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Electron']\n",
+      "['pt', 'eta', 'phi', 'mass']\n"
+     ]
+    }
+   ],
+   "source": [
+    "events = NanoEventsFactory.from_root(\n",
+    "           fname, \n",
+    "           schemaclass=DummySchema\n",
+    "         ).events()\n",
+    "print(events.fields)\n",
+    "print(events.Electron.fields)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Congratualtions, it should work. We can use the mask and do selection on the whole collection at once now:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[49.3, 38.1], [48.9, 43.9, 50.8, 43.9], ... 40.4], [44.6, 45.5, 49.2, 58.3, 51.9]]\n",
+      "[[0.366, 0.437], [0.149, 0.236, 0.472, ... [0.442, 0.854, 0.344, 0.156, 0.564]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "mask = (events.Electron.pt>3) & (events.Electron.pt<60)\n",
+    "good_elec = events.Electron[mask]\n",
+    "print(good_elec.pt)\n",
+    "print(good_elec.eta)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "However, if you put some unknown branches to the collection, errors will be returned. \n",
+    "For example, uncomment the following line in `DummySchema`:\n",
+    "```python\n",
+    "\"xx\": branch_forms[\"Electron_xx\"],\n",
+    "```\n",
+    "Run the above code again, you will see:\n",
+    "```bash\n",
+    "KeyError: 'Electron_xx'\n",
+    "```\n",
+    "Of course we can make a long list and manually group all the TBranches. \n",
+    "But use naming convetions would enable you to write the schema in a very neat way. Like what we have in the dummy root file, branches are named as `object_varible`. \n",
+    "So we can define some collections and put TBranches  `{collection_name}_xx` into the collection:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class DummySchema(BaseSchema):\n",
+    "    \"\"\"\n",
+    "    \"\"\"\n",
+    "    mixins = {\n",
+    "        'Electron': \"PtEtaPhiMLorentzVector\",\n",
+    "        'Muon': 'PtEtaPhiMLorentzVector',\n",
+    "        'Jet': 'PtEtaPhiELorentzVector',\n",
+    "        'Subjet': 'PtEtaPhiELorentzVector',\n",
+    "    }\n",
+    "    def __init__(self, base_form):\n",
+    "        super().__init__(base_form)\n",
+    "        self._form[\"contents\"] = self._build_collections(self._form[\"contents\"])\n",
+    "\n",
+    "    def _build_collections(self, branch_forms):\n",
+    "        output = {}\n",
+    "        ## Making the basic \n",
+    "        for name in self.mixins:\n",
+    "            mixin = self.mixins.get(name, \"NanoCollection\")\n",
+    "            output[name] = zip_forms({\n",
+    "                k[len(name) + 1 :]: branch_forms[k]\n",
+    "                for k in branch_forms\n",
+    "                if k.startswith(name + \"_\")\n",
+    "            },\n",
+    "            name,\n",
+    "            record_name=mixin)\n",
+    "        return output\n",
+    "\n",
+    "    @property\n",
+    "    def behavior(self):\n",
+    "        from coffea.nanoevents.methods import base, vector\n",
+    "        behavior = {}\n",
+    "        behavior.update(base.behavior)\n",
+    "        behavior.update(vector.behavior)\n",
+    "        return behavior"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We defined 4 collections `Electron, Muon, Jet, Subjet` in the above DummySchema and we used `for k in branch_forms` to search all the braches start with `{collection_name}_`. Now open the dummy root file again, we can see defined collections. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Electron', 'Muon', 'Jet', 'Subjet']\n",
+      "['pt', 'eta', 'phi', 'mass', 'charge', 'flag', 'dxy', 'dxyErr', 'dz', 'dzErr']\n",
+      "[[48.7, 33.9], [26.6, 40.2, 29.8, 31.6], ... 47.3, 24.6], [33, 30.2, 47.8, 31.5, 45]]\n",
+      "[[1.21, 1.15], [1.42, 1.34, 1.12, 1.47], ... 1.56], [1.14, 0.805, 1.23, 1.42, 1.03]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "events = NanoEventsFactory.from_root(\n",
+    "           fname, \n",
+    "           schemaclass=DummySchema\n",
+    "         ).events()\n",
+    "print(events.fields)\n",
+    "print(events.Electron.fields)\n",
+    "print(events.Electron.px)\n",
+    "print(events.Electron.theta)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Maybe you already noticed we printed something called `events.Electron.px` and `events.Electron.theta` in the last block, but they don't exist in the dummy root file. How were thay created? This is actually the `behavior` this collection has, we'll talk about this in the next section. \n",
+    "\n",
+    "Look at the collection list:\n",
+    "```python\n",
+    "mixins = {\n",
+    "        'Electron': \"PtEtaPhiMLorentzVector\",\n",
+    "        'Muon': 'PtEtaPhiMLorentzVector',\n",
+    "        'Jet': 'PtEtaPhiELorentzVector',\n",
+    "        'Subjet': 'PtEtaPhiELorentzVector',\n",
+    "    }\n",
+    "```\n",
+    "`PtEtaPhiMLorentzVector` is the name of `behavior` that each collection has. It is defined [here](https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/methods/vector.py#L497). \n",
+    "And we imported it through `from coffea.nanoevents.methods import base, vector`\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create behavior\n",
+    "\n",
+    "Aside from put different branches into collections, we can also add `behavior` to collections. This means additional awkward arrays are generated on-the-fly via predefined algorithm. Like we can get `px, theta` previously. \n",
+    "\n",
+    "A bunch of other common physics behaviors are already provided in coffea, and you can find them in [methods](https://github.com/CoffeaTeam/coffea/tree/a95401cad91e88ceac47a4c693068bc4cbc7d338/coffea/nanoevents/methods).\n",
+    "\n",
+    "To write our own coffea behavior, first we need to define the `behavior` first. \n",
+    "In the following code, we define `DummyBehavior`. It only has one function `plus1()`, which returns the `particle.mass+1` when you call `particle.plus1`.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import awkward1\n",
+    "dummybehavior={}\n",
+    "@awkward1.mixin_class(dummybehavior)\n",
+    "class DummyBehavior:\n",
+    "    @property\n",
+    "    def plus1(self):\n",
+    "        return self.mass+1 \n",
+    "\n",
+    "class DummySchema(BaseSchema):\n",
+    "    \"\"\"\n",
+    "    \"\"\"\n",
+    "    mixins = {\n",
+    "        'Electron': \"DummyBehavior\",\n",
+    "        'Muon': 'PtEtaPhiMLorentzVector',\n",
+    "        'Jet': 'PtEtaPhiELorentzVector',\n",
+    "        'Subjet': 'PtEtaPhiELorentzVector',\n",
+    "    }\n",
+    "    def __init__(self, base_form):\n",
+    "        super().__init__(base_form)\n",
+    "        self._form[\"contents\"] = self._build_collections(self._form[\"contents\"])\n",
+    "\n",
+    "    def _build_collections(self, branch_forms):\n",
+    "        output = {}\n",
+    "        ## Making the basic \n",
+    "        for name in self.mixins:\n",
+    "            mixin = self.mixins.get(name, \"NanoCollection\")\n",
+    "            output[name] = zip_forms({\n",
+    "                k[len(name) + 1 :]: branch_forms[k]\n",
+    "                for k in branch_forms\n",
+    "                if k.startswith(name + \"_\")\n",
+    "            },\n",
+    "            name,\n",
+    "            record_name=mixin)\n",
+    "        return output\n",
+    "\n",
+    "    @property\n",
+    "    def behavior(self):\n",
+    "        from coffea.nanoevents.methods import base, vector\n",
+    "        behavior = {}\n",
+    "        behavior.update(base.behavior)\n",
+    "        behavior.update(vector.behavior)\n",
+    "        behavior.update(dummybehavior)\n",
+    "        return behavior"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The `behavior` of `Electron` is changed to `DummyBehavior` in the above DummySchema. \n",
+    "Now try our self-defined behavior:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Electron', 'Muon', 'Jet', 'Subjet']\n",
+      "['pt', 'eta', 'phi', 'mass', 'charge', 'flag', 'dxy', 'dxyErr', 'dz', 'dzErr']\n",
+      "[[0.00051, 0.00051], [0.00051, ... 0.00051, 0.00051, 0.00051, 0.00051, 0.00051]]\n",
+      "[[1, 1], [1, 1, 1, 1], [1, 1, 1, 1, 1, 1, ... 1, 1], [1, 1, 1, 1], [1, 1, 1, 1, 1]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "events = NanoEventsFactory.from_root(\n",
+    "           fname, \n",
+    "           schemaclass=DummySchema\n",
+    "         ).events()\n",
+    "print(events.fields)\n",
+    "print(events.Electron.fields)\n",
+    "print(events.Electron.mass)\n",
+    "print(events.Electron.plus1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Since we changed the `behavior`, `print(events.Electron.theta)` should not work now. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "AttributeError",
+     "evalue": "no field named 'theta'\n\n(https://github.com/scikit-hep/awkward-1.0/blob/0.4.5/src/awkward1/highlevel.py#L1084)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mAttributeError\u001b[0m                            Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-11-657f78c18536>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mevents\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mElectron\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtheta\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[0;32m~/Desktop/CoffeaTutorial/coffeaenv/lib/python3.8/site-packages/awkward1/highlevel.py\u001b[0m in \u001b[0;36m__getattr__\u001b[0;34m(self, where)\u001b[0m\n\u001b[1;32m   1080\u001b[0m                     )\n\u001b[1;32m   1081\u001b[0m             \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1082\u001b[0;31m                 raise AttributeError(\n\u001b[0m\u001b[1;32m   1083\u001b[0m                     \u001b[0;34m\"no field named {0}\"\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mformat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mrepr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mwhere\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1084\u001b[0m                     \u001b[0;34m+\u001b[0m \u001b[0mawkward1\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_util\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mexception_suffix\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0m__file__\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mAttributeError\u001b[0m: no field named 'theta'\n\n(https://github.com/scikit-hep/awkward-1.0/blob/0.4.5/src/awkward1/highlevel.py#L1084)"
+     ]
+    }
+   ],
+   "source": [
+    "print(events.Electron.theta)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
  "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
   "language_info": {
    "codemirror_mode": {
     "name": "ipython",
@@ -10,28 +513,9 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": 3
-  },
-  "orig_nbformat": 2
+   "version": "3.8.1"
+  }
  },
  "nbformat": 4,
- "nbformat_minor": 2,
- "cells": [
-  {
-   "source": [
-    "# Writting coffea Schema files\n",
-    "\n",
-    "TO Be Written -- assigned Yihui Lai"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ]
+ "nbformat_minor": 2
 }
