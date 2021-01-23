@@ -11,7 +11,6 @@
    installation
    notebooks/intronotebook.ipynb
    notebooks/awkwardbasic.ipynb
-   notebooks/awkwardcalc.ipynb
    notebooks/coffeaprocessors.ipynb
    notebooks/coffeaschema.ipynb
    notebooks/higgsto4l.ipynb
