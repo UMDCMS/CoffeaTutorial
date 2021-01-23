@@ -9,6 +9,7 @@
    :maxdepth: 2
 
    installation
+   notebooks/intronotebook.ipynb
    notebooks/awkwardbasic.ipynb
    notebooks/awkwardcalc.ipynb
    notebooks/coffeaprocessors.ipynb
