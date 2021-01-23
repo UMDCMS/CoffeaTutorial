@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Writting coffea Schema files" href="coffeaschema.html" />
-    <link rel="prev" title="Involved calcuations with awkward arrays" href="awkwardcalc.html" /> 
+    <link rel="prev" title="Learnig the awkward arrays syntax" href="awkwardbasic.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,7 +30,7 @@
           <a href="coffeaschema.html" title="Writting coffea Schema files"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="awkwardcalc.html" title="Involved calcuations with awkward arrays"
+          <a href="awkwardbasic.html" title="Learnig the awkward arrays syntax"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Coffea processors</a></li> 
@@ -329,20 +329,20 @@ gritty details filtered out.</p>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>
 
         <span class="c1"># The object selection</span>
-        <span class="n">selectedElectron</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="p">[</span> <span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="o">&amp;</span>
-                                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0.5</span><span class="p">)</span> <span class="p">]</span>
-        <span class="n">selectedElectron</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">pt</span>
-        <span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedElectron&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selectedElectron</span>
+        <span class="n">selectedMuon</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span> <span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="o">&amp;</span>
+                                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">2.4</span><span class="p">)</span> <span class="p">]</span>
+        <span class="n">selectedMuon</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">pt</span>
+        <span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedMuon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selectedMuon</span>
 
         <span class="c1"># Event selection</span>
-        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># Filling the accumulator</span>
         <span class="n">output</span><span class="p">[</span><span class="s1">&#39;nevent&#39;</span><span class="p">][</span><span class="n">dataset</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;invpt_sum&#39;</span><span class="p">][</span><span class="n">dataset</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">invpt</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;invpt_sum&#39;</span><span class="p">][</span><span class="n">dataset</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">invpt</span><span class="p">)</span>
         <span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                              <span class="n">invpt</span><span class="o">=</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">invpt</span><span class="p">),</span>
-                              <span class="n">eta</span><span class="o">=</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedElectron</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="p">)</span>
+                              <span class="n">invpt</span><span class="o">=</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">invpt</span><span class="p">),</span>
+                              <span class="n">eta</span><span class="o">=</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="p">)</span>
 
         <span class="c1"># returning the output</span>
         <span class="k">return</span> <span class="n">output</span>
@@ -374,14 +374,14 @@ wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummys
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
-<span class="kn">from</span> <span class="nn">dummyschema</span> <span class="kn">import</span> <span class="n">DummySchema</span>
+<span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span> <span class="n">NanoAODSchema</span>
 
-<span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:dummy_nanoevents.root&#39;</span> <span class="p">,</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span> <span class="p">,</span>
                                       <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
-                                      <span class="n">entry_stop</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                                      <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                                       <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;Dummy&quot;</span><span class="p">},</span>
                                       <span class="c1"># Processors expects new meta data</span>
-                                      <span class="n">schemaclass</span><span class="o">=</span><span class="n">DummySchema</span><span class="p">,</span>
+                                      <span class="n">schemaclass</span><span class="o">=</span><span class="n">NanoAODSchema</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">DummyProcessor</span><span class="p">()</span>
@@ -399,9 +399,9 @@ wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummys
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 24.0})
-defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.9589513540267944})
-&lt;Hist (dataset,invpt,eta) instance at 0x7fa8cc1b8a00&gt;
+defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 3.0})
+defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.054097119718790054})
+&lt;Hist (dataset,invpt,eta) instance at 0x7efefbf81430&gt;
 </pre></div></div>
 </div>
 <p>For typical analysis work, the most import object to futher explore is the plotting of the histogram objects. Again the <a class="reference external" href="https://coffeateam.github.io/coffea/notebooks/histograms.html">official tutorial</a> has excellent pages on the manipulations of the <code class="docutils literal notranslate"><span class="pre">coffea.hist</span></code> objects. Here I will just use a couple of basic examples for those who are just getting ready to explore coffea:</p>
@@ -424,8 +424,8 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.95895
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;Hist (dataset,invpt,eta) instance at 0x7fa8cc1b8a00&gt;
-&lt;Hist (dataset,invpt) instance at 0x7fa8cc310fd0&gt;
+&lt;Hist (dataset,invpt,eta) instance at 0x7efefbf81430&gt;
+&lt;Hist (dataset,invpt) instance at 0x7f00a40c8a60&gt;
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -479,14 +479,13 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.95895
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">output</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_uproot_job</span><span class="p">(</span>
     <span class="p">{</span>
-        <span class="s1">&#39;Dataset1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dummy_nanoevents.root&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;Dataset2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;dummy_nanoevents.root&#39;</span><span class="p">,</span>
-                     <span class="s1">&#39;dummy_nanoevents.root&#39;</span><span class="p">]</span>
+        <span class="s1">&#39;Dataset1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;TTbar.root&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;Dataset2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;TTbar.root&#39;</span><span class="p">,</span> <span class="s1">&#39;TTbar.root&#39;</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="n">treename</span><span class="o">=</span><span class="s2">&quot;Events&quot;</span><span class="p">,</span>
     <span class="n">processor_instance</span><span class="o">=</span><span class="n">DummyProcessor</span><span class="p">(),</span>
     <span class="n">executor</span><span class="o">=</span><span class="n">processor</span><span class="o">.</span><span class="n">futures_executor</span><span class="p">,</span>
-    <span class="n">executor_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">DummySchema</span><span class="p">,</span> <span class="s2">&quot;workers&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="n">executor_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">NanoAODSchema</span><span class="p">,</span> <span class="s2">&quot;workers&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -495,22 +494,31 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.95895
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c3fcc16e23174c30af677781374c029e"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "cf240c3ca8524b249f51cf8fd42bedb9"}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "638a7dad407c4570b14644d288bf1ffc"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "79ae37c14fdd49cd97363d4cfddc5b94"}</script></div>
 </div>
-<p>Now at first glance this seems to be a very straigh forwards translation to the from what we already have in the <code class="docutils literal notranslate"><span class="pre">NanoEventsFractory</span></code> method. The magic statement that give coffea simple scalability is the use of the <code class="docutils literal notranslate"><span class="pre">executor</span></code> argument. By using the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.futures_executor.html#coffea.processor.futures_executor">processor.futures_executor</a>, you have already enabled local multithreading with a maximum of 10 parallel threads! Aside from
-the futures_executor. there is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.iterative_executor.html">iterative_executor</a> for single thread processing, which is the best for analysis debugging, since parallelism would cause the error messages to be wrapped in additional thread-related messages. Thre is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.dask_executor.html">dask_executor</a>, which submits job to the grid computing resourse available to
-machine running the notebook. If you already have the settings stored somewhere on, you can switch from a debuging to grid-level parallel programming simply by changing a couple of lines in the notebook! Examples of the configuration required to run grid-level parallelism can be found in the example <a class="reference internal" href="../snippets.html"><span class="doc">snippets</span></a>.</p>
+<p>Now at first glance this seems to be a very straigh forwards translation to the from what we already have in the <code class="docutils literal notranslate"><span class="pre">NanoEventsFractory</span></code> method. The magic statement that give coffea simple scalability is the use of the <code class="docutils literal notranslate"><span class="pre">executor</span></code> argument. By using the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.futures_executor.html#coffea.processor.futures_executor">processor.futures_executor</a>, you have already enabled local multithreading with a maximum of 10 parallel threads, by doing so,
+we have just shwed through nearly 10 gigabytes of data in less than 5 seconds! Aside from the futures_executor. there is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.iterative_executor.html">iterative_executor</a> for single thread processing, which is the best for analysis debugging, since parallelism would cause the error messages to be wrapped in additional thread-related messages. There is also the
+<a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.dask_executor.html">dask_executor</a>, which submits job to the grid computing resourse available to machine running the notebook. If you already have the settings stored somewhere on, you can switch from a debuging to grid-level parallel programming simply by changing a couple of lines in the notebook! Examples of the configuration required to run grid-level parallelism can be found in the example <a class="reference internal" href="../snippets.html"><span class="doc">snippets</span></a>.</p>
 <p>A couple of notes on how parallelism works on the various executors: it is still file-based (a.k.a each file generates their own events awkward array to be processed), so be careful that when running the <code class="docutils literal notranslate"><span class="pre">futures_executor</span></code> during medorate testing you don’t saturate memory usage of your local machine. Because of this, if you create a histogram to keep a tally of <code class="docutils literal notranslate"><span class="pre">len(events)</span></code>, what you would get is not a single number of events for each sample, but rather the various number of events stored
 in each file. While it might be concptually helpful to think abstractly that the input <code class="docutils literal notranslate"><span class="pre">events</span></code> object to the <code class="docutils literal notranslate"><span class="pre">process</span></code> method is a massive awkward array that spans the entire data set, this is not how the the processor is actually working.</p>
 <p>Also now we can comment on how process <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> are performed across multiple jobs. The contents of each of the accumulator instances are added together via the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> oeprator. For <code class="docutils literal notranslate"><span class="pre">coffea.hist</span></code> histogram, this method is already overloaded to behave how one would expect histogram aggregation to work, but you can supply your own class with the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> operator overloaded if you really want. Right now, there is <strong>no</strong> standard class to aggregate unbinned data, since the unbinned
 data can be artibitrarily large, so in a grid-level computation settings one would want to keep the unbinned data on each worker node until they are called by the main thread for further processing, as returning all data to the main thread will likely saturate all resources on a single machine. The core developers are currently <a class="reference external" href="https://github.com/CoffeaTeam/coffea/pull/368">working</a> on this general use case which uses a different data format, but if you know that your final output data fram
 is expected to be small (ex you have a very tight background rejection selection), you can write your own accumulator class to get unbinned data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -531,8 +539,8 @@ is expected to be small (ex you have a very tight background rejection selection
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="awkwardcalc.html"
-                        title="previous chapter">Involved calcuations with awkward arrays</a></p>
+  <p class="topless"><a href="awkwardbasic.html"
+                        title="previous chapter">Learnig the awkward arrays syntax</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="coffeaschema.html"
                         title="next chapter">Writting coffea Schema files</a></p>
@@ -567,7 +575,7 @@ is expected to be small (ex you have a very tight background rejection selection
           <a href="coffeaschema.html" title="Writting coffea Schema files"
              >next</a> |</li>
         <li class="right" >
-          <a href="awkwardcalc.html" title="Involved calcuations with awkward arrays"
+          <a href="awkwardbasic.html" title="Learnig the awkward arrays syntax"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Coffea processors</a></li> 
