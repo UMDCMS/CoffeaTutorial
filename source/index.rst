@@ -13,6 +13,7 @@
    notebooks/awkwardcalc.ipynb
    notebooks/coffeaprocessors.ipynb
    notebooks/coffeaschema.ipynb
+   notebooks/nestedjaggedarray.ipynb
    notebooks/higgsto4l.ipynb
    snippets
    contribute
