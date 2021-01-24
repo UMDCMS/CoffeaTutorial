@@ -292,7 +292,6 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Writting-coffea-Schema-files">
 <h1>Writting coffea Schema files<a class="headerlink" href="#Writting-coffea-Schema-files" title="Permalink to this headline">¶</a></h1>
-<p>TO Be Written – assigned Yihui Lai</p>
 <p>The interpretation of the TTree data is configurable via schema objects.</p>
 <p>Schema teachs the event processor how to group variables into collections, so operations can be run over entire collection at once. And we can also define some handy <a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/ak.behavior.html">behaviors</a> for a specific collection in schema.</p>
 <p>In this demo, we will create our own dummy schema and implement our own behavior.</p>
@@ -304,7 +303,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span><span class="p">,</span> <span class="n">BaseSchema</span><span class="p">,</span> <span class="n">NanoAODSchema</span>
-<span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;file:dummy_nanoevents.root&quot;</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;../../samples/dummy_nanoevents.root&quot;</span>
 <span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
            <span class="n">fname</span><span class="p">,</span>
            <span class="n">schemaclass</span><span class="o">=</span><span class="n">BaseSchema</span>
@@ -658,7 +657,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <p>Since we changed the <code class="docutils literal notranslate"><span class="pre">behavior</span></code>, <code class="docutils literal notranslate"><span class="pre">print(events.Electron.theta)</span></code> should not work now.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
@@ -667,28 +666,222 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="Nested-jagged-array-implementation">
+<h2>Nested jagged array implementation<a class="headerlink" href="#Nested-jagged-array-implementation" title="Permalink to this headline">¶</a></h2>
+<p>A jagged array is an array of arrays. Each array is not guaranteed to be of the same size. You could have one parent array that each of its component is another array.</p>
+<p>But why do we need such kind of data structure? It will be clear after we take a look at the dummy_nanoevents.cc file. For convenience, I pasted the related codes below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;TFile.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;TRandom.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;TTree.h&quot;</span><span class="cp"></span>
+
+<span class="kt">void</span>
+<span class="nf">dummy_nanoevent</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">UInt_t</span> <span class="n">run</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">luminosityBlock</span><span class="p">;</span>
+
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_Pt</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_Eta</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_Phi</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_E</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_ID</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">Jets_SubjetsCounts</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_subjet_Pt</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_subjet_Eta</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_subjet_Phi</span><span class="p">;</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">Jets_subjet_E</span><span class="p">;</span>
+
+  <span class="n">TFile</span><span class="o">*</span> <span class="n">Tfile</span> <span class="o">=</span> <span class="n">Tfile</span> <span class="o">=</span> <span class="n">TFile</span><span class="o">::</span><span class="n">Open</span><span class="p">(</span> <span class="s">&quot;dummy_nanoevents.root&quot;</span><span class="p">,</span> <span class="s">&quot;RECREATE&quot;</span> <span class="p">);</span>
+  <span class="n">TTree</span><span class="o">*</span> <span class="n">ttree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TTree</span><span class="p">(</span> <span class="s">&quot;Events&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span> <span class="p">);</span>
+
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;run&quot;</span><span class="p">,</span>                <span class="o">&amp;</span><span class="n">run</span><span class="p">,</span>             <span class="s">&quot;run/I&quot;</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;luminosityBlock&quot;</span><span class="p">,</span>    <span class="o">&amp;</span><span class="n">luminosityBlock</span><span class="p">,</span> <span class="s">&quot;luminosityBlock/I&quot;</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;event&quot;</span><span class="p">,</span>              <span class="o">&amp;</span><span class="n">event</span><span class="p">,</span>           <span class="s">&quot;event/I&quot;</span> <span class="p">);</span>
+
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Jet_pt&quot;</span><span class="p">,</span>            <span class="o">&amp;</span><span class="n">Jets_Pt</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Jet_eta&quot;</span><span class="p">,</span>           <span class="o">&amp;</span><span class="n">Jets_Eta</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Jet_phi&quot;</span><span class="p">,</span>           <span class="o">&amp;</span><span class="n">Jets_Phi</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Jet_energy&quot;</span><span class="p">,</span>             <span class="o">&amp;</span><span class="n">Jets_E</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Jet_ID&quot;</span><span class="p">,</span>            <span class="o">&amp;</span><span class="n">Jets_ID</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Jet_SubjetsCounts&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Jets_SubjetsCounts</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Subjet_pt&quot;</span><span class="p">,</span>     <span class="o">&amp;</span><span class="n">Jets_subjet_Pt</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Subjet_eta&quot;</span><span class="p">,</span>    <span class="o">&amp;</span><span class="n">Jets_subjet_Eta</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Subjet_phi&quot;</span><span class="p">,</span>    <span class="o">&amp;</span><span class="n">Jets_subjet_Phi</span> <span class="p">);</span>
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span> <span class="s">&quot;Subjet_energy&quot;</span><span class="p">,</span>      <span class="o">&amp;</span><span class="n">Jets_subjet_E</span> <span class="p">);</span>
+
+  <span class="k">for</span><span class="p">(</span> <span class="n">Int_t</span> <span class="n">ev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ev</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">ev</span><span class="o">++</span> <span class="p">){</span>
+    <span class="n">run</span>             <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">event</span>           <span class="o">=</span> <span class="n">ev</span><span class="p">;</span>
+    <span class="n">luminosityBlock</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">ev</span><span class="p">;</span>
+    <span class="n">Int_t</span> <span class="n">njet</span> <span class="o">=</span> <span class="n">Int_t</span><span class="p">(</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
+
+    <span class="n">Jets_Pt</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_Eta</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_Phi</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_E</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_ID</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_SubjetsCounts</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_subjet_Pt</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_subjet_Eta</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_subjet_Phi</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">Jets_subjet_E</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">njet</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">){</span>
+      <span class="n">Jets_Pt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+      <span class="n">Jets_Eta</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+      <span class="n">Jets_Phi</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+      <span class="n">Jets_E</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Gaus</span><span class="p">(</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">10</span> <span class="p">)</span> <span class="p">);</span>
+      <span class="n">Jets_ID</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="kt">int</span><span class="p">(</span> <span class="mi">7</span><span class="o">*</span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">)</span> <span class="p">);</span>
+      <span class="c1">// subjets</span>
+      <span class="n">Int_t</span> <span class="n">jets_sub</span> <span class="o">=</span> <span class="n">Int_t</span><span class="p">(</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+      <span class="n">Jets_SubjetsCounts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">jets_sub</span> <span class="p">);</span>
+
+      <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">jets_sub</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">){</span>
+        <span class="n">Jets_subjet_Pt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+        <span class="n">Jets_subjet_Eta</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+        <span class="n">Jets_subjet_Phi</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span> <span class="p">);</span>
+        <span class="n">Jets_subjet_E</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Gaus</span><span class="p">(</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">10</span> <span class="p">)</span> <span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Fill</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Write</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the file, we generated <code class="docutils literal notranslate"><span class="pre">{njet}</span></code> jets and each jet has <code class="docutils literal notranslate"><span class="pre">{jets_sub}</span></code> subjets. So the structure looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;jet&#39;</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="s1">&#39;pt&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+          <span class="s1">&#39;eta&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+          <span class="s1">&#39;phi&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+          <span class="s1">&#39;energy&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+          <span class="s1">&#39;ID&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">],</span>
+          <span class="s1">&#39;subjets&#39;</span> <span class="p">:</span> <span class="p">[</span>
+              <span class="p">{</span><span class="s1">&#39;pt&#39;</span><span class="p">:[</span><span class="n">m0</span><span class="p">],</span> <span class="s1">&#39;eta&#39;</span><span class="p">:[</span><span class="n">m0</span><span class="p">],</span> <span class="s1">&#39;phi&#39;</span><span class="p">:[</span><span class="n">m0</span><span class="p">],</span> <span class="s1">&#39;energy&#39;</span><span class="p">:[</span><span class="n">m0</span><span class="p">]},</span>   <span class="c1"># 0</span>
+              <span class="p">{</span><span class="s1">&#39;pt&#39;</span><span class="p">:[</span><span class="n">m1</span><span class="p">],</span> <span class="s1">&#39;eta&#39;</span><span class="p">:[</span><span class="n">m1</span><span class="p">],</span> <span class="s1">&#39;phi&#39;</span><span class="p">:[</span><span class="n">m1</span><span class="p">],</span> <span class="s1">&#39;energy&#39;</span><span class="p">:[</span><span class="n">m1</span><span class="p">]},</span>   <span class="c1"># 1</span>
+              <span class="o">...</span>
+              <span class="p">{</span><span class="s1">&#39;pt&#39;</span><span class="p">:[</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;eta&#39;</span><span class="p">:[</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;phi&#39;</span><span class="p">:[</span><span class="n">m</span><span class="p">],</span> <span class="s1">&#39;energy&#39;</span><span class="p">:[</span><span class="n">m</span><span class="p">]},</span>   <span class="c1"># n-1</span>
+          <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We have <code class="docutils literal notranslate"><span class="pre">n</span></code> jets here and each jet has <code class="docutils literal notranslate"><span class="pre">m</span></code> subjets. <code class="docutils literal notranslate"><span class="pre">m</span></code> does not need to be the same for all the jets, that’s where the name <code class="docutils literal notranslate"><span class="pre">jagged</span></code> comes. <code class="docutils literal notranslate"><span class="pre">jet.pt</span></code> returns array with <code class="docutils literal notranslate"><span class="pre">n</span></code> numbers (<code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">...</span> <span class="pre">n-1]</span></code>), while <code class="docutils literal notranslate"><span class="pre">jet.subjets.pt</span></code> returns <code class="docutils literal notranslate"><span class="pre">n</span></code> arrays (<code class="docutils literal notranslate"><span class="pre">[[m0],</span> <span class="pre">[m1],</span> <span class="pre">...</span> <span class="pre">[m]]</span></code>).</p>
+<p>Note that when we create the TBranches, we can define it to store vector of vectors <code class="docutils literal notranslate"><span class="pre">vector&lt;</span> <span class="pre">vector&lt;double&gt;</span> <span class="pre">&gt;</span></code>, this is intuitively the same structure as we shown above. However, Coffea doesn’t recognize this structure.</p>
+<p>We need to store the jets as a flat vector with length <code class="docutils literal notranslate"><span class="pre">n</span></code> and store all the subjets as a flat vector with length <code class="docutils literal notranslate"><span class="pre">N</span></code> (<code class="docutils literal notranslate"><span class="pre">N&gt;=n</span></code>). Additionally we need another Branch <code class="docutils literal notranslate"><span class="pre">Jet_SubjetsCounts</span></code> (with length <code class="docutils literal notranslate"><span class="pre">n</span></code>) to tell us how many subjets that each jet contains.</p>
+<p>So if we have the following vectors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jets_energy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mf">10.2</span><span class="p">];</span>
+<span class="n">Jet_SubjetsCounts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span>
+<span class="n">Jets_subjet_energy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>It means we have 3 jets, the mapping is: <code class="docutils literal notranslate"><span class="pre">Jet:</span> <span class="pre">[10,</span> <span class="pre">10.1,</span> <span class="pre">10.2]</span>&#160; <span class="pre">-&gt;</span> <span class="pre">Subjets:</span> <span class="pre">[</span> <span class="pre">{10},</span> <span class="pre">{1.1,</span> <span class="pre">5,</span> <span class="pre">4},</span> <span class="pre">{5.1,</span> <span class="pre">5.1}]</span></code></p>
+<p>So how to implement this structure in coffea? It is actually very easy because we only need to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">nest_jagged_forms</span></code> and follow the rules:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">dummybehavior</span><span class="o">=</span><span class="p">{}</span>
+<span class="nd">@awkward1</span><span class="o">.</span><span class="n">mixin_class</span><span class="p">(</span><span class="n">dummybehavior</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DummyBehavior</span><span class="p">:</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">plus1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mass</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Electron&#39;</span><span class="p">:</span> <span class="s2">&quot;DummyBehavior&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;Muon&#39;</span><span class="p">:</span> <span class="s1">&#39;PtEtaPhiMLorentzVector&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Jet&#39;</span><span class="p">:</span> <span class="s1">&#39;PtEtaPhiELorentzVector&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Subjet&#39;</span><span class="p">:</span> <span class="s1">&#39;PtEtaPhiELorentzVector&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_form</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_form</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_form</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_collections</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_form</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_build_collections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch_forms</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">## Making the basic</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixins</span><span class="p">:</span>
+            <span class="n">mixin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixins</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;NanoCollection&quot;</span><span class="p">)</span>
+            <span class="n">output</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">zip_forms</span><span class="p">({</span>
+                <span class="n">k</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]:</span> <span class="n">branch_forms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">branch_forms</span>
+                <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">record_name</span><span class="o">=</span><span class="n">mixin</span><span class="p">)</span>
+
+        <span class="n">nest_jagged_forms</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;Jet&#39;</span><span class="p">],</span>
+                          <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;Subjet&#39;</span><span class="p">),</span>
+                          <span class="s1">&#39;SubjetsCounts&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;Subjets&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">coffea.nanoevents.methods</span> <span class="kn">import</span> <span class="n">base</span><span class="p">,</span> <span class="n">vector</span>
+        <span class="n">behavior</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">behavior</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">behavior</span><span class="p">)</span>
+        <span class="n">behavior</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">behavior</span><span class="p">)</span>
+        <span class="n">behavior</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dummybehavior</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">behavior</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">`nest_jagged_forms</span></code> is defined as follows &lt;<a class="reference external" href="https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62">https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62</a>&gt;`__. The first input parameter is the parent array, the second parameter is the child array. Then the third one is the counts array. Final one is the new name for the child array.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">nest_jagged_forms</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">counts_name</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Place child listarray inside parent listarray as a double-jagged array&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ListOffsetArray&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">if</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;RecordArray&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">child</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ListOffsetArray&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;contents&quot;</span><span class="p">][</span><span class="n">counts_name</span><span class="p">]</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">counts2offsets_form</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="n">listarray_form</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="n">offsets</span><span class="p">)</span>
+    <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;contents&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">inner</span>
+</pre></div>
+</div>
+<p>We can try this DummySchema now:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
+           <span class="n">fname</span><span class="p">,</span>
+           <span class="n">schemaclass</span><span class="o">=</span><span class="n">DummySchema</span>
+         <span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">Subjets</span><span class="o">.</span><span class="n">energy</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-11-657f78c18536&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>print<span class="ansi-blue-fg">(</span>events<span class="ansi-blue-fg">.</span>Electron<span class="ansi-blue-fg">.</span>theta<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Desktop/CoffeaTutorial/coffeaenv/lib/python3.8/site-packages/awkward1/highlevel.py</span> in <span class="ansi-cyan-fg">__getattr__</span><span class="ansi-blue-fg">(self, where)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1080</span>                     )
-<span class="ansi-green-intense-fg ansi-bold">   1081</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">-&gt; 1082</span><span class="ansi-red-fg">                 raise AttributeError(
-</span><span class="ansi-green-intense-fg ansi-bold">   1083</span>                     <span class="ansi-blue-fg">&#34;no field named {0}&#34;</span><span class="ansi-blue-fg">.</span>format<span class="ansi-blue-fg">(</span>repr<span class="ansi-blue-fg">(</span>where<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1084</span>                     <span class="ansi-blue-fg">+</span> awkward1<span class="ansi-blue-fg">.</span>_util<span class="ansi-blue-fg">.</span>exception_suffix<span class="ansi-blue-fg">(</span>__file__<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">AttributeError</span>: no field named &#39;theta&#39;
-
-(https://github.com/scikit-hep/awkward-1.0/blob/0.4.5/src/awkward1/highlevel.py#L1084)
+[&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;]
+[&#39;pt&#39;, &#39;eta&#39;, &#39;phi&#39;, &#39;energy&#39;, &#39;ID&#39;, &#39;SubjetsCounts&#39;, &#39;Subjets&#39;]
+[51.8, 47.9, 56]
+[[17.4], [22.5, 24.7], [28.3, 23]]
 </pre></div></div>
 </div>
+</div>
+<div class="section" id="Inherit-from-NanoEvents">
+<h2>Inherit from NanoEvents<a class="headerlink" href="#Inherit-from-NanoEvents" title="Permalink to this headline">¶</a></h2>
+<p>So far we showed how to create custom collections and behaviors. Actually, if you don’t want to write a new schema, you can name the TBranch with the same naming convention as NanoAOD and use the <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>. Then it will be recognized automatically.</p>
+<p>Looking at the content of <a class="reference external" href="https://cms-nanoaod-integration.web.cern.ch/integration/master-cmsswmaster/mc102X_doc.html">NanoAOD file</a>, you will need to follow the same naming if you want to use <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>.</p>
+<p>By doing so, you can also make use of the <code class="docutils literal notranslate"><span class="pre">behaviors</span></code> in <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code> automatically, which is very convenient.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -713,6 +906,8 @@ div.rendered_html tbody tr:hover {
 <li><a class="reference internal" href="#">Writting coffea Schema files</a><ul>
 <li><a class="reference internal" href="#Create-collections">Create collections</a></li>
 <li><a class="reference internal" href="#Create-behavior">Create behavior</a></li>
+<li><a class="reference internal" href="#Nested-jagged-array-implementation">Nested jagged array implementation</a></li>
+<li><a class="reference internal" href="#Inherit-from-NanoEvents">Inherit from NanoEvents</a></li>
 </ul>
 </li>
 </ul>
