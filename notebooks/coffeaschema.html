@@ -293,9 +293,9 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Writting-coffea-Schema-files">
 <h1>Writting coffea Schema files<a class="headerlink" href="#Writting-coffea-Schema-files" title="Permalink to this headline">¶</a></h1>
 <p>The interpretation of the TTree data is configurable via schema objects.</p>
-<p>Schema teachs the event processor how to group variables into collections, so operations can be run over entire collection at once. And we can also define some handy <a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/ak.behavior.html">behaviors</a> for a specific collection in schema.</p>
-<p>In this demo, we will create our own dummy schema and implement our own behavior.</p>
-<p>First, Let’s look at the dummy_nanoevents root file with <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code> and see what’s inside of this file. We’ll show how to construct a schema that can be used to interpret this root file.</p>
+<p>Schema teaches the event processor how to group variables into collections, so operations can be run over entire collection at once. And we can also define some handy <a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/ak.behavior.html">behaviors</a> for a specific collection in a schema.</p>
+<p>In this demo, we will create our own dummy schema and implement our own dummy behavior.</p>
+<p>Let’s look at the content of dummy_nanoevents.root file with <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>. We’ll show how to construct a schema that can be used to interpret this root file later.</p>
 <p>The events object can be instantiated as follows:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -383,8 +383,9 @@ div.rendered_html tbody tr:hover {
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Just as you have seen when we open the dummy root file with <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>, all the branches are listed when do <code class="docutils literal notranslate"><span class="pre">print(events.fields)</span></code>.</p>
-<p>We would like to put some branches into the same collection, as what follows:</p>
+<p>Just as you have seen when we open the dummy root file with <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>, all the branches are listed when do <code class="docutils literal notranslate"><span class="pre">print(events.fields)</span></code>. These branches are independent to each other. For example when you do a selection on <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, the branch <code class="docutils literal notranslate"><span class="pre">particle_eta</span></code> will not be affected.</p>
+<p>We usually would like to do selections collectively. If some particles don’t pass the selection on <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, their <code class="docutils literal notranslate"><span class="pre">particle_eta</span></code> should also be eliminated from the list.</p>
+<p>I.e. We would like to put some branches into the same collection, as what follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_branch_forms</span><span class="o">=</span><span class="p">{</span>
   <span class="s2">&quot;particle&quot;</span><span class="p">:</span> <span class="n">schemas</span><span class="o">.</span><span class="n">zip_forms</span><span class="p">({</span>
       <span class="s2">&quot;pt&quot;</span> <span class="p">:</span> <span class="n">branch_forms</span><span class="p">[</span><span class="s2">&quot;particle_pt&quot;</span><span class="p">],</span>
@@ -395,15 +396,15 @@ div.rendered_html tbody tr:hover {
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>So when we want to call <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, we actually do <code class="docutils literal notranslate"><span class="pre">particle.pt</span></code>.</p>
+<p>So when we want to call <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, we actually do <code class="docutils literal notranslate"><span class="pre">particle.pt</span></code>. And we can apply selections on the <code class="docutils literal notranslate"><span class="pre">particle</span></code> level so <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code> and <code class="docutils literal notranslate"><span class="pre">particle_eta</span></code> are selected at the same time now.</p>
 <p>All of this is to be implemented in the <code class="docutils literal notranslate"><span class="pre">Schema._build_collections</span></code> method.</p>
-<p>For example, let’s add the <code class="docutils literal notranslate"><span class="pre">Electron</span></code> collection to our schema. To do this we also need to import <code class="docutils literal notranslate"><span class="pre">zip_forms</span></code>.</p>
+<p>For example, let’s add the <code class="docutils literal notranslate"><span class="pre">Electron</span></code> collection to our schema. To do this we need to import <code class="docutils literal notranslate"><span class="pre">zip_forms</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span> <span class="n">zip_forms</span><span class="p">,</span> <span class="n">nest_jagged_forms</span>
+<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span> <span class="n">zip_forms</span>
 <span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -489,7 +490,8 @@ div.rendered_html tbody tr:hover {
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>KeyError: <span class="s1">&#39;Electron_xx&#39;</span>
 </pre></div>
 </div>
-<p>Of course we can make a long list and manually group all the TBranches. But use naming convetions would enable you to write the schema in a very neat way. Like what we have in the dummy root file, branches are named as <code class="docutils literal notranslate"><span class="pre">object_varible</span></code>. So we can define some collections and put TBranches <code class="docutils literal notranslate"><span class="pre">{collection_name}_xx</span></code> into the collection:</p>
+<p>Of course we can make a long list and manually group all the TBranches. But use naming convetions would enable you to write the schema in a very neat way. Like what we have in the dummy root file, branches are named as <code class="docutils literal notranslate"><span class="pre">object_varible</span></code>. So we can define some collections and put the corresponding TBranches into them.</p>
+<p>4 collections are defined below in <code class="docutils literal notranslate"><span class="pre">mixins</span></code>:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -532,7 +534,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>We defined 4 collections <code class="docutils literal notranslate"><span class="pre">Electron,</span> <span class="pre">Muon,</span> <span class="pre">Jet,</span> <span class="pre">Subjet</span></code> in the above DummySchema and we used <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">branch_forms</span></code> to search all the braches start with <code class="docutils literal notranslate"><span class="pre">{collection_name}_</span></code>. Now open the dummy root file again, we can see defined collections.</p>
+<p>We defined <code class="docutils literal notranslate"><span class="pre">Electron,</span> <span class="pre">Muon,</span> <span class="pre">Jet,</span> <span class="pre">Subjet</span></code> in the above DummySchema and we used <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">branch_forms</span></code> to search all the braches start with <code class="docutils literal notranslate"><span class="pre">{collection}_</span></code> and put them into the corresponding collections. Now open the dummy root file again, we can see the defined collections.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -560,7 +562,7 @@ div.rendered_html tbody tr:hover {
 [[1.21, 1.15], [1.42, 1.34, 1.12, 1.47], ... 1.56], [1.14, 0.805, 1.23, 1.42, 1.03]]
 </pre></div></div>
 </div>
-<p>Maybe you already noticed we printed something called <code class="docutils literal notranslate"><span class="pre">events.Electron.px</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Electron.theta</span></code> in the last block, but they don’t exist in the dummy root file. How were thay created? This is actually the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> this collection has, we’ll talk about this in the next section.</p>
+<p>Maybe you already noticed that we printed something called <code class="docutils literal notranslate"><span class="pre">events.Electron.px</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Electron.theta</span></code> in the previous block, which don’t exist in the dummy root file at all. How were thay created? This is actually the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> this collection has, which we’ll talk about right now.</p>
 <p>Look at the collection list:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;Electron&#39;</span><span class="p">:</span> <span class="s2">&quot;PtEtaPhiMLorentzVector&quot;</span><span class="p">,</span>
@@ -574,9 +576,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Create-behavior">
 <h2>Create behavior<a class="headerlink" href="#Create-behavior" title="Permalink to this headline">¶</a></h2>
-<p>Aside from put different branches into collections, we can also add <code class="docutils literal notranslate"><span class="pre">behavior</span></code> to collections. This means additional awkward arrays are generated on-the-fly via predefined algorithm. Like we can get <code class="docutils literal notranslate"><span class="pre">px,</span> <span class="pre">theta</span></code> previously.</p>
+<p>Aside from putting different branches into collections, we can also add <code class="docutils literal notranslate"><span class="pre">behavior</span></code> to collections. This means additional awkward arrays are generated on-the-fly via predefined algorithm. Like we can get <code class="docutils literal notranslate"><span class="pre">px,</span> <span class="pre">theta</span></code> previously.</p>
 <p>A bunch of other common physics behaviors are already provided in coffea, and you can find them in <a class="reference external" href="https://github.com/CoffeaTeam/coffea/tree/a95401cad91e88ceac47a4c693068bc4cbc7d338/coffea/nanoevents/methods">methods</a>.</p>
-<p>To write our own coffea behavior, first we need to define the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> first. In the following code, we define <code class="docutils literal notranslate"><span class="pre">DummyBehavior</span></code>. It only has one function <code class="docutils literal notranslate"><span class="pre">plus1()</span></code>, which returns the <code class="docutils literal notranslate"><span class="pre">particle.mass+1</span></code> when you call <code class="docutils literal notranslate"><span class="pre">particle.plus1</span></code>.</p>
+<p>To write our own coffea behavior, we need to define the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> class. In the following code, we create <code class="docutils literal notranslate"><span class="pre">DummyBehavior</span></code>, which has one function <code class="docutils literal notranslate"><span class="pre">plus1()</span></code>. It returns the <code class="docutils literal notranslate"><span class="pre">particle.mass+1</span></code> when you call <code class="docutils literal notranslate"><span class="pre">particle.plus1</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -628,9 +630,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">behavior</span></code> of <code class="docutils literal notranslate"><span class="pre">Electron</span></code> is changed to <code class="docutils literal notranslate"><span class="pre">DummyBehavior</span></code> in the above DummySchema. Now try our self-defined behavior:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">behavior</span></code> of <code class="docutils literal notranslate"><span class="pre">Electron</span></code> is changed to <code class="docutils literal notranslate"><span class="pre">DummyBehavior</span></code> in the above DummySchema. Also the <code class="docutils literal notranslate"><span class="pre">dummybehavior</span></code> is included in the <code class="docutils literal notranslate"><span class="pre">DummySchema</span></code> through <code class="docutils literal notranslate"><span class="pre">behavior.update(dummybehavior)</span></code>. Now try our customer behavior:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -640,8 +642,8 @@ div.rendered_html tbody tr:hover {
          <span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">plus1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">mass</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Electron</span><span class="o">.</span><span class="n">plus1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -652,13 +654,14 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 [&#39;Electron&#39;, &#39;Muon&#39;, &#39;Jet&#39;, &#39;Subjet&#39;]
 [&#39;pt&#39;, &#39;eta&#39;, &#39;phi&#39;, &#39;mass&#39;, &#39;charge&#39;, &#39;flag&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;]
-[[0.00051, 0.00051], [0.00051, ... 0.00051, 0.00051, 0.00051, 0.00051, 0.00051]]
-[[1, 1], [1, 1, 1, 1], [1, 1, 1, 1, 1, 1, ... 1, 1], [1, 1, 1, 1], [1, 1, 1, 1, 1]]
+[0.00051, 0.00051]
+[1, 1]
 </pre></div></div>
 </div>
+<p>Python did the rounding so the output is not exactly 1.00051.</p>
 <p>Since we changed the <code class="docutils literal notranslate"><span class="pre">behavior</span></code>, <code class="docutils literal notranslate"><span class="pre">print(events.Electron.theta)</span></code> should not work now.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -768,8 +771,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <p>We have <code class="docutils literal notranslate"><span class="pre">n</span></code> jets here and each jet has <code class="docutils literal notranslate"><span class="pre">m</span></code> subjets. <code class="docutils literal notranslate"><span class="pre">m</span></code> does not need to be the same for all the jets, that’s where the name <code class="docutils literal notranslate"><span class="pre">jagged</span></code> comes. <code class="docutils literal notranslate"><span class="pre">jet.pt</span></code> returns array with <code class="docutils literal notranslate"><span class="pre">n</span></code> numbers (<code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">...</span> <span class="pre">n-1]</span></code>), while <code class="docutils literal notranslate"><span class="pre">jet.subjets.pt</span></code> returns <code class="docutils literal notranslate"><span class="pre">n</span></code> arrays (<code class="docutils literal notranslate"><span class="pre">[[m0],</span> <span class="pre">[m1],</span> <span class="pre">...</span> <span class="pre">[m]]</span></code>).</p>
-<p>Note that when we create the TBranches, we can define it to store vector of vectors <code class="docutils literal notranslate"><span class="pre">vector&lt;</span> <span class="pre">vector&lt;double&gt;</span> <span class="pre">&gt;</span></code>, this is intuitively the same structure as we shown above. However, Coffea doesn’t recognize this structure.</p>
-<p>We need to store the jets as a flat vector with length <code class="docutils literal notranslate"><span class="pre">n</span></code> and store all the subjets as a flat vector with length <code class="docutils literal notranslate"><span class="pre">N</span></code> (<code class="docutils literal notranslate"><span class="pre">N&gt;=n</span></code>). Additionally we need another Branch <code class="docutils literal notranslate"><span class="pre">Jet_SubjetsCounts</span></code> (with length <code class="docutils literal notranslate"><span class="pre">n</span></code>) to tell us how many subjets that each jet contains.</p>
+<p>Note that when we create the TBranches, we can define it to store vector of vectors <code class="docutils literal notranslate"><span class="pre">vector&lt;</span> <span class="pre">vector&lt;double&gt;</span> <span class="pre">&gt;</span></code>, this is intuitively the same structure as we shown above. However, Coffea doesn’t recognize this structure. If you have this type of branch in the root file, you will need to make modifications to the generation codes.</p>
+<p>We can store the jets as a flat vector (length <code class="docutils literal notranslate"><span class="pre">n</span></code>) and use another flat vector to store all the subjets (length <code class="docutils literal notranslate"><span class="pre">N</span></code>). Since one jet at least has one subjet, <code class="docutils literal notranslate"><span class="pre">N&gt;=n</span></code> should be fulfilled. Additionally we need another Branch <code class="docutils literal notranslate"><span class="pre">Jet_SubjetsCounts</span></code> (with length <code class="docutils literal notranslate"><span class="pre">n</span></code>) to tell us how many subjets that each jet contains.</p>
 <p>So if we have the following vectors:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Jets_energy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mf">10.2</span><span class="p">];</span>
 <span class="n">Jet_SubjetsCounts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span>
@@ -777,13 +780,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <p>It means we have 3 jets, the mapping is: <code class="docutils literal notranslate"><span class="pre">Jet:</span> <span class="pre">[10,</span> <span class="pre">10.1,</span> <span class="pre">10.2]</span>&#160; <span class="pre">-&gt;</span> <span class="pre">Subjets:</span> <span class="pre">[</span> <span class="pre">{10},</span> <span class="pre">{1.1,</span> <span class="pre">5,</span> <span class="pre">4},</span> <span class="pre">{5.1,</span> <span class="pre">5.1}]</span></code></p>
-<p>So how to implement this structure in coffea? It is actually very easy because we only need to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">nest_jagged_forms</span></code> and follow the rules:</p>
+<p>So how to implement this structure in coffea? It is actually very easy because we only need to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">nest_jagged_forms</span></code> and follow the rules of this predefined fuction:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">dummybehavior</span><span class="o">=</span><span class="p">{}</span>
+<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span> <span class="n">nest_jagged_forms</span>
+
+<span class="n">dummybehavior</span><span class="o">=</span><span class="p">{}</span>
 <span class="nd">@awkward1</span><span class="o">.</span><span class="n">mixin_class</span><span class="p">(</span><span class="n">dummybehavior</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">DummyBehavior</span><span class="p">:</span>
     <span class="nd">@property</span>
@@ -833,7 +838,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">`nest_jagged_forms</span></code> is defined as follows &lt;<a class="reference external" href="https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62">https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62</a>&gt;`__. The first input parameter is the parent array, the second parameter is the child array. Then the third one is the counts array. Final one is the new name for the child array.</p>
+<p><code class="docutils literal notranslate"><span class="pre">`nest_jagged_forms</span></code> &lt;<a class="reference external" href="https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62">https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62</a>&gt;`__ is defined as follows. The first input parameter is the parent array, the second parameter is the child array. Then the third one is the counts array. The final one is the new name for the child array.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">nest_jagged_forms</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">counts_name</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Place child listarray inside parent listarray as a double-jagged array&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ListOffsetArray&quot;</span><span class="p">):</span>
@@ -850,7 +855,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>We can try this DummySchema now:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -879,7 +884,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Inherit-from-NanoEvents">
 <h2>Inherit from NanoEvents<a class="headerlink" href="#Inherit-from-NanoEvents" title="Permalink to this headline">¶</a></h2>
-<p>So far we showed how to create custom collections and behaviors. Actually, if you don’t want to write a new schema, you can name the TBranch with the same naming convention as NanoAOD and use the <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>. Then it will be recognized automatically.</p>
+<p>So far we showed how to create customer collections and behaviors. Actually, if you don’t want to write a new schema, you can name the TBranch with the same naming convention as NanoAOD and use the <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>. Then it will be recognized automatically.</p>
 <p>Looking at the content of <a class="reference external" href="https://cms-nanoaod-integration.web.cern.ch/integration/master-cmsswmaster/mc102X_doc.html">NanoAOD file</a>, you will need to follow the same naming if you want to use <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>.</p>
 <p>By doing so, you can also make use of the <code class="docutils literal notranslate"><span class="pre">behaviors</span></code> in <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code> automatically, which is very convenient.</p>
 <div class="nbinput nblast docutils container">
