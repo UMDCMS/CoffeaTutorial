@@ -13,8 +13,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Handy snippets" href="../snippets.html" />
@@ -301,8 +299,7 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">awkward1</span> <span class="k">as</span> <span class="nn">ak</span>
-<span class="kn">import</span> <span class="nn">awkward</span>
+<span class="kn">import</span> <span class="nn">awkward</span> <span class="k">as</span> <span class="nn">ak</span>
 <span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span><span class="p">,</span> <span class="n">BaseSchema</span><span class="p">,</span> <span class="n">NanoAODSchema</span>
 </pre></div>
 </div>
@@ -329,7 +326,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;event&#39;, &#39;Electron&#39;, &#39;Muon&#39;, &#39;run&#39;, &#39;luminosityBlock&#39;]
+[&#39;event&#39;, &#39;Electron&#39;, &#39;luminosityBlock&#39;, &#39;run&#39;, &#39;Muon&#39;]
 </pre></div></div>
 </div>
 <p>Here we begin the selections on events</p>
@@ -381,7 +378,7 @@ events (nmuon&gt;=4) number:  327
 <span class="c1"># total charge need to be 0</span>
 <span class="n">selected_muons</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">selected_muons</span><span class="p">[:,:,</span><span class="s2">&quot;charge&quot;</span><span class="p">],</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;events (charge==0) number: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_muons</span><span class="p">))</span>
-<span class="c1"># 6 combinations: 12, 13, 14, 23, 24, 34</span>
+<span class="c1"># 6 combinations: mu1mu2, mu1mu3, mu1mu4, mu2mu3, mu2mu4, mu3mu4</span>
 <span class="c1"># after charge selection, only 4 combinations preserved</span>
 <span class="n">selected_muon_pair</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">selected_muons</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">selected_muon_pair</span> <span class="o">=</span> <span class="n">selected_muon_pair</span><span class="p">[((</span><span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">][:,</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">][:,</span><span class="s2">&quot;charge&quot;</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">)]</span>
@@ -418,11 +415,12 @@ events (charge==0) number:  327
 <span></span><span class="c1"># get the mask for the closest z boson and another z boson</span>
 <span class="n">z_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span>
 <span class="n">za_mask</span> <span class="o">=</span> <span class="n">closest</span><span class="p">(</span><span class="n">z_pair</span><span class="p">)</span>
-<span class="n">zb_mask</span> <span class="o">=</span> <span class="n">awkward</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">za_mask</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">zb_mask</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">za_mask</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
 <span class="c1"># best combination of muons, za is closer to real Z boson mass</span>
 <span class="n">zamuons</span> <span class="o">=</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="n">za_mask</span><span class="p">]</span>
 <span class="n">zbmuons</span> <span class="o">=</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="n">zb_mask</span><span class="p">]</span>
 <span class="n">zamuons</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">zamuons</span><span class="p">)</span>
+<span class="n">zbmuons</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">zbmuons</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -485,6 +483,23 @@ final events number: 284
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">higgs</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[110, 123, 126, 123, 122, 125, 124, 126, ... 126, 123, 127, 124, 125, 127, 125, 117]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
@@ -503,13 +518,13 @@ final events number: 284
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_higgsto4l_13_0.png" src="../_images/notebooks_higgsto4l_13_0.png" />
+<img alt="../_images/notebooks_higgsto4l_14_0.png" src="../_images/notebooks_higgsto4l_14_0.png" />
 </div>
 </div>
 <div class="section" id="Write-the-previous-code-again-within-processor-framwork">
 <h2>Write the previous code again within processor framwork<a class="headerlink" href="#Write-the-previous-code-again-within-processor-framwork" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -566,11 +581,12 @@ final events number: 284
 
         <span class="n">z_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span>
         <span class="n">za_mask</span> <span class="o">=</span> <span class="n">closest</span><span class="p">(</span><span class="n">z_pair</span><span class="p">)</span>
-        <span class="n">zb_mask</span> <span class="o">=</span> <span class="n">awkward</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">za_mask</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="n">zb_mask</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">za_mask</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
 
         <span class="n">zamuons</span> <span class="o">=</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="n">za_mask</span><span class="p">]</span>
         <span class="n">zbmuons</span> <span class="o">=</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="n">zb_mask</span><span class="p">]</span>
         <span class="n">zamuons</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">zamuons</span><span class="p">)</span>
+        <span class="n">zbmuons</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">zbmuons</span><span class="p">)</span>
 
         <span class="n">isgoodmza</span> <span class="o">=</span> <span class="p">(((</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&gt;</span><span class="mi">40</span><span class="p">)</span><span class="o">&amp;</span><span class="p">((</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&lt;</span><span class="mi">120</span><span class="p">))</span>
         <span class="n">isgoodmzb</span> <span class="o">=</span> <span class="p">(((</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&gt;</span><span class="mi">12</span><span class="p">)</span><span class="o">&amp;</span><span class="p">((</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&lt;</span><span class="mi">120</span><span class="p">))</span>
@@ -592,7 +608,7 @@ final events number: 284
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -610,12 +626,12 @@ final events number: 284
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;Higgs&#39;: &lt;Hist (dataset,Higgs) instance at 0x7ff99f28dfa0&gt;,
+{&#39;Higgs&#39;: &lt;Hist (dataset,Higgs) instance at 0x7fcc5ae30c40&gt;,
  &#39;cutflow&#39;: defaultdict_accumulator(int,
                          {&#39;all muons&#39;: 9880,
                           &#39;good muons&#39;: 7992,
@@ -625,7 +641,7 @@ final events number: 284
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -634,7 +650,7 @@ final events number: 284
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -646,7 +662,7 @@ final events number: 284
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_higgsto4l_17_1.png" src="../_images/notebooks_higgsto4l_17_1.png" />
+<img alt="../_images/notebooks_higgsto4l_18_1.png" src="../_images/notebooks_higgsto4l_18_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -721,7 +737,7 @@ final events number: 284
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
     </div>
   </body>
 </html>
