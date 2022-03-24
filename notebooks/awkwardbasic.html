@@ -4,17 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Learnig the awkward arrays syntax &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Coffea processors" href="coffeaprocessors.html" />
@@ -252,7 +253,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -290,7 +291,7 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Learnig-the-awkward-arrays-syntax">
+<section id="Learnig-the-awkward-arrays-syntax">
 <h1>Learnig the awkward arrays syntax<a class="headerlink" href="#Learnig-the-awkward-arrays-syntax" title="Permalink to this headline">¶</a></h1>
 <p>At the front and formost of coffea is a completely new syntax for expressing analysis computations: <code class="docutils literal notranslate"><span class="pre">awkward</span> <span class="pre">arrays</span></code> and it’s index based notation. For people coming from a more traditional loop-based programming syntax, the syntax will take some getting use to, but this tutorial can hopefully help you understand how to understand the syntax and how to understand the various method.</p>
 <p>Let use begin by first understanding what you need to explore the contents of a typical ntuple file using coffea related tools. For the examples below we will be using the <a class="reference external" href="http://opendata.cern.ch/record/12354#">CMS open data</a>. Either download the file to your working directory to follow along.</p>
@@ -299,8 +300,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
 <span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span>  <span class="n">NanoAODSchema</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">awkward1</span> <span class="k">as</span> <span class="nn">ak</span>
@@ -312,8 +312,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
     <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>    <span class="c1"># The file, notice the prefix &quot;file:&quot; for local file operation</span>
     <span class="s1">&#39;Events&#39;</span><span class="p">,</span>             <span class="c1"># Name of the tree object to open</span>
     <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>        <span class="c1"># Limit the number of events to process, nice for small scale debugging</span>
@@ -327,8 +326,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -345,8 +343,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -363,8 +360,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -384,8 +380,7 @@ the energy collection is calculated on the fly.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -407,8 +402,7 @@ the energy collection is calculated on the fly.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">events</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">events</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -421,15 +415,14 @@ the energy collection is calculated on the fly.</p>
 </pre></div></div>
 </div>
 <p>But the real power of using awkward arrays is for using awkward arrays comes in when you don’t explicily use a concrete index, and instead call calculation all in an abstract form</p>
-<div class="section" id="Basic-object-and-event-selection">
+<section id="Basic-object-and-event-selection">
 <h2>Basic object and event selection<a class="headerlink" href="#Basic-object-and-event-selection" title="Permalink to this headline">¶</a></h2>
 <p>Let us start with the most basic example of event selection. Say we want to select event with electrons that have <span class="math notranslate nohighlight">\(p_T &gt; 30\)</span> GeV and <span class="math notranslate nohighlight">\(|\eta| &lt; 2.0\)</span>. The awkward array allows us to write something like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">mask_pt</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mask_pt</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span>
 <span class="n">mask_eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">2.0</span>
 <span class="n">muon_mask</span> <span class="o">=</span> <span class="n">mask_pt</span> <span class="o">&amp;</span> <span class="n">mask_eta</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">mask_pt</span><span class="p">)</span>
@@ -454,8 +447,7 @@ this mask? The answer is any array that has a <code class="docutils literal notr
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="n">muon_mask</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="n">muon_mask</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">eta</span><span class="p">[</span><span class="n">muon_mask</span><span class="p">])</span>
 <span class="n">selectedMuons</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="n">muon_mask</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">selectedMuons</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
@@ -478,8 +470,7 @@ flattend out.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span><span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
 <span class="nb">print</span><span class="p">(</span> <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">%</span><span class="k">2</span>==0])
@@ -503,8 +494,7 @@ flattend out.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">muon_count</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">selectedMuons</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">muon_count</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">selectedMuons</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">event_mask</span> <span class="o">=</span> <span class="n">muon_count</span> <span class="o">&gt;=</span> <span class="mi">1</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">event_mask</span><span class="p">)</span>
 </pre></div>
@@ -523,8 +513,7 @@ flattend out.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">selectedEvents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">event_mask</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selectedEvents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">event_mask</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">event_mask</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">selectedEvents</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
@@ -544,16 +533,15 @@ flattend out.</p>
 </pre></div></div>
 </div>
 <p>Here we can confirm that the first event to pass the event selection is the 1-st event in the event list, and the 0-th instance in the <code class="docutils literal notranslate"><span class="pre">selectedEvents.Muon.pt</span></code> result of the selectedEvents indeed corresponds to the values stored in the 1-st event of the orignal event list.</p>
-</div>
-<div class="section" id="Object-storce-and-collection-creation">
+</section>
+<section id="Object-storce-and-collection-creation">
 <h2>Object storce and collection creation<a class="headerlink" href="#Object-storce-and-collection-creation" title="Permalink to this headline">¶</a></h2>
 <p>Having completed the selection, we might be rather annoyed that we didn’t just store the selected Electron, since these are the objects that we are likely going to use for further calculation. Following from the code above, what we can do is add the additional selection to the <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code> collections. This is valid since the <code class="docutils literal notranslate"><span class="pre">N</span></code> dimesional event mask “makes sense” performed on the <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> dimesional selectedMuon object.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">our_selectedMuons</span> <span class="o">=</span> <span class="n">selectedMuons</span><span class="p">[</span><span class="n">event_mask</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">our_selectedMuons</span> <span class="o">=</span> <span class="n">selectedMuons</span><span class="p">[</span><span class="n">event_mask</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">our_selectedMuons</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">our_selectedMuons</span><span class="p">))</span>
 </pre></div>
@@ -569,13 +557,12 @@ flattend out.</p>
 </pre></div></div>
 </div>
 <p>However, this is rather undesirable, since now we have some a whole bunch of detected collections, and event lists that we need to take care of: <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">our_selectedMuons</span></code>. And this is with just one toy object selection. One can imagine if there isn’t some sort of way to store collections into events, the analysis code will get out of hands very quick. This also ties into the topic that there might be certain physics quantities that are specific to a certain
-analysis that would might be used for the analysis object selection and would be nice to add to the electron collection if it isn’t a standard variable that is maintained by the NanoAOD development team. Here we are going to add a very artificial example of calculating the inverse of the electron pt, then selecting on the inverse pt. This very simple example will demonstrate the typical syntax used for storing variables as well as exposing one of the parculiar quirks of awkward arrays:</p>
+analysis that would might be used for the analysis object selection and would be nice to add to the electron collection if it isn’t a standard variable that is maintained by the NanoAOD development team. Here we are going to add a very artificial example of calculating the inverse of the electron pt, then selecting on the inverse pt. This very simple example will demonstrate the typical syntax used for storing variables as well as exposing one of the parculiar quirks of awkward arrays:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First attempt at adding extended variables to events&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;First attempt at adding extended variables to events&#39;</span><span class="p">)</span>
 <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span>
 <span class="n">events</span><span class="p">[</span><span class="s1">&#39;selectedMuon_1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">]</span>
 
@@ -600,8 +587,7 @@ analysis that would might be used for the analysis object selection and would be
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">myMuon</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon_3</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
-
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -636,8 +622,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">SelectMuons</span><span class="p">(</span><span class="n">muon</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">SelectMuons</span><span class="p">(</span><span class="n">muon</span><span class="p">):</span>
     <span class="n">muon</span> <span class="o">=</span> <span class="n">muon</span><span class="p">[</span><span class="n">muon</span><span class="o">.</span><span class="n">pt</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">]</span>
     <span class="n">muon</span><span class="p">[</span><span class="s1">&#39;invpt&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">muon</span><span class="o">.</span><span class="n">pt</span>
     <span class="k">return</span> <span class="n">muon</span>
@@ -662,8 +647,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">myevents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon_f</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">myevents</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon_f</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">selectedMuon_f</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
@@ -676,8 +660,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 
 <span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">myevents</span><span class="o">.</span><span class="n">selectedMuon_f</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
-
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -693,16 +676,15 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Comparing-array-based-compuations-and-loop-based-compuatation">
+</section>
+<section id="Comparing-array-based-compuations-and-loop-based-compuatation">
 <h2>Comparing array based compuations and loop based compuatation<a class="headerlink" href="#Comparing-array-based-compuations-and-loop-based-compuatation" title="Permalink to this headline">¶</a></h2>
 <p>So to put this together into a single code block, suppose our analysis consisten of selecting events that have at least 1 electron with <span class="math notranslate nohighlight">\(p_{T} &gt; 50GeV\)</span>, <span class="math notranslate nohighlight">\(|\eta| &lt; 2.4\)</span>, and we want to calculate the average of all such electron’s iverserse <span class="math notranslate nohighlight">\(p_{T}\)</span> within the selected events. Our awkward array code would look something like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>
                                       <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
                                       <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                                       <span class="n">schemaclass</span><span class="o">=</span><span class="n">NanoAODSchema</span><span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
@@ -718,9 +700,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 
 <span class="c1"># Calculating the total average</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">invpt</span><span class="p">)</span><span class="o">/</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">invpt</span><span class="p">))</span>
-
-
-</pre></div>
+<br/><br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -736,8 +716,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>
                                       <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
                                       <span class="n">entry_stop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                                       <span class="n">schemaclass</span><span class="o">=</span><span class="n">NanoAODSchema</span><span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
@@ -769,16 +748,15 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <p>Notice the results are only difference because the 32bit to 64 bit float conversion is happening at different places. For awkward arrays, this is happening only after the sum has been performed. For the loop based approach this happening everytime the <code class="docutils literal notranslate"><span class="pre">+=</span></code> operator is called.</p>
 <p>For the loop based analysis, notice for such a simple analysis, many many lines of code are dedicated to just book keeping stuff: number of electrons passing criteria, adding a counter variable and sum variable… etc, instead of actualy analysis computation. The array based notation for expressing the analysis is much cleaner, if rather more unfamiliar to typical users.</p>
 <p>Of course, this isn’t the end. Physics analysis are typically more involved that just basic selection and counting. In the next session, we will talk about how to perform more involed calculations with awkward arrays that involves multiple collections within an event collection.</p>
-</div>
-<div class="section" id="More-on-index-notation">
+</section>
+<section id="More-on-index-notation">
 <h2>More on index notation<a class="headerlink" href="#More-on-index-notation" title="Permalink to this headline">¶</a></h2>
 <p>Let us dive in a bit more regarding the index notation, with a fresh set of events.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span><span class="p">,</span>
                                       <span class="s1">&#39;Events&#39;</span><span class="p">,</span>
                                       <span class="n">entry_stop</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
                                       <span class="n">schemaclass</span><span class="o">=</span><span class="n">NanoAODSchema</span><span class="p">)</span><span class="o">.</span><span class="n">events</span><span class="p">()</span>
@@ -796,8 +774,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The entire MET list:                  &quot;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The entire MET list:                  &quot;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The MET from the second of last event:&quot;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The MET of the first 5 events:        &quot;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The MET of every other event:         &quot;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
@@ -818,7 +795,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </pre></div></div>
 </div>
 <p>Very rarely will a typical analysis want to directly operator on the event index. What we can do is operate on object indices using the notation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">object</span><span class="p">[</span><span class="n">event_index</span><span class="p">,</span> <span class="n">object_index</span><span class="p">]</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>object[event_index, object_index]
 </pre></div>
 </div>
 <p>There the comma in the square braces is used to seperate the first index argument that operation on the outer-most dimension (in our case the event index), while the second argument is for the inner dimension index (in which our case the object index within an event). For instance, if we want to get the leading jet’s <span class="math notranslate nohighlight">\(p_{T}\)</span> for every event, we can used the following</p>
@@ -826,8 +803,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -844,8 +820,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -876,8 +851,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events_with_muons</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events_with_muons</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events_with_muons</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -895,8 +869,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events_with_2jets</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events_with_2jets</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="p">]</span>
 <span class="n">events_with_2jets</span><span class="p">[</span><span class="s1">&#39;selectedJetsPt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events_with_2jets</span><span class="o">.</span><span class="n">Jet</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events_with_2jets</span><span class="o">.</span><span class="n">selectedJetsPt</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 </pre></div>
@@ -915,14 +888,12 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">order</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">eta</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span> <span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">eta</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span> <span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
 <span class="n">events</span><span class="p">[</span><span class="s1">&#39;JetByEta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">JetByEta</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
-
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -945,8 +916,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">new_order</span> <span class="o">=</span> <span class="n">order</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_order</span> <span class="o">=</span> <span class="n">order</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
 <span class="n">events</span><span class="p">[</span><span class="s1">&#39;JetByEta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="p">[</span><span class="n">new_order</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">JetByEta</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
 </pre></div>
@@ -965,8 +935,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">muon_withgen</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">genPartIdx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">muon_withgen</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">genPartIdx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">muon_genpart</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">GenPart</span><span class="p">[</span><span class="n">muon_withgen</span><span class="o">.</span><span class="n">genPartIdx</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">muon_withgen</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">muon_genpart</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
@@ -987,8 +956,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">muon_withgen</span><span class="p">[</span><span class="s1">&#39;GenPart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muon_genpart</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">muon_withgen</span><span class="p">[</span><span class="s1">&#39;GenPart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muon_genpart</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">muon_withgen</span><span class="o">.</span><span class="n">GenPart</span><span class="o">.</span><span class="n">pdgId</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">muon_withgen</span><span class="o">.</span><span class="n">GenPart</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
 </pre></div>
@@ -1004,12 +972,12 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </pre></div></div>
 </div>
 <p>Now the code mimics quite a bit with what you would normally get with object based code, which makes awkward arrays rather more useful than just the flat arrays one typically get in C++ ntuple codes.</p>
-</div>
-<div class="section" id="Calcuation-with-objects">
+</section>
+<section id="Calcuation-with-objects">
 <h2>Calcuation with objects<a class="headerlink" href="#Calcuation-with-objects" title="Permalink to this headline">¶</a></h2>
 <p>Uptil now, the calculations have all removed around single collection. Even in the case of the cell involving two collection, one is just used to generate index dimension. The first instance of calculation, where we use a mathematic operation to generate an new array is in the case of mask generation and the calculation of a the inverse of muon pt, but that apprently only involved 1 array. In this section, we dive a bit deeper into what mathematical operators actually imply in awkward.</p>
 <p>The mathematical operations of awkward arrays is member-wise: Given 2 arrays of identical dimsion (<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>) and a generic binary operation <span class="math notranslate nohighlight">\(\otimes\)</span>, the statement <span class="math notranslate nohighlight">\(a\otimes b\)</span>, will generate a new array with the same dimensions as <span class="math notranslate nohighlight">\(a\)</span>, with output being a member-wise results of <span class="math notranslate nohighlight">\(o_{ijk\ldots} = a_{ijk\ldots} \otimes b{ijk\ldots}\)</span>. Now what if <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are different dimension, say in our case <span class="math notranslate nohighlight">\(a\)</span> is a scalar 1, and <span class="math notranslate nohighlight">\(b\)</span> is the
-muon <span class="math notranslate nohighlight">\(p_{T}\)</span> array. What happens is formally know as <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">**broadcasting**</a>: you can think that awkward automatically expands the scalar <span class="math notranslate nohighlight">\(a\)</span> into a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array and performs a typical member-wise arithematics. Broadcasting is a rather complicated subject to fully discuss, but we can basically operations would be valid:</p>
+muon <span class="math notranslate nohighlight">\(p_{T}\)</span> array. What happens is formally know as <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a>: you can think that awkward automatically expands the scalar <span class="math notranslate nohighlight">\(a\)</span> into a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array and performs a typical member-wise arithematics. Broadcasting is a rather complicated subject to fully discuss, but we can basically operations would be valid:</p>
 <ul class="simple">
 <li><p>scalar <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">N</span></code>: scalar is expanded to a <code class="docutils literal notranslate"><span class="pre">N</span></code></p></li>
 <li><p>scalar <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">NxA</span></code>: scalar is expanded to a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array</p></li>
@@ -1021,8 +989,7 @@ muon <span class="math notranslate nohighlight">\(p_{T}\)</span> array. What hap
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;scalar @ N   :&#39;</span><span class="p">,</span> <span class="mi">100</span> <span class="o">+</span>  <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">px</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;scalar @ N   :&#39;</span><span class="p">,</span> <span class="mi">100</span> <span class="o">+</span>  <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">px</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;scalar @ NxA :&#39;</span><span class="p">,</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">px</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NxA    @ NxA :&#39;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">px</span> <span class="o">+</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">py</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;N      @ NxA :&#39;</span><span class="p">,</span> <span class="n">events</span><span class="o">.</span><span class="n">MET</span><span class="o">.</span><span class="n">px</span> <span class="o">+</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">px</span><span class="p">)</span>
@@ -1046,13 +1013,11 @@ binary operation.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">evt</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evt</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">Jet</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="p">]</span>
 <span class="n">first_jet</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Jet</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">second_jet</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Jet</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">first_jet</span><span class="o">.</span><span class="n">delta_r</span><span class="p">(</span><span class="n">second_jet</span><span class="p">))</span>
-
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1068,8 +1033,7 @@ binary operation.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">first_jet</span><span class="o">.</span><span class="n">delta_r</span><span class="p">(</span><span class="n">evt</span><span class="o">.</span><span class="n">Muon</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">first_jet</span><span class="o">.</span><span class="n">delta_r</span><span class="p">(</span><span class="n">evt</span><span class="o">.</span><span class="n">Muon</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1087,8 +1051,7 @@ binary operation.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">jets</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Jet</span><span class="p">[:]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jets</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Jet</span><span class="p">[:]</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">genpart</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unzip</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">cartesian</span><span class="p">([</span><span class="n">evt</span><span class="o">.</span><span class="n">Jet</span><span class="p">,</span><span class="n">evt</span><span class="o">.</span><span class="n">GenPart</span><span class="p">],</span><span class="n">nested</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="n">jets</span><span class="p">[</span><span class="s1">&#39;genpart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">genpart</span><span class="p">[</span><span class="n">jets</span><span class="o">.</span><span class="n">delta_r</span><span class="p">(</span><span class="n">genpart</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">jets</span><span class="o">.</span><span class="n">genpart</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span>
@@ -1107,12 +1070,12 @@ binary operation.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ak.unzip</span></code> and <code class="docutils literal notranslate"><span class="pre">ak.cartesian</span></code> method expands the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.Jet</span></code> array and the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.GenPart</span></code> array in to a <code class="docutils literal notranslate"><span class="pre">NxBxA</span></code> arrays (named <code class="docutils literal notranslate"><span class="pre">_</span></code> since we wouldn’t be using this) and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. The broardcast is the performed on the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jets array and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> <code class="docutils literal notranslate"><span class="pre">genpart</span></code> array to generate a delta R mask of dimension <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code>, which is then used to filter the <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. Now we can stored the <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array into the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jet collection, which is used to
 find all gen particles associated with a jet via delta R matching!</p>
 <p>This is probably the most advanced that calculation that a typical analysis will need in computation: the computation of arrays of mismatch dimensions. Hopefully this introduction is enough to help people start to translate their loop based analysis calculation into array based syntaxs.</p>
-</div>
-<div class="section" id="When-all-else-fails---numba-for-loops">
+</section>
+<section id="When-all-else-fails---numba-for-loops">
 <h2>When all else fails - numba for loops<a class="headerlink" href="#When-all-else-fails---numba-for-loops" title="Permalink to this headline">¶</a></h2>
 <p>TO BE WRITTEN: assigned -Yi-Mu Chen</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -1121,8 +1084,9 @@ find all gen particles associated with a jet via delta R matching!</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Learnig the awkward arrays syntax</a><ul>
 <li><a class="reference internal" href="#Basic-object-and-event-selection">Basic object and event selection</a></li>
 <li><a class="reference internal" href="#Object-storce-and-collection-creation">Object storce and collection creation</a></li>
@@ -1134,12 +1098,17 @@ find all gen particles associated with a jet via delta R matching!</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="intronotebook.html"
-                        title="previous chapter">Navigating jupyter notebooks</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="coffeaprocessors.html"
-                        title="next chapter">Coffea processors</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="intronotebook.html"
+                          title="previous chapter">Navigating jupyter notebooks</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="coffeaprocessors.html"
+                          title="next chapter">Coffea processors</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1151,7 +1120,7 @@ find all gen particles associated with a jet via delta R matching!</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -1179,7 +1148,7 @@ find all gen particles associated with a jet via delta R matching!</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

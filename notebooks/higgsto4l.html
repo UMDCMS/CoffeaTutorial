@@ -4,19 +4,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Example: Higgs to 4 Muons &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Handy snippets" href="../snippets.html" />
-    <link rel="prev" title="Writting coffea Schema files" href="coffeaschema.html" /> 
+    <link rel="prev" title="Histogram processing in Coffea" href="histogram.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,7 +31,7 @@
           <a href="../snippets.html" title="Handy snippets"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="coffeaschema.html" title="Writting coffea Schema files"
+          <a href="histogram.html" title="Histogram processing in Coffea"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Example: Higgs to 4 Muons</a></li> 
@@ -250,7 +253,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -288,7 +291,7 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Example:-Higgs-to-4-Muons">
+<section id="Example:-Higgs-to-4-Muons">
 <h1>Example: Higgs to 4 Muons<a class="headerlink" href="#Example:-Higgs-to-4-Muons" title="Permalink to this headline">¶</a></h1>
 <p>In this example, we will follow the <a class="reference external" href="https://github.com/cms-opendata-analyses/HiggsExample20112012">cms open data analyses</a>. Repeat the Higgs discovery (Higgs to 4 Muons) with the Coffea language.</p>
 <p>Selections/cuts used are from this <a class="reference external" href="https://github.com/cms-opendata-analyses/HiggsExample20112012/blob/master/HiggsDemoAnalyzer/src/HiggsDemoAnalyzerGit.cc">Analyzer</a>.</p>
@@ -296,8 +299,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">awkward</span> <span class="k">as</span> <span class="nn">ak</span>
 <span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span><span class="p">,</span> <span class="n">BaseSchema</span><span class="p">,</span> <span class="n">NanoAODSchema</span>
@@ -309,8 +311,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
     <span class="s2">&quot;../../samples/Higgs4L1file.root&quot;</span><span class="p">,</span>
     <span class="s2">&quot;demo/ttree&quot;</span><span class="p">,</span>
     <span class="n">entry_stop</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
@@ -334,8 +335,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#select global particle flow muons</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#select global particle flow muons</span>
 <span class="n">selected_muons</span> <span class="o">=</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="p">[</span><span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">isPFMuon</span> <span class="o">&amp;</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">isPFIsolationValid</span> <span class="o">&amp;</span> <span class="n">events</span><span class="o">.</span><span class="n">Muon</span><span class="o">.</span><span class="n">hasglobalTrack</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;muon total number: &quot;</span><span class="p">,</span><span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">num</span><span class="p">(</span><span class="n">selected_muons</span><span class="p">)))</span>
 
@@ -352,8 +352,7 @@ div.rendered_html tbody tr:hover {
 <span class="c1">#ZZ to 4Muons</span>
 <span class="n">selected_muons</span> <span class="o">=</span> <span class="n">selected_muons</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">num</span><span class="p">(</span><span class="n">selected_muons</span><span class="p">)</span> <span class="o">&gt;=</span><span class="mi">4</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;events (nmuon&gt;=4) number: &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_muons</span><span class="p">))</span>
-
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -370,8 +369,7 @@ events (nmuon&gt;=4) number:  327
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">#sort from high pt to low pt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#sort from high pt to low pt</span>
 <span class="n">selected_muons</span> <span class="o">=</span> <span class="n">selected_muons</span><span class="p">[</span><span class="n">ak</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">selected_muons</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
 <span class="c1">#only need the first 4 muons</span>
 <span class="n">selected_muons</span> <span class="o">=</span> <span class="n">selected_muons</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
@@ -397,8 +395,7 @@ events (charge==0) number:  327
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># define a function used to find the combination with mass closest to real Z mass</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define a function used to find the combination with mass closest to real Z mass</span>
 <span class="k">def</span> <span class="nf">closest</span><span class="p">(</span><span class="n">muon_pair</span><span class="p">):</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="mf">91.1876</span> <span class="o">-</span> <span class="n">muon_pair</span><span class="o">.</span><span class="n">mass</span><span class="p">[:])</span>
     <span class="n">closest_masses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
@@ -411,8 +408,7 @@ events (charge==0) number:  327
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># get the mask for the closest z boson and another z boson</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the mask for the closest z boson and another z boson</span>
 <span class="n">z_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">selected_muon_pair</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span>
 <span class="n">za_mask</span> <span class="o">=</span> <span class="n">closest</span><span class="p">(</span><span class="n">z_pair</span><span class="p">)</span>
 <span class="n">zb_mask</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span><span class="n">za_mask</span><span class="p">[:,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
@@ -428,8 +424,7 @@ events (charge==0) number:  327
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">zamuons</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">zamuons</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">zbmuons</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -447,8 +442,7 @@ events (charge==0) number:  327
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># requirement on mass of za, zb</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># requirement on mass of za, zb</span>
 <span class="n">isgoodmza</span> <span class="o">=</span> <span class="p">(((</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&gt;</span><span class="mi">40</span><span class="p">)</span><span class="o">&amp;</span><span class="p">((</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zamuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&lt;</span><span class="mi">120</span><span class="p">))</span>
 <span class="n">isgoodmzb</span> <span class="o">=</span> <span class="p">(((</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&gt;</span><span class="mi">12</span><span class="p">)</span><span class="o">&amp;</span><span class="p">((</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span><span class="o">+</span><span class="n">zbmuons</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">mass</span><span class="o">&lt;</span><span class="mi">120</span><span class="p">))</span>
 <span class="c1"># another requirement on za</span>
@@ -462,8 +456,7 @@ events (charge==0) number:  327
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># add 4 muons</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># add 4 muons</span>
 <span class="n">higgs</span> <span class="o">=</span> <span class="n">Goodza</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">Goodza</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">Goodzb</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">Goodzb</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span>
 <span class="n">higgs</span> <span class="o">=</span> <span class="n">higgs</span><span class="p">[</span><span class="n">higgs</span><span class="o">.</span><span class="n">mass</span><span class="o">&gt;</span><span class="mi">70</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;final events number:&quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">higgs</span><span class="p">))</span>
@@ -482,8 +475,7 @@ final events number: 284
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="n">higgs</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">higgs</span><span class="o">.</span><span class="n">mass</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -499,8 +491,7 @@ final events number: 284
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 <span class="n">n</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">patches</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">higgs</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,)</span>
@@ -510,8 +501,7 @@ final events number: 284
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -521,14 +511,13 @@ final events number: 284
 <img alt="../_images/notebooks_higgsto4l_14_0.png" src="../_images/notebooks_higgsto4l_14_0.png" />
 </div>
 </div>
-<div class="section" id="Write-the-previous-code-again-within-processor-framwork">
+<section id="Write-the-previous-code-again-within-processor-framwork">
 <h2>Write the previous code again within processor framwork<a class="headerlink" href="#Write-the-previous-code-again-within-processor-framwork" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">coffea.processor</span> <span class="k">as</span> <span class="nn">processor</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">coffea.processor</span> <span class="k">as</span> <span class="nn">processor</span>
 <span class="kn">from</span> <span class="nn">coffea</span> <span class="kn">import</span> <span class="n">hist</span>
 
 <span class="k">def</span> <span class="nf">closest</span><span class="p">(</span><span class="n">muon_pair</span><span class="p">):</span>
@@ -611,8 +600,7 @@ final events number: 284
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span>
     <span class="s2">&quot;../../samples/Higgs4L1file.root&quot;</span><span class="p">,</span>
     <span class="s2">&quot;demo/ttree&quot;</span><span class="p">,</span>
     <span class="n">entry_stop</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
@@ -644,8 +632,7 @@ final events number: 284
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hist</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;Higgs&#39;</span><span class="p">],</span> <span class="n">overlay</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="n">fill_opts</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.3</span><span class="p">),</span> <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;Higgs&#39;</span><span class="p">],</span> <span class="n">overlay</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="n">fill_opts</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.3</span><span class="p">),</span> <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -669,13 +656,12 @@ final events number: 284
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -684,20 +670,26 @@ final events number: 284
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Example: Higgs to 4 Muons</a><ul>
 <li><a class="reference internal" href="#Write-the-previous-code-again-within-processor-framwork">Write the previous code again within processor framwork</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="coffeaschema.html"
-                        title="previous chapter">Writting coffea Schema files</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../snippets.html"
-                        title="next chapter">Handy snippets</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="histogram.html"
+                          title="previous chapter">Histogram processing in Coffea</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../snippets.html"
+                          title="next chapter">Handy snippets</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -709,7 +701,7 @@ final events number: 284
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -729,7 +721,7 @@ final events number: 284
           <a href="../snippets.html" title="Handy snippets"
              >next</a> |</li>
         <li class="right" >
-          <a href="coffeaschema.html" title="Writting coffea Schema files"
+          <a href="histogram.html" title="Histogram processing in Coffea"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Example: Higgs to 4 Muons</a></li> 
@@ -737,7 +729,7 @@ final events number: 284
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>

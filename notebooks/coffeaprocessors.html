@@ -4,15 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Coffea processors &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Writting coffea Schema files" href="coffeaschema.html" />
@@ -250,7 +253,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -288,19 +291,18 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Coffea-processors">
+<section id="Coffea-processors">
 <h1>Coffea processors<a class="headerlink" href="#Coffea-processors" title="Permalink to this headline">¶</a></h1>
 <p>Previously, we have only been working with awkward arrays constructed from a single file. Coffea processers is the tool provided to scale up the calculations to arbitrary file counts. The official <a class="reference external" href="https://coffeateam.github.io/coffea/notebooks/processor.html">coffea-by-example docuemtation</a> on this topic acutally is a very complete a tutorial on how you can get started. But for the sake of the completion of this document, we will be including our own version of the tutorial, to most of the
 gritty details filtered out.</p>
-<div class="section" id="A-very-simple-processor----understanding-output">
-<h2>A very simple processor – understanding output<a class="headerlink" href="#A-very-simple-processor----understanding-output" title="Permalink to this headline">¶</a></h2>
+<section id="A-very-simple-processor-–-understanding-output">
+<h2>A very simple processor – understanding output<a class="headerlink" href="#A-very-simple-processor-–-understanding-output" title="Permalink to this headline">¶</a></h2>
 <p>Lets first take a look at a very simple processor that takes work flow described in the final analysis in simple calculation page, and translate into awkward syntax:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">coffea</span> <span class="kn">import</span> <span class="n">processor</span><span class="p">,</span><span class="n">hist</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coffea</span> <span class="kn">import</span> <span class="n">processor</span><span class="p">,</span><span class="n">hist</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">awkward1</span> <span class="k">as</span> <span class="nn">ak</span>
 
@@ -348,9 +350,7 @@ gritty details filtered out.</p>
 
     <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accumulator</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">accumulator</span>
-
-
-</pre></div>
+<br/><br/></pre></div>
 </div>
 </div>
 <p>The selection/filtering part of the <code class="docutils literal notranslate"><span class="pre">DummyProcessor.process</span></code> is basically entirely the same as the using awkward examples without processors class, except this time, the events has an additional <code class="docutils literal notranslate"><span class="pre">metadata</span></code> tag that can be used to identify dataset name.</p>
@@ -370,8 +370,7 @@ wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummys
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents</span> <span class="kn">import</span> <span class="n">NanoEventsFactory</span>
 <span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span> <span class="n">NanoAODSchema</span>
 
 <span class="n">events</span> <span class="o">=</span> <span class="n">NanoEventsFactory</span><span class="o">.</span><span class="n">from_root</span><span class="p">(</span> <span class="s1">&#39;file:TTbar.root&#39;</span> <span class="p">,</span>
@@ -408,8 +407,7 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.05409
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="s1">&#39;eta&#39;</span><span class="p">))</span>
@@ -446,8 +444,7 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.05409
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">hist</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="s1">&#39;invpt&#39;</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mf">0.015</span><span class="p">,</span><span class="mf">0.020</span><span class="p">)))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist</span><span class="o">.</span><span class="n">plot1d</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;hist&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="s1">&#39;invpt&#39;</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mf">0.015</span><span class="p">,</span><span class="mf">0.020</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
@@ -466,16 +463,15 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.05409
 <div class="output_area docutils container">
 <img alt="../_images/notebooks_coffeaprocessors_7_1.svg" src="../_images/notebooks_coffeaprocessors_7_1.svg" /></div>
 </div>
-</div>
-<div class="section" id="Scaling-up-calculations----process-executors">
-<h2>Scaling up calculations – process executors<a class="headerlink" href="#Scaling-up-calculations----process-executors" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="Scaling-up-calculations-–-process-executors">
+<h2>Scaling up calculations – process executors<a class="headerlink" href="#Scaling-up-calculations-–-process-executors" title="Permalink to this headline">¶</a></h2>
 <p>Suppose you have some file set, you can define coffea to run over all file with a given metadata tag using the following</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">output</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_uproot_job</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">run_uproot_job</span><span class="p">(</span>
     <span class="p">{</span>
         <span class="s1">&#39;Dataset1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;TTbar.root&#39;</span><span class="p">],</span>
         <span class="s1">&#39;Dataset2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;TTbar.root&#39;</span><span class="p">,</span> <span class="s1">&#39;TTbar.root&#39;</span><span class="p">]</span>
@@ -512,13 +508,12 @@ is expected to be small (ex you have a very tight background rejection selection
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -527,21 +522,27 @@ is expected to be small (ex you have a very tight background rejection selection
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Coffea processors</a><ul>
-<li><a class="reference internal" href="#A-very-simple-processor----understanding-output">A very simple processor – understanding output</a></li>
-<li><a class="reference internal" href="#Scaling-up-calculations----process-executors">Scaling up calculations – process executors</a></li>
+<li><a class="reference internal" href="#A-very-simple-processor-–-understanding-output">A very simple processor – understanding output</a></li>
+<li><a class="reference internal" href="#Scaling-up-calculations-–-process-executors">Scaling up calculations – process executors</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="awkwardbasic.html"
-                        title="previous chapter">Learnig the awkward arrays syntax</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="coffeaschema.html"
-                        title="next chapter">Writting coffea Schema files</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="awkwardbasic.html"
+                          title="previous chapter">Learnig the awkward arrays syntax</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="coffeaschema.html"
+                          title="next chapter">Writting coffea Schema files</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -553,7 +554,7 @@ is expected to be small (ex you have a very tight background rejection selection
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -581,7 +582,7 @@ is expected to be small (ex you have a very tight background rejection selection
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>
