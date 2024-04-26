@@ -1,25 +1,24 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Coffea processors &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=0f882399" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Writting coffea Schema files" href="coffeaschema.html" />
-    <link rel="prev" title="Learnig the awkward arrays syntax" href="awkwardbasic.html" /> 
+    <link rel="prev" title="Learning the awkward arrays syntax" href="awkwardbasic.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,7 +30,7 @@
           <a href="coffeaschema.html" title="Writting coffea Schema files"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="awkwardbasic.html" title="Learnig the awkward arrays syntax"
+          <a href="awkwardbasic.html" title="Learning the awkward arrays syntax"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Coffea processors</a></li> 
@@ -43,261 +42,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Coffea-processors">
-<h1>Coffea processors<a class="headerlink" href="#Coffea-processors" title="Permalink to this headline">¶</a></h1>
-<p>Previously, we have only been working with awkward arrays constructed from a single file. Coffea processers is the tool provided to scale up the calculations to arbitrary file counts. The official <a class="reference external" href="https://coffeateam.github.io/coffea/notebooks/processor.html">coffea-by-example docuemtation</a> on this topic acutally is a very complete a tutorial on how you can get started. But for the sake of the completion of this document, we will be including our own version of the tutorial, to most of the
+  <section id="Coffea-processors">
+<h1>Coffea processors<a class="headerlink" href="#Coffea-processors" title="Link to this heading">¶</a></h1>
+<p>Previously, we have only been working with awkward arrays constructed from a single file. Coffea processers is the tool provided to scale up the calculations to arbitrary file counts. The official <a class="reference external" href="https://coffeateam.github.io/coffea/notebooks/processor.html">coffea-by-example documentation</a> on this topic actually is a very complete a tutorial on how you can get started. But for the sake of the completion of this document, we will be including our own version of the tutorial, to most of the
 gritty details filtered out.</p>
-<section id="A-very-simple-processor-–-understanding-output">
-<h2>A very simple processor – understanding output<a class="headerlink" href="#A-very-simple-processor-–-understanding-output" title="Permalink to this headline">¶</a></h2>
-<p>Lets first take a look at a very simple processor that takes work flow described in the final analysis in simple calculation page, and translate into awkward syntax:</p>
+<section id="A-very-simple-processor----understanding-output">
+<h2>A very simple processor – understanding output<a class="headerlink" href="#A-very-simple-processor----understanding-output" title="Link to this heading">¶</a></h2>
+<p>Let’s first take a look at a very simple processor that takes work flow described in the final analysis in simple calculation page, and translate into awkward syntax:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -353,19 +104,16 @@ gritty details filtered out.</p>
 <br/><br/></pre></div>
 </div>
 </div>
-<p>The selection/filtering part of the <code class="docutils literal notranslate"><span class="pre">DummyProcessor.process</span></code> is basically entirely the same as the using awkward examples without processors class, except this time, the events has an additional <code class="docutils literal notranslate"><span class="pre">metadata</span></code> tag that can be used to identify dataset name.</p>
-<div class="line-block">
-<div class="line">The main difference is in the output parts of the processor. Here the return is what is known as <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> classes defined the <code class="docutils literal notranslate"><span class="pre">coffea.processor</span></code>. Bacially each object that is defined within the various accumulators will be added up across the multiple jobs that the processor instance will be run on. In our case, we have two floating points that will be summed across multiple jobs, and a histogram with 3 axis: 1 being what the data is, the other 2 being some variables of interest. The
-filling of the histogram uses python keywords to simplify the filling variable assignment. All argument in the fill command have to have compatibele dimensions, in our case: - dataset has exactly dimension 1 - <code class="docutils literal notranslate"><span class="pre">ak.flatten()</span></code> reduces that <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure of electron variables to a simple <code class="docutils literal notranslate"><span class="pre">L</span></code></div>
-<div class="line">lengthed array, the array inputs <code class="docutils literal notranslate"><span class="pre">invpt</span></code> and <code class="docutils literal notranslate"><span class="pre">eta</span></code> must have matching diemsions.</div>
-</div>
-<p>One can create a processor, and run on a single file for testing. (Again, if you are running this tutorial notebook as is, remember to download the provided data and schema files using the commands:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span>   &lt;WORKINGDIRECTORY&gt;
-wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummy_nanoevents.root
-wget https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummyschema.py
+<p>The selection/filtering part of the <code class="docutils literal notranslate"><span class="pre">DummyProcessor.process</span></code> is basically entirely the same as the using awkward examples without processors class, except this time, the events have an additional <code class="docutils literal notranslate"><span class="pre">metadata</span></code> tag that can be used to identify dataset name.</p>
+<p>The main difference is in the output parts of the processor. Here the return is what is known as <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> classes defined the <code class="docutils literal notranslate"><span class="pre">coffea.processor</span></code>. Basically each object that is defined within the various accumulators will be added up across the multiple jobs that the processor instance will be run on. In our case, we have two floating points that will be summed across multiple jobs, and a histogram with 3 axes: 1 being what the data is, the other 2 being some variables of interest. The
+filling of the histogram uses python keywords to simplify the filling variable assignment. All argument in the fill command have to have compatible dimensions, in our case: - dataset has exactly dimension 1 - <code class="docutils literal notranslate"><span class="pre">ak.flatten()</span></code> reduces that <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure of electron variables to a simple <code class="docutils literal notranslate"><span class="pre">L</span></code>-lengthed array, the array inputs <code class="docutils literal notranslate"><span class="pre">invpt</span></code> and <code class="docutils literal notranslate"><span class="pre">eta</span></code> must have matching dimensions.</p>
+<p>One can create a processor, and run on a single file for testing. (Again, if you are running this tutorial notebook as is, remember to download the provided data and schema files using the commands):</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w">   </span>&lt;WORKINGDIRECTORY&gt;
+wget<span class="w"> </span>https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummy_nanoevents.root
+wget<span class="w"> </span>https://raw.githubusercontent.com/UMDCMS/CoffeaTutorial/main/samples/dummyschema.py
 </pre></div>
 </div>
-<p>This will help use get a feels of what the output data is like:</p>
+<p>This will help use get a feel of what the output data is like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -439,7 +187,7 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.05409
 <div class="output_area docutils container">
 <img alt="../_images/notebooks_coffeaprocessors_5_2.svg" src="../_images/notebooks_coffeaprocessors_5_2.svg" /></div>
 </div>
-<p>Notice how <code class="docutils literal notranslate"><span class="pre">integrate</span></code> can be used to reduce the dimensions of a histgoram. You can also provide a custom integration range if you want to performed additional selections on binned dataset. Also</p>
+<p>Notice how <code class="docutils literal notranslate"><span class="pre">integrate</span></code> can be used to reduce the dimensions of a histograms. You can also provide a custom integration range if you want to perform additional selections on binned dataset. Also</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -464,8 +212,8 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.05409
 <img alt="../_images/notebooks_coffeaprocessors_7_1.svg" src="../_images/notebooks_coffeaprocessors_7_1.svg" /></div>
 </div>
 </section>
-<section id="Scaling-up-calculations-–-process-executors">
-<h2>Scaling up calculations – process executors<a class="headerlink" href="#Scaling-up-calculations-–-process-executors" title="Permalink to this headline">¶</a></h2>
+<section id="Scaling-up-calculations----process-executors">
+<h2>Scaling up calculations – process executors<a class="headerlink" href="#Scaling-up-calculations----process-executors" title="Link to this heading">¶</a></h2>
 <p>Suppose you have some file set, you can define coffea to run over all file with a given metadata tag using the following</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -488,30 +236,22 @@ defaultdict_accumulator(&lt;class &#39;float&#39;&gt;, {&#39;Dummy&#39;: 0.05409
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "cf240c3ca8524b249f51cf8fd42bedb9"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cf240c3ca8524b249f51cf8fd42bedb9", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "79ae37c14fdd49cd97363d4cfddc5b94"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "79ae37c14fdd49cd97363d4cfddc5b94", "version_major": 2, "version_minor": 0}</script></div>
 </div>
-<p>Now at first glance this seems to be a very straigh forwards translation to the from what we already have in the <code class="docutils literal notranslate"><span class="pre">NanoEventsFractory</span></code> method. The magic statement that give coffea simple scalability is the use of the <code class="docutils literal notranslate"><span class="pre">executor</span></code> argument. By using the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.futures_executor.html#coffea.processor.futures_executor">processor.futures_executor</a>, you have already enabled local multithreading with a maximum of 10 parallel threads, by doing so,
-we have just shwed through nearly 10 gigabytes of data in less than 5 seconds! Aside from the futures_executor. there is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.iterative_executor.html">iterative_executor</a> for single thread processing, which is the best for analysis debugging, since parallelism would cause the error messages to be wrapped in additional thread-related messages. There is also the
-<a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.dask_executor.html">dask_executor</a>, which submits job to the grid computing resourse available to machine running the notebook. If you already have the settings stored somewhere on, you can switch from a debuging to grid-level parallel programming simply by changing a couple of lines in the notebook! Examples of the configuration required to run grid-level parallelism can be found in the example <a class="reference internal" href="../snippets.html"><span class="doc">snippets</span></a>.</p>
-<p>A couple of notes on how parallelism works on the various executors: it is still file-based (a.k.a each file generates their own events awkward array to be processed), so be careful that when running the <code class="docutils literal notranslate"><span class="pre">futures_executor</span></code> during medorate testing you don’t saturate memory usage of your local machine. Because of this, if you create a histogram to keep a tally of <code class="docutils literal notranslate"><span class="pre">len(events)</span></code>, what you would get is not a single number of events for each sample, but rather the various number of events stored
-in each file. While it might be concptually helpful to think abstractly that the input <code class="docutils literal notranslate"><span class="pre">events</span></code> object to the <code class="docutils literal notranslate"><span class="pre">process</span></code> method is a massive awkward array that spans the entire data set, this is not how the the processor is actually working.</p>
-<p>Also now we can comment on how process <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> are performed across multiple jobs. The contents of each of the accumulator instances are added together via the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> oeprator. For <code class="docutils literal notranslate"><span class="pre">coffea.hist</span></code> histogram, this method is already overloaded to behave how one would expect histogram aggregation to work, but you can supply your own class with the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> operator overloaded if you really want. Right now, there is <strong>no</strong> standard class to aggregate unbinned data, since the unbinned
-data can be artibitrarily large, so in a grid-level computation settings one would want to keep the unbinned data on each worker node until they are called by the main thread for further processing, as returning all data to the main thread will likely saturate all resources on a single machine. The core developers are currently <a class="reference external" href="https://github.com/CoffeaTeam/coffea/pull/368">working</a> on this general use case which uses a different data format, but if you know that your final output data fram
-is expected to be small (ex you have a very tight background rejection selection), you can write your own accumulator class to get unbinned data.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
+<p>Now at first glance this seems to be a very straight forwards translation to the form what we already have in the <code class="docutils literal notranslate"><span class="pre">NanoEventsFractory</span></code> method. The magic statement that give coffea simple scalability is the use of the <code class="docutils literal notranslate"><span class="pre">executor</span></code> argument. By using the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.futures_executor.html#coffea.processor.futures_executor">processor.futures_executor</a>, you have already enabled local multithreading with a maximum of 10 parallel threads, by doing so,
+we have just showed through nearly 10 gigabytes of data in less than 5 seconds! Aside from the futures_executor. There is also the <a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.iterative_executor.html">iterative_executor</a> for single thread processing, which is the best for analysis debugging, since parallelism would cause the error messages to be wrapped in additional thread-related messages. There is also the
+<a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.processor.dask_executor.html">dask_executor</a>, which submits job to the grid computing resource available to machine running the notebook. If you already have the settings stored somewhere on, you can switch from a debugging to grid-level parallel programming simply by changing a couple of lines in the notebook! Examples of the configuration required to run grid-level parallelism can be found in the example <a class="reference internal" href="../snippets.html"><span class="doc">snippets</span></a>.</p>
+<p>A couple of notes on how parallelism works on the various executors: it is still file-based (i.e. each file generates their own events awkward array to be processed), so be careful that when running the <code class="docutils literal notranslate"><span class="pre">futures_executor</span></code> during moderate testing you don’t saturate memory usage of your local machine. Because of this, if you create a histogram to keep a tally of <code class="docutils literal notranslate"><span class="pre">len(events)</span></code>, what you would get is not a single number of events for each sample, but rather the various number of events stored in
+each file. While it might be conceptually helpful to think abstractly that the input <code class="docutils literal notranslate"><span class="pre">events</span></code> object to the <code class="docutils literal notranslate"><span class="pre">process</span></code> method is a massive awkward array that spans the entire data set, this is not how the processor is actually working.</p>
+<p>Also, now we can comment on how process <code class="docutils literal notranslate"><span class="pre">accumulator</span></code> are performed across multiple jobs. The contents of each of the accumulator instances are added together via the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> operator. For <code class="docutils literal notranslate"><span class="pre">coffea.hist</span></code> histogram, this method is already overloaded to behave how one would expect histogram aggregation to work, but you can supply your own class with the <code class="docutils literal notranslate"><span class="pre">__sum__</span></code> operator overloaded if you really want. Right now, there is <strong>no</strong> standard class to aggregate unbinned data, since the
+unbinned data can be arbitrarily large, so in a grid-level computation settings one would want to keep the unbinned data on each worker node until they are called by the main thread for further processing, as returning all data to the main thread will likely saturate all resources on a single machine. The core developers are currently <a class="reference external" href="https://github.com/CoffeaTeam/coffea/pull/368">working</a> on this general use case which uses a different data format, but if you know that your final output
+data frame is expected to be small (ex you have a very tight background rejection selection), you can write your own accumulator class to get unbinned data.</p>
 </section>
 </section>
 
@@ -526,8 +266,8 @@ is expected to be small (ex you have a very tight background rejection selection
     <h3><a href="../index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Coffea processors</a><ul>
-<li><a class="reference internal" href="#A-very-simple-processor-–-understanding-output">A very simple processor – understanding output</a></li>
-<li><a class="reference internal" href="#Scaling-up-calculations-–-process-executors">Scaling up calculations – process executors</a></li>
+<li><a class="reference internal" href="#A-very-simple-processor----understanding-output">A very simple processor – understanding output</a></li>
+<li><a class="reference internal" href="#Scaling-up-calculations----process-executors">Scaling up calculations – process executors</a></li>
 </ul>
 </li>
 </ul>
@@ -536,7 +276,7 @@ is expected to be small (ex you have a very tight background rejection selection
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="awkwardbasic.html"
-                          title="previous chapter">Learnig the awkward arrays syntax</a></p>
+                          title="previous chapter">Learning the awkward arrays syntax</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
@@ -550,7 +290,7 @@ is expected to be small (ex you have a very tight background rejection selection
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -558,8 +298,8 @@ is expected to be small (ex you have a very tight background rejection selection
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -574,15 +314,15 @@ is expected to be small (ex you have a very tight background rejection selection
           <a href="coffeaschema.html" title="Writting coffea Schema files"
              >next</a> |</li>
         <li class="right" >
-          <a href="awkwardbasic.html" title="Learnig the awkward arrays syntax"
+          <a href="awkwardbasic.html" title="Learning the awkward arrays syntax"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Coffea processors</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2021, UMDCMS.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

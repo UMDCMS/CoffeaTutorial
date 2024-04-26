@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Learnig the awkward arrays syntax &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <title>Learning the awkward arrays syntax &#8212; Unofficial Coffea Tutorial  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=0f882399" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -34,7 +33,7 @@
           <a href="intronotebook.html" title="Navigating jupyter notebooks"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Learnig the awkward arrays syntax</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Learning the awkward arrays syntax</a></li> 
       </ul>
     </div>  
 
@@ -43,259 +42,11 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Learnig-the-awkward-arrays-syntax">
-<h1>Learnig the awkward arrays syntax<a class="headerlink" href="#Learnig-the-awkward-arrays-syntax" title="Permalink to this headline">¶</a></h1>
-<p>At the front and formost of coffea is a completely new syntax for expressing analysis computations: <code class="docutils literal notranslate"><span class="pre">awkward</span> <span class="pre">arrays</span></code> and it’s index based notation. For people coming from a more traditional loop-based programming syntax, the syntax will take some getting use to, but this tutorial can hopefully help you understand how to understand the syntax and how to understand the various method.</p>
-<p>Let use begin by first understanding what you need to explore the contents of a typical ntuple file using coffea related tools. For the examples below we will be using the <a class="reference external" href="http://opendata.cern.ch/record/12354#">CMS open data</a>. Either download the file to your working directory to follow along.</p>
-<p>First import the relevent coffea objects:</p>
+  <section id="Learning-the-awkward-arrays-syntax">
+<h1>Learning the awkward arrays syntax<a class="headerlink" href="#Learning-the-awkward-arrays-syntax" title="Link to this heading">¶</a></h1>
+<p>The core of <code class="docutils literal notranslate"><span class="pre">coffea</span></code> leverages a completely new syntax for expressing analysis computations: <code class="docutils literal notranslate"><span class="pre">awkward</span> <span class="pre">arrays</span></code> and its index-based notation. For people coming from a more traditional loop-based programming syntax, the syntax will take some getting use to, but this tutorial can hopefully help you understand how to understand the syntax and how to understand the various method.</p>
+<p>Let use begin by first understanding what you need to explore the contents of a typical n-tuple file using <code class="docutils literal notranslate"><span class="pre">coffea</span></code> related tools. For the examples below we will be using the <a class="reference external" href="http://opendata.cern.ch/record/12354#">CMS open data</a>. Either download the file to your working directory to follow along.</p>
+<p>First import the relevant <code class="docutils literal notranslate"><span class="pre">coffea</span></code> objects:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -307,7 +58,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>Now we can create the event list as an awkward array using coffea tools like:</p>
+<p>Now we can create the event list as an awkward array using <code class="docutils literal notranslate"><span class="pre">coffea</span></code> tools like:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -321,7 +72,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>The last <code class="docutils literal notranslate"><span class="pre">schemaclass</span></code> argument will be let unexplained for now, see the schema tutorials to learn more about what this is. Here we have created the events as a awkward array. To see that is stored in the array we can use:</p>
+<p>The last <code class="docutils literal notranslate"><span class="pre">schemaclass</span></code> argument will be let unexplained for now, see the schema tutorials to learn more about what this is. Here we have created the events as an awkward array. To see that is stored in the array we can use:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -338,7 +89,7 @@ div.rendered_html tbody tr:hover {
 [&#39;Muon&#39;, &#39;luminosityBlock&#39;, &#39;Jet&#39;, &#39;HLT&#39;, &#39;PV&#39;, &#39;Tau&#39;, &#39;GenPart&#39;, &#39;MET&#39;, &#39;run&#39;, &#39;event&#39;]
 </pre></div></div>
 </div>
-<p>Indicating the collections that are stored in the awkward array. To see how many events exists in in our file we can use the typical python method:</p>
+<p>Indicating the collections that are stored in the awkward array. To see how many events exists in our file we can use the typical python method:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -355,7 +106,7 @@ div.rendered_html tbody tr:hover {
 50
 </pre></div></div>
 </div>
-<p>The 50 here in corresponds correctly to the <code class="docutils literal notranslate"><span class="pre">entry_stop</span></code> used in to open the file. Next we can, of course, start to explore the contents of the various object collections. One can acess the fields of the event as if it was a regular data memeber</p>
+<p>The 50 here in corresponds correctly to the <code class="docutils literal notranslate"><span class="pre">entry_stop</span></code> used in to open the file. Next we can, of course, start to explore the contents of the various object collections. One can access the fields of the event as if it was a regular data member</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -374,8 +125,8 @@ div.rendered_html tbody tr:hover {
 [&#39;pt&#39;, &#39;eta&#39;, &#39;phi&#39;, &#39;mass&#39;, &#39;puId&#39;, &#39;btag&#39;]
 </pre></div></div>
 </div>
-<p>Ah ha! We we are starting to see numbers we can play around with. Notice that coffea was written with High energy physics analysis in mind, so even if the electron energy doesn’t look like it is stored from the output of the fields, we can still access methods that we will typically associate with 4-vectors. In particular, notice that we can call the <code class="docutils literal notranslate"><span class="pre">energy</span></code> field of the electron collection, even though the energy field isn’t explicitly defined. Coffea is designed with 4 vectors in mind, so
-the energy collection is calculated on the fly.</p>
+<p>Ah-ha! Now, we are starting to see numbers we can play around with. Notice that <code class="docutils literal notranslate"><span class="pre">coffea</span></code> was written with high energy physics analysis in mind, so even if the electron energy doesn’t look like it is stored from the output of the fields, we can still access methods that we will typically associate with 4-vectors. In particular, notice that we can call the <code class="docutils literal notranslate"><span class="pre">energy</span></code> field of the electron collection, even though the energy field isn’t explicitly defined. <code class="docutils literal notranslate"><span class="pre">coffea</span></code> is designed with 4 vectors in
+mind, so the energy collection is calculated on the fly.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -394,9 +145,9 @@ the energy collection is calculated on the fly.</p>
 [[52.3], [], [], [95.6, 30.2, 8.01], [], [], ... [], [], [309], [], [19.7], [], []]
 </pre></div></div>
 </div>
-<p>Now, looking at the output, we can begin to get a grasp of what awkward arrays are: the variable <code class="docutils literal notranslate"><span class="pre">events.Muon.pt</span></code> variable represents a N events times A objects array of floating point, the <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> variable represents and N events times A <em>objects</em>, acting as a <em>collection</em> of floating point arrays.</p>
-<p>The “awkward” part of awkward array refers to two parts: - The value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is differnt for each event and for each collection. In this demonstration, our 0-th event has 1 muon, the 1-st and 2-rd event has no muons, and the 3-rd event has 3 muons and so on. - Each collection can have a different number of fields. In a sense, the <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">Muon</span></code> and <code class="docutils literal notranslate"><span class="pre">pt</span></code> variables are just a easy way for represting the final <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array that we might be intested in for the analysis.</p>
-<p>In our case the <code class="docutils literal notranslate"><span class="pre">N</span></code> number of events is whatis called as the outer most <strong>dimension</strong> or axis of the various objects, <code class="docutils literal notranslate"><span class="pre">A</span></code> is the one inner dimesion of the of array. One thinkg to keep in mind is that we typically refer to the dimension of <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Muon.pt</span></code> as both being <code class="docutils literal notranslate"><span class="pre">NxA</span></code>, except <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> is a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of objects (or collection), while the the <code class="docutils literal notranslate"><span class="pre">events.Electron.pt</span></code> being a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of a concrete data type (in this case a float).</p>
+<p>Now, looking at the output, we can begin to get a grasp of what awkward arrays are: the variable <code class="docutils literal notranslate"><span class="pre">events.Muon.pt</span></code> variable represents an <span class="math notranslate nohighlight">\(N\)</span> events times <span class="math notranslate nohighlight">\(A\)</span> objects array of floating point, the <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> variable represents and <span class="math notranslate nohighlight">\(N\)</span> events times <span class="math notranslate nohighlight">\(A\)</span> <em>objects</em>, acting as a <em>collection</em> of floating point arrays.</p>
+<p>The “awkward” part of awkward array refers to two parts: - The value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is different for each event and for each collection. In this demonstration, our 0-th event has 1 muon, the 1-st and 2-rd event has no muons, and the 3-rd event has 3 muons and so on. - Each collection can have a different number of fields. In a sense, the <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">Muon</span></code> and <code class="docutils literal notranslate"><span class="pre">pt</span></code> variables are just an easy way for representing the final <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array that we might be interested in for the analysis.</p>
+<p>In our case the <code class="docutils literal notranslate"><span class="pre">N</span></code> number of events is what will refer to as the outermost <strong>dimension</strong> or axis of the various objects, <code class="docutils literal notranslate"><span class="pre">A</span></code> is the one inner dimension of the of array. One thing to keep in mind is that we typically refer to the dimension of <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Muon.pt</span></code> as both being <code class="docutils literal notranslate"><span class="pre">NxA</span></code>, except <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> is a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of objects (or collection), while the <code class="docutils literal notranslate"><span class="pre">events.Electron.pt</span></code> being a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of a concrete data type (in this case a float).</p>
 <p>We can use the usual index notation to look at a particular object of interest. For instance if we want to look at the 0-th Muon of the 3-rd event in our event list, we can write:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -414,9 +165,9 @@ the energy collection is calculated on the fly.</p>
 57.327919006347656 1.0991891622543335
 </pre></div></div>
 </div>
-<p>But the real power of using awkward arrays is for using awkward arrays comes in when you don’t explicily use a concrete index, and instead call calculation all in an abstract form</p>
+<p>But the real power of using awkward arrays is for using awkward arrays comes in when you don’t explicitly use a concrete index, and instead call calculation all in an abstract form</p>
 <section id="Basic-object-and-event-selection">
-<h2>Basic object and event selection<a class="headerlink" href="#Basic-object-and-event-selection" title="Permalink to this headline">¶</a></h2>
+<h2>Basic object and event selection<a class="headerlink" href="#Basic-object-and-event-selection" title="Link to this heading">¶</a></h2>
 <p>Let us start with the most basic example of event selection. Say we want to select event with electrons that have <span class="math notranslate nohighlight">\(p_T &gt; 30\)</span> GeV and <span class="math notranslate nohighlight">\(|\eta| &lt; 2.0\)</span>. The awkward array allows us to write something like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -441,8 +192,8 @@ the energy collection is calculated on the fly.</p>
 [[False], [], [], [True, False, False], [], ... [], [False], [], [False], [], []]
 </pre></div></div>
 </div>
-<p>We can see that the usual logic comparision operators generate a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> boolean array telling use which electron (or more specifically which electron.pt and electron etas) pass this particular selection criteia. This particular boolean array generated from a logic operation on usual arrays is typically call a <code class="docutils literal notranslate"><span class="pre">mask</span></code>. We can use the typical boolean operation <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> operation to get the intersect of multiple masks, or maybe the <code class="docutils literal notranslate"><span class="pre">|</span></code> operator for the union. Now the problem is where can we use
-this mask? The answer is any array that has a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure and recieve these masks to create a reduced array!</p>
+<p>We can see that the usual logic comparison operators generate a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> boolean array telling use which electron (or more specifically which electron.pt and electron etas) pass this particular selection criteria. This particular boolean array generated from a logic operation on usual arrays is typically call a <code class="docutils literal notranslate"><span class="pre">mask</span></code>. We can use the typical boolean operation <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> operation to get the intersect of multiple masks, or maybe the <code class="docutils literal notranslate"><span class="pre">|</span></code> operator for the union. Now the problem is where can we use
+this mask? The answer is any array that has a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure and can receive these masks to create a reduced array!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -464,8 +215,8 @@ this mask? The answer is any array that has a <code class="docutils literal notr
 [[], [], [], [57.3], [], [], [], [], [], ... [], [], [], [], [], [], [], [], []]
 </pre></div></div>
 </div>
-<p>Probably the most important place to put the mask is the directly in the <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> index, this generates a new collection of electrons that preserves the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure, but have verious collection instances filterd out. If you are familiar with <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, this sort if index-based array filtering look familiar. The difference is that because awkward arrays accecpt arrays of varying inner dimensions, it can truely preserve the structure of such selection, rather than having everything be
-flattend out.</p>
+<p>Probably the most important place to put the mask is directly in the <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> index, this generates a new collection of electrons that preserves the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> structure, but have various collection instances filtered out. If you are familiar with <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, this sort of index-based array filtering look familiar. The difference is that because awkward arrays accept arrays of varying inner dimensions, it can truly preserve the structure of such selection, rather than having everything be
+flattened out.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -489,7 +240,7 @@ flattend out.</p>
 [[2, 4], [6, 8], [2]]
 </pre></div></div>
 </div>
-<p>Now suppose we only want events that have at least 1 electron selected event. What we need are a set of functions that can reduces this <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> array to something of just dimesion <code class="docutils literal notranslate"><span class="pre">N</span></code>. Formally this is called <strong>reduction</strong> operations, and the awkward package has a large set of functions that can reduce the dimension of arrays. In our case, what we want is:</p>
+<p>Now suppose we only want events that have at least 1 electron selected event. What we need are a set of functions that can reduces this <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> array to something of just dimension <code class="docutils literal notranslate"><span class="pre">N</span></code>. Formally this is called <strong>reduction</strong> operations, and the awkward package has a large set of functions that can reduce the dimension of arrays. In our case, what we want is:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -508,7 +259,7 @@ flattend out.</p>
 [False, False, False, True, False, False, ... False, False, False, False, False]
 </pre></div></div>
 </div>
-<p>To break this down, <code class="docutils literal notranslate"><span class="pre">ak.count</span></code>, as the method name suggests “counts” the number of elements along a certain axis, in our case, what we are intersted is the inner most dimension/axis, hence the typical python notation of <code class="docutils literal notranslate"><span class="pre">axis=-1</span></code>. Using this we can run the event selection using the usual masking notation:</p>
+<p>To break this down, <code class="docutils literal notranslate"><span class="pre">ak.count</span></code>, as the method name suggests “counts” the number of elements along a certain axis, in our case, what we are interested is the innermost dimension/axis, hence the typical python notation of <code class="docutils literal notranslate"><span class="pre">axis=-1</span></code>. Using this we can run the event selection using the usual masking notation:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -532,11 +283,11 @@ flattend out.</p>
 2
 </pre></div></div>
 </div>
-<p>Here we can confirm that the first event to pass the event selection is the 1-st event in the event list, and the 0-th instance in the <code class="docutils literal notranslate"><span class="pre">selectedEvents.Muon.pt</span></code> result of the selectedEvents indeed corresponds to the values stored in the 1-st event of the orignal event list.</p>
+<p>Here we can confirm that the first event to pass the event selection is the 1-st event in the event list, and the 0-th instance in the <code class="docutils literal notranslate"><span class="pre">selectedEvents.Muon.pt</span></code> result of the <code class="docutils literal notranslate"><span class="pre">selectedEvents</span></code> indeed corresponds to the values stored in the 1-st event of the original event list.</p>
 </section>
-<section id="Object-storce-and-collection-creation">
-<h2>Object storce and collection creation<a class="headerlink" href="#Object-storce-and-collection-creation" title="Permalink to this headline">¶</a></h2>
-<p>Having completed the selection, we might be rather annoyed that we didn’t just store the selected Electron, since these are the objects that we are likely going to use for further calculation. Following from the code above, what we can do is add the additional selection to the <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code> collections. This is valid since the <code class="docutils literal notranslate"><span class="pre">N</span></code> dimesional event mask “makes sense” performed on the <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> dimesional selectedMuon object.</p>
+<section id="Object-storage-and-collection-creation">
+<h2>Object storage and collection creation<a class="headerlink" href="#Object-storage-and-collection-creation" title="Link to this heading">¶</a></h2>
+<p>Having completed the selection, we might be rather annoyed that we didn’t just store the selected Electron, since these are the objects that we are likely going to use for further calculation. Following from the code above, what we can do is add the additional selection to the <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code> collections. This is valid since the <code class="docutils literal notranslate"><span class="pre">N</span></code> dimensional event mask “makes sense” performed on the <code class="docutils literal notranslate"><span class="pre">NxA'</span></code> dimensional <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code> object.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
@@ -556,8 +307,8 @@ flattend out.</p>
 2
 </pre></div></div>
 </div>
-<p>However, this is rather undesirable, since now we have some a whole bunch of detected collections, and event lists that we need to take care of: <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">our_selectedMuons</span></code>. And this is with just one toy object selection. One can imagine if there isn’t some sort of way to store collections into events, the analysis code will get out of hands very quick. This also ties into the topic that there might be certain physics quantities that are specific to a certain
-analysis that would might be used for the analysis object selection and would be nice to add to the electron collection if it isn’t a standard variable that is maintained by the NanoAOD development team. Here we are going to add a very artificial example of calculating the inverse of the electron pt, then selecting on the inverse pt. This very simple example will demonstrate the typical syntax used for storing variables as well as exposing one of the parculiar quirks of awkward arrays:</p>
+<p>However, this is rather undesirable, since now we have some a bunch of detected collections, and event lists that we need to take care of: <code class="docutils literal notranslate"><span class="pre">selectedMuon</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">our_selectedMuons</span></code>. And this is with just one toy object selection. One can imagine if there isn’t some sort of way to store collections into events, the analysis code will get out of hands very quick. This also ties into the topic that there might be certain physics quantities that are specific to a certain analysis
+that might be used for the analysis object selection and would be nice to add to the electron collection if it isn’t a standard variable that is maintained by the NanoAOD development team. Here we are going to add a very artificial example of calculating the inverse of the electron pt, then selecting on the inverse pt. This very simple example will demonstrate the typical syntax used for storing variables as well as exposing one of the particuliar quirks of awkward arrays:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -613,10 +364,10 @@ Third attemp at adding extended variables to events
 [&#39;charge&#39;, &#39;dxy&#39;, &#39;dxyErr&#39;, &#39;dz&#39;, &#39;dzErr&#39;, &#39;eta&#39;, &#39;genPartIdx&#39;, &#39;genPartIdxG&#39;, &#39;jetIdx&#39;, &#39;jetIdxG&#39;, &#39;mass&#39;, &#39;pfRelIso03_all&#39;, &#39;pfRelIso04_all&#39;, &#39;phi&#39;, &#39;pt&#39;, &#39;softId&#39;, &#39;tightId&#39;, &#39;invpt&#39;]
 </pre></div></div>
 </div>
-<p>Lets get the straightforward part of the code clear up. The addition of collections looks very straight forward, one can think of the <code class="docutils literal notranslate"><span class="pre">events</span></code> as something that looks like a “dictionary of collection with a common outer dimension”, so the addition of the two electron collections to the event has a very distionary-esque notation. What is strange is the persistence of the extended collection for the electrons. Logically, the operation looks identical, but the first attempt to add the new
+<p>Let’s get the straightforward part of the code clear up. The addition of collections looks very straight forward, one can think of the <code class="docutils literal notranslate"><span class="pre">events</span></code> as something that looks like a “dictionary of collection with a common outer dimension”, so the addition of the two electron collections to the event has a very distionary-esque notation. What is strange is the persistence of the extended collection for the electrons. Logically, the operation looks identical, but the first attempt to add the new
 variable <code class="docutils literal notranslate"><span class="pre">invpt</span></code> directly to <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> fails to persist, and thus all direct extensions of <code class="docutils literal notranslate"><span class="pre">events.Muon</span></code> doesn’t include the new <code class="docutils literal notranslate"><span class="pre">invpt</span></code> field.</p>
 <p>The reason for this is rather technical regarding the mutability of objects in python and awkward. The rule-of-thumb is that collections that are directly generated from the file, (a.k.a. the collections directly obtained listed the <code class="docutils literal notranslate"><span class="pre">events.fields</span></code> immediate after opening a file) can <strong>never</strong> be altered, and therefore cannot have extended variables added to them. To create an extended variable to some collection, we will need to make some sort of copy of the original either by some trivial
-kinematic selection (ex. <code class="docutils literal notranslate"><span class="pre">myMuons</span> <span class="pre">=</span> <span class="pre">events.Muon[events.Muon.pt</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code>) or some trivial splicing (<code class="docutils literal notranslate"><span class="pre">myMuon</span> <span class="pre">=</span> <span class="pre">events.Muons[:]</span></code>). Another feature of mutability is that once the collection is added to the event collection, it becomes immutable. That is why the third attempt is the one that adds the both the electron extended variable and the extednded electron collection to the event.</p>
+kinematic selection (ex. <code class="docutils literal notranslate"><span class="pre">myMuons</span> <span class="pre">=</span> <span class="pre">events.Muon[events.Muon.pt</span> <span class="pre">&gt;</span> <span class="pre">0]</span></code>) or some trivial splicing (<code class="docutils literal notranslate"><span class="pre">myMuon</span> <span class="pre">=</span> <span class="pre">events.Muons[:]</span></code>). Another feature of mutability is that once the collection is added to the event collection, it becomes immutable. That is why the third attempt is the one that adds the both the electron extended variable and the extended electron collection to the event.</p>
 <p>Because of these quirks, it would typically be worth it to wrap the object selection into a function if the object selection is typical within an analysis, and it also helps with code readability</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -677,9 +428,9 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 </pre></div></div>
 </div>
 </section>
-<section id="Comparing-array-based-compuations-and-loop-based-compuatation">
-<h2>Comparing array based compuations and loop based compuatation<a class="headerlink" href="#Comparing-array-based-compuations-and-loop-based-compuatation" title="Permalink to this headline">¶</a></h2>
-<p>So to put this together into a single code block, suppose our analysis consisten of selecting events that have at least 1 electron with <span class="math notranslate nohighlight">\(p_{T} &gt; 50GeV\)</span>, <span class="math notranslate nohighlight">\(|\eta| &lt; 2.4\)</span>, and we want to calculate the average of all such electron’s iverserse <span class="math notranslate nohighlight">\(p_{T}\)</span> within the selected events. Our awkward array code would look something like:</p>
+<section id="Comparing-array-based-computations-and-loop-based-computation">
+<h2>Comparing array based computations and loop based computation<a class="headerlink" href="#Comparing-array-based-computations-and-loop-based-computation" title="Link to this heading">¶</a></h2>
+<p>So to put this together into a single code block, suppose our analysis consisted of selecting events that have at least 1 electron with <span class="math notranslate nohighlight">\(p_{T} &gt; 50GeV\)</span>, <span class="math notranslate nohighlight">\(|\eta| &lt; 2.4\)</span>, and we want to calculate the average of all such electron’s inverse <span class="math notranslate nohighlight">\(p_{T}\)</span> within the selected events. Our awkward array code would look something like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -700,7 +451,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 
 <span class="c1"># Calculating the total average</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">invpt</span><span class="p">)</span><span class="o">/</span><span class="n">ak</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">events</span><span class="o">.</span><span class="n">selectedMuon</span><span class="o">.</span><span class="n">invpt</span><span class="p">))</span>
-<br/><br/></pre></div>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -711,7 +462,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 0.018032373239596684
 </pre></div></div>
 </div>
-<p>On total this is 4 statements (not counting the file reading step) used to make this analysis. Compare that with the loop based notation:</p>
+<p>In total, this is 4 statements (not counting the file reading step) used to make this analysis. Compare that with the loop based notation:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -745,12 +496,12 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 0.01803237348586199
 </pre></div></div>
 </div>
-<p>Notice the results are only difference because the 32bit to 64 bit float conversion is happening at different places. For awkward arrays, this is happening only after the sum has been performed. For the loop based approach this happening everytime the <code class="docutils literal notranslate"><span class="pre">+=</span></code> operator is called.</p>
-<p>For the loop based analysis, notice for such a simple analysis, many many lines of code are dedicated to just book keeping stuff: number of electrons passing criteria, adding a counter variable and sum variable… etc, instead of actualy analysis computation. The array based notation for expressing the analysis is much cleaner, if rather more unfamiliar to typical users.</p>
-<p>Of course, this isn’t the end. Physics analysis are typically more involved that just basic selection and counting. In the next session, we will talk about how to perform more involed calculations with awkward arrays that involves multiple collections within an event collection.</p>
+<p>Notice the results are only difference because the 32-bit to 64-bit float conversion is happening at different places. For awkward arrays, this is happening only after the sum has been performed. For the loop based approach this happening every time the <code class="docutils literal notranslate"><span class="pre">+=</span></code> operator is called.</p>
+<p>In the loop based analysis, notice for such a simple analysis, many lines of code are dedicated to just bookkeeping stuff: number of electrons passing criteria, adding a counter variable and sum variable… etc., instead of actually analysis computation. The array based notation for expressing the analysis is much cleaner, if rather more unfamiliar to typical users.</p>
+<p>Of course, this isn’t the end. Physics analysis are typically more involved than just basic selection and counting. In the next session, we will talk about how to perform more involved calculations with awkward arrays that use multiple collections within an event collection.</p>
 </section>
 <section id="More-on-index-notation">
-<h2>More on index notation<a class="headerlink" href="#More-on-index-notation" title="Permalink to this headline">¶</a></h2>
+<h2>More on index notation<a class="headerlink" href="#More-on-index-notation" title="Link to this heading">¶</a></h2>
 <p>Let us dive in a bit more regarding the index notation, with a fresh set of events.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
@@ -763,7 +514,7 @@ kinematic selection (ex. <code class="docutils literal notranslate"><span class=
 </pre></div>
 </div>
 </div>
-<p>The index notation largely follows in index notation of numpy arrays, which means we can use some of the following</p>
+<p>The index notation largely follows in index notation of <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, which means we can use some of the following</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">array[</span> <span class="pre">-n</span> <span class="pre">]</span></code>: to the objects in the array in reverse order</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">array[</span> <span class="pre">start:end:step</span> <span class="pre">]</span></code>: to slice an array given a certain range and step size,</p></li>
@@ -798,7 +549,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>object[event_index, object_index]
 </pre></div>
 </div>
-<p>There the comma in the square braces is used to seperate the first index argument that operation on the outer-most dimension (in our case the event index), while the second argument is for the inner dimension index (in which our case the object index within an event). For instance, if we want to get the leading jet’s <span class="math notranslate nohighlight">\(p_{T}\)</span> for every event, we can used the following</p>
+<p>There the comma in the square braces is used to separate the first index argument that operation on the outermost dimension (in our case the event index), while the second argument is for the inner dimension index (in which our case the object index within an event). For instance, if we want to get the leading jet’s <span class="math notranslate nohighlight">\(p_{T}\)</span> for every event, we can use the following</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
@@ -815,7 +566,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 [147, 76.9, 84.4, 52.8, 105, 94.3, 34.8, ... 41.7, 133, 210, 91.3, 76.3, 96.2, 139]
 </pre></div></div>
 </div>
-<p>The first argument <code class="docutils literal notranslate"><span class="pre">:</span></code> is a trivial slice operation, indicating that we want every event. The second operator indicates that we want the leading (a.k.a 0-th) jet in each event. Notice that the user is responsible to make sure a corresponding object exists. For instance, if we run the same notation using the muon collection instead:</p>
+<p>The first argument <code class="docutils literal notranslate"><span class="pre">:</span></code> is a trivial slice operation, indicating that we want every event. The second operator indicates that we want the leading (a.k.a. 0-th) jet in each event. Notice that the user is responsible to make sure a corresponding object exists. For instance, if we run the same notation using the muon collection instead:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
@@ -908,10 +659,10 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 </div>
 <p>Now this example is a bit more involved:</p>
 <ul class="simple">
-<li><p>First the method <code class="docutils literal notranslate"><span class="pre">`ak.argsort</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.argsort.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.argsort.html</a>&gt;`__, generates the index by which the object should be called along the last axis(<code class="docutils literal notranslate"><span class="pre">axis=-1</span></code>) in descending order: For example in the first event, the jet with the largest <span class="math notranslate nohighlight">\(|\eta|\)</span> is the 0-th on, followed by the 2-nd one and so one. The <code class="docutils literal notranslate"><span class="pre">order</span></code> variable would be a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of integers.</p></li>
+<li><p>First the method <code class="docutils literal notranslate"><span class="pre">`ak.argsort</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.argsort.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.argsort.html</a>&gt;`__, generates the index by which the object should be called along the last axis(<code class="docutils literal notranslate"><span class="pre">axis=-1</span></code>) in descending order: For example in the first event, the jet with the largest <span class="math notranslate nohighlight">\(|\eta|\)</span> is the 0-th on, followed by the 2-nd one and so on. The <code class="docutils literal notranslate"><span class="pre">order</span></code> variable would be a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array of integers.</p></li>
 <li><p>Next, when placed in the square parenthesis, since the outer dimension of the <code class="docutils literal notranslate"><span class="pre">order</span></code> matches the outer dimension of <code class="docutils literal notranslate"><span class="pre">events.Jet</span></code> it automatically knows to apply the index by event to each inner dimension.</p></li>
 </ul>
-<p>Notice becuase of how the second line is phrased, the resulting <code class="docutils literal notranslate"><span class="pre">events.JetByEta</span></code> has an inner dimension that is the same as the the <code class="docutils literal notranslate"><span class="pre">order</span></code> variale and <em>not</em> the <code class="docutils literal notranslate"><span class="pre">events.Jet</span></code> variable. For instance, if we are only interested in the 2 least forward jets we can use:</p>
+<p>Notice because of how the second line is phrased, the resulting <code class="docutils literal notranslate"><span class="pre">events.JetByEta</span></code> has an inner dimension that is the same as the <code class="docutils literal notranslate"><span class="pre">order</span></code> variable and <em>not</em> the <code class="docutils literal notranslate"><span class="pre">events.Jet</span></code> variable. For instance, if we are only interested in the 2 least forward jets we can use:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
@@ -930,7 +681,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 [[-1.46, 0.0878], [-0.27, -0.178], [0.738, ... [-0.399, -0.239], [0.94, 0.0518]]
 </pre></div></div>
 </div>
-<p>Another handy application of this is the index notation is the old process of using object indices in the place of pointers. In this NanoAOD event, muons have a <code class="docutils literal notranslate"><span class="pre">genPartIdx</span></code> field, which indicates which <code class="docutils literal notranslate"><span class="pre">events.GenPart</span></code> collection it should be matched to. Notice that we will need to some some additional parsing to ensure: 1. The muons of intestest have a corresponding genPartIdx (&gt;= 0)</p>
+<p>Another handy application of this is the index notation is the old process of using object indices in the place of pointers. In this NanoAOD event, muons have a <code class="docutils literal notranslate"><span class="pre">genPartIdx</span></code> field, which indicates which <code class="docutils literal notranslate"><span class="pre">events.GenPart</span></code> collection it should be matched to. Notice that we will need to some additional parsing to ensure, that the muons of interest have correct <code class="docutils literal notranslate"><span class="pre">genPartIdx</span></code> values (&gt;= 0)</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
@@ -951,7 +702,7 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 [[24], [], [], [56.2, 29.4, 29.4], ... [14.7], [3.31, 27, 27, 27, 27, 27, 3.31]]
 </pre></div></div>
 </div>
-<p>Now since the <code class="docutils literal notranslate"><span class="pre">muon_genpart</span></code> has the same dimension as that of the <code class="docutils literal notranslate"><span class="pre">events.MuonWithGen</span></code> collection, we can add the <code class="docutils literal notranslate"><span class="pre">muon_genpart</span></code> to the <code class="docutils literal notranslate"><span class="pre">MuonWithGen</span></code> collection. This makes additiona codes much more useful:</p>
+<p>Now since the <code class="docutils literal notranslate"><span class="pre">muon_genpart</span></code> has the same dimension as that of the <code class="docutils literal notranslate"><span class="pre">events.MuonWithGen</span></code> collection, we can add the <code class="docutils literal notranslate"><span class="pre">muon_genpart</span></code> to the <code class="docutils literal notranslate"><span class="pre">MuonWithGen</span></code> collection. This makes additional codes much more useful:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
@@ -971,20 +722,20 @@ The MET of events 1 3 and 10:          [50.1, 38.8, 12.7]
 [[1], [], [], [1, 1, 1], [], [], [2], ... [], [1, 1], [1], [1, 1, 1, 1, 1, 1, 1]]
 </pre></div></div>
 </div>
-<p>Now the code mimics quite a bit with what you would normally get with object based code, which makes awkward arrays rather more useful than just the flat arrays one typically get in C++ ntuple codes.</p>
+<p>Now the code mimics quite a bit with what you would normally get with object based code, which makes awkward arrays rather more useful than just the flat arrays one typically get in C++ n-tuple codes.</p>
 </section>
-<section id="Calcuation-with-objects">
-<h2>Calcuation with objects<a class="headerlink" href="#Calcuation-with-objects" title="Permalink to this headline">¶</a></h2>
-<p>Uptil now, the calculations have all removed around single collection. Even in the case of the cell involving two collection, one is just used to generate index dimension. The first instance of calculation, where we use a mathematic operation to generate an new array is in the case of mask generation and the calculation of a the inverse of muon pt, but that apprently only involved 1 array. In this section, we dive a bit deeper into what mathematical operators actually imply in awkward.</p>
-<p>The mathematical operations of awkward arrays is member-wise: Given 2 arrays of identical dimsion (<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>) and a generic binary operation <span class="math notranslate nohighlight">\(\otimes\)</span>, the statement <span class="math notranslate nohighlight">\(a\otimes b\)</span>, will generate a new array with the same dimensions as <span class="math notranslate nohighlight">\(a\)</span>, with output being a member-wise results of <span class="math notranslate nohighlight">\(o_{ijk\ldots} = a_{ijk\ldots} \otimes b{ijk\ldots}\)</span>. Now what if <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are different dimension, say in our case <span class="math notranslate nohighlight">\(a\)</span> is a scalar 1, and <span class="math notranslate nohighlight">\(b\)</span> is the
-muon <span class="math notranslate nohighlight">\(p_{T}\)</span> array. What happens is formally know as <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a>: you can think that awkward automatically expands the scalar <span class="math notranslate nohighlight">\(a\)</span> into a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array and performs a typical member-wise arithematics. Broadcasting is a rather complicated subject to fully discuss, but we can basically operations would be valid:</p>
+<section id="Calculation-with-objects">
+<h2>Calculation with objects<a class="headerlink" href="#Calculation-with-objects" title="Link to this heading">¶</a></h2>
+<p>Up til now, the calculations have all removed around single collection. Even in the case of the cell involving two collection, one is just used to generate index dimension. The first instance of calculation, where we use a mathematic operation to generate a new array is in the case of mask generation and the calculation of the inverse of muon pt, but that apparently only involved 1 array. In this section, we dive a bit deeper into what mathematical operators actually imply in awkward.</p>
+<p>The mathematical operations of awkward arrays is member-wise: Given 2 arrays of identical dimension (<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>) and a generic binary operation <span class="math notranslate nohighlight">\(\otimes\)</span>, the statement <span class="math notranslate nohighlight">\(a\otimes b\)</span>, will generate a new array with the same dimensions as <span class="math notranslate nohighlight">\(a\)</span>, with output being a member-wise results of <span class="math notranslate nohighlight">\(o_{ijk\ldots} = a_{ijk\ldots} \otimes b{ijk\ldots}\)</span>. Now what if <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are different dimension, say in our case <span class="math notranslate nohighlight">\(a\)</span> is a scalar 1, and <span class="math notranslate nohighlight">\(b\)</span> is the
+muon <span class="math notranslate nohighlight">\(p_{T}\)</span> array. What happens is formally known as <a class="reference external" href="https://numpy.org/doc/stable/user/basics.broadcasting.html">broadcasting</a>: you can think that awkward automatically expands the scalar <span class="math notranslate nohighlight">\(a\)</span> into a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array and performs a typical member-wise arithmetics. Broadcasting is a rather complicated subject to fully discuss, but a rule-of-thumb is that the follow operations would be considered valid:</p>
 <ul class="simple">
 <li><p>scalar <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">N</span></code>: scalar is expanded to a <code class="docutils literal notranslate"><span class="pre">N</span></code></p></li>
 <li><p>scalar <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">NxA</span></code>: scalar is expanded to a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NxA</span></code> <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">NxA</span></code>: typical member-wise calcualtion</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NxA</span></code> <span class="math notranslate nohighlight">\(\otimes\)</span>: expansion of the first <code class="docutils literal notranslate"><span class="pre">N</span></code> array to a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NxA</span></code> <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">NxA</span></code>: typical member-wise calculation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code> <span class="math notranslate nohighlight">\(\otimes\)</span> <code class="docutils literal notranslate"><span class="pre">N</span></code>: expansion of the first <code class="docutils literal notranslate"><span class="pre">N</span></code> array to a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array</p></li>
 </ul>
-<p>Since in awkward array, the <code class="docutils literal notranslate"><span class="pre">A</span></code> dimension is a variable one, we will never encounter the case of a <code class="docutils literal notranslate"><span class="pre">A</span></code><span class="math notranslate nohighlight">\(\otimes\)</span><code class="docutils literal notranslate"><span class="pre">NxA</span></code> array. To use some concreate examples:</p>
+<p>Since in awkward array, the <code class="docutils literal notranslate"><span class="pre">A</span></code> dimension is a variable one, we will never encounter the case of a <code class="docutils literal notranslate"><span class="pre">A</span></code><span class="math notranslate nohighlight">\(\otimes\)</span><code class="docutils literal notranslate"><span class="pre">NxA</span></code> array. To use some concrete examples:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
@@ -1007,8 +758,8 @@ NxA    @ NxA : [[11.1], [], [], [16, -7.89, ... [3.99, 4.12, 3.91, 23.5, 21.4, 6
 N      @ NxA : [[-17.5], [], [], [68.7, 37.4, 25, ... [42.3, 43.3, 42.3, 58.2, 55.6, 45.7, 42.7]]
 </pre></div></div>
 </div>
-<p>Pretty much all calculations can be broken down into binary operations like above, coffea even provides some common HEP function such as <code class="docutils literal notranslate"><span class="pre">delta_r</span></code> so you done , the difficulty comes in mangling the array into the correct dimension. that broadcasting can take over. For instance, the calculation of the <span class="math notranslate nohighlight">\(\Delta R\)</span> of the first and second leading jets in an event is simple, this this is just a reduction of the 2 <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array to 2 <code class="docutils literal notranslate"><span class="pre">N</span></code> array via index selection, then calling a inbuild
-binary operation.</p>
+<p>Pretty much all calculations can be broken down into binary operations like above, <code class="docutils literal notranslate"><span class="pre">coffea</span></code> even provides some common HEP function such as <code class="docutils literal notranslate"><span class="pre">delta_r</span></code>, so you don’t have to re-write common routines from scratch. The difficulty comes in mangling the array into the correct dimension, so that broadcasting can take over. For instance, the calculation of the <span class="math notranslate nohighlight">\(\Delta R\)</span> of the first and second leading jets in an event is simple, this is just a reduction of the 2 <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array to 2 <code class="docutils literal notranslate"><span class="pre">N</span></code> array
+via index selection, then calling an in-built binary operation.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
@@ -1045,7 +796,7 @@ binary operation.</p>
 [[3.16], [], [], [2.66, 3.49, 3.56, ... [3.5, 3.47, 3.58, 3.55, 3.48, 3.55, 3.53]]
 </pre></div></div>
 </div>
-<p>Now suppose we want to perform a jet-cone matching of the gen particles collection with the <strong>all</strong> jets in the event. How do we perform broadcasting of a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array with a <code class="docutils literal notranslate"><span class="pre">NxB</span></code> array? The answer is to expand one of the array into a <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array for the boardcast for higher dimensions can be performed. Details of how this method works can be found the awkward documentation for the <code class="docutils literal notranslate"><span class="pre">`cartesian</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.cartesian.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.cartesian.html</a>&gt;`__ and
+<p>Now suppose we want to perform a jet-cone matching of the gen particles collection with the <strong>all</strong> jets in the event. How do we perform broadcasting of a <code class="docutils literal notranslate"><span class="pre">NxA</span></code> array with a <code class="docutils literal notranslate"><span class="pre">NxB</span></code> array? The answer is to expand one of the array into a <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array for the broadcast for higher dimensions can be performed. Details of how this method works can be found the awkward documentation for the <code class="docutils literal notranslate"><span class="pre">`cartesian</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.cartesian.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.cartesian.html</a>&gt;`__ and
 <code class="docutils literal notranslate"><span class="pre">`unzip</span></code> &lt;<a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/_auto/ak.unzip.html">https://awkward-array.readthedocs.io/en/latest/_auto/ak.unzip.html</a>&gt;`__ method, but here is skeleton code performing object x object computations:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
@@ -1066,13 +817,13 @@ binary operation.</p>
 [[[], [24, 24, 24, 24], [], [], []], ... 27], [], [], [], [], [0.545, 0.545], []]]
 </pre></div></div>
 </div>
-<p>Lets break down the code above:</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">ak.unzip</span></code> and <code class="docutils literal notranslate"><span class="pre">ak.cartesian</span></code> method expands the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.Jet</span></code> array and the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.GenPart</span></code> array in to a <code class="docutils literal notranslate"><span class="pre">NxBxA</span></code> arrays (named <code class="docutils literal notranslate"><span class="pre">_</span></code> since we wouldn’t be using this) and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. The broardcast is the performed on the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jets array and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> <code class="docutils literal notranslate"><span class="pre">genpart</span></code> array to generate a delta R mask of dimension <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code>, which is then used to filter the <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. Now we can stored the <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array into the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jet collection, which is used to
-find all gen particles associated with a jet via delta R matching!</p>
-<p>This is probably the most advanced that calculation that a typical analysis will need in computation: the computation of arrays of mismatch dimensions. Hopefully this introduction is enough to help people start to translate their loop based analysis calculation into array based syntaxs.</p>
+<p>Breaking down the code above:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ak.unzip</span></code> and <code class="docutils literal notranslate"><span class="pre">ak.cartesian</span></code> method expands the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.Jet</span></code> array and the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> <code class="docutils literal notranslate"><span class="pre">evt.GenPart</span></code> array in to a <code class="docutils literal notranslate"><span class="pre">NxBxA</span></code> arrays (named <code class="docutils literal notranslate"><span class="pre">_</span></code> since we wouldn’t be using this) and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. The broadcast is the performed on the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jets array and <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> <code class="docutils literal notranslate"><span class="pre">genpart</span></code> array to generate a delta R mask of dimension <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code>, which is then used to filter the <code class="docutils literal notranslate"><span class="pre">genpart</span></code>. Now we can store the <code class="docutils literal notranslate"><span class="pre">NxAxB</span></code> array into the <code class="docutils literal notranslate"><span class="pre">NxA</span></code> jet collection, which is used to
+find all gen particles associated with a jet via delta-R matching!</p>
+<p>This is probably the most advanced that calculation that a typical analysis will need in computation: the computation of arrays of mismatch dimensions. Hopefully this introduction is enough to help people start to translate their loop based analysis calculation into array-based syntax.</p>
 </section>
 <section id="When-all-else-fails---numba-for-loops">
-<h2>When all else fails - numba for loops<a class="headerlink" href="#When-all-else-fails---numba-for-loops" title="Permalink to this headline">¶</a></h2>
+<h2>When all else fails - numba for loops<a class="headerlink" href="#When-all-else-fails---numba-for-loops" title="Link to this heading">¶</a></h2>
 <p>TO BE WRITTEN: assigned -Yi-Mu Chen</p>
 </section>
 </section>
@@ -1087,12 +838,12 @@ find all gen particles associated with a jet via delta R matching!</p>
   <div>
     <h3><a href="../index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Learnig the awkward arrays syntax</a><ul>
+<li><a class="reference internal" href="#">Learning the awkward arrays syntax</a><ul>
 <li><a class="reference internal" href="#Basic-object-and-event-selection">Basic object and event selection</a></li>
-<li><a class="reference internal" href="#Object-storce-and-collection-creation">Object storce and collection creation</a></li>
-<li><a class="reference internal" href="#Comparing-array-based-compuations-and-loop-based-compuatation">Comparing array based compuations and loop based compuatation</a></li>
+<li><a class="reference internal" href="#Object-storage-and-collection-creation">Object storage and collection creation</a></li>
+<li><a class="reference internal" href="#Comparing-array-based-computations-and-loop-based-computation">Comparing array based computations and loop based computation</a></li>
 <li><a class="reference internal" href="#More-on-index-notation">More on index notation</a></li>
-<li><a class="reference internal" href="#Calcuation-with-objects">Calcuation with objects</a></li>
+<li><a class="reference internal" href="#Calculation-with-objects">Calculation with objects</a></li>
 <li><a class="reference internal" href="#When-all-else-fails---numba-for-loops">When all else fails - numba for loops</a></li>
 </ul>
 </li>
@@ -1116,7 +867,7 @@ find all gen particles associated with a jet via delta R matching!</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -1124,8 +875,8 @@ find all gen particles associated with a jet via delta R matching!</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1143,12 +894,12 @@ find all gen particles associated with a jet via delta R matching!</p>
           <a href="intronotebook.html" title="Navigating jupyter notebooks"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Unofficial Coffea Tutorial  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Learnig the awkward arrays syntax</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Learning the awkward arrays syntax</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2021, UMDCMS.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

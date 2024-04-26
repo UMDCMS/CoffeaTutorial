@@ -1,5 +1,56 @@
 {
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Awkward array snippets\n",
+    "\n",
+    "Here are a bunch of computation routines that might not be so straight think up\n",
+    "when first moving form loop based analysis. Takes these snippets adapt them to\n",
+    "your own needs."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Object matching\n",
+    "\n",
+    "TO BE Written  --- assigned Yi-Mu Chen\n",
+    "\n",
+    "Given two collections A, and B, create a sub-collection in A that is composed of\n",
+    "B matching some selection criteria that involves matching objects in collection\n",
+    "B to collection A\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "lines_to_next_cell": 0
+   },
+   "outputs": [],
+   "source": [
+    "def match(collection_A, collection_B):\n",
+    "    collection_A = collection_[:]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7137a24b",
+   "metadata": {},
+   "source": []
+  }
+ ],
  "metadata": {
+  "jupytext": {
+   "main_language": "python"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "name": "python3"
+  },
   "language_info": {
    "codemirror_mode": {
     "name": "ipython",
@@ -11,53 +62,8 @@
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
    "version": "3.9.1-final"
-  },
-  "orig_nbformat": 2,
-  "kernelspec": {
-   "name": "python3",
-   "display_name": "Python 3"
   }
  },
  "nbformat": 4,
- "nbformat_minor": 2,
- "cells": [
-  {
-   "source": [
-    "# Awkward array snippets \n",
-    "\n",
-    "Here are a bunch of computation routines that might not be so straight think up when first moving form loop based analysis.\n",
-    "Takes these snippets adapt them to your own needs."
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
-  },
-  {
-   "source": [
-    "## Object matching\n",
-    "\n",
-    "TO BE Written  --- assigned Yi-Mu Chen\n",
-    "\n",
-    "Given two collections A, and B, create a subcollection in A that is composed of B matching some selection criteria that involves matching objects in collection B to collection A \n"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def match(collection_A, collection_B):\n",
-    "    collection_A = collection_[:]"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ]
+ "nbformat_minor": 2
 }

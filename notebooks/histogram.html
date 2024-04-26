@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Histogram processing in Coffea &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=0f882399" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -43,256 +42,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Histogram-processing-in-Coffea">
-<h1>Histogram processing in Coffea<a class="headerlink" href="#Histogram-processing-in-Coffea" title="Permalink to this headline">¶</a></h1>
+  <section id="Histogram-processing-in-Coffea">
+<h1>Histogram processing in Coffea<a class="headerlink" href="#Histogram-processing-in-Coffea" title="Link to this heading">¶</a></h1>
 <p>While <code class="docutils literal notranslate"><span class="pre">coffea</span></code> provides its own <code class="docutils literal notranslate"><span class="pre">`coffea.hist</span></code> &lt;<a class="reference external" href="https://coffeateam.github.io/coffea/api/coffea.hist.Hist.html">https://coffeateam.github.io/coffea/api/coffea.hist.Hist.html</a>&gt;`__ package, to better interface with the python ecosystem in general, I recommend users to start their analysis using the <code class="docutils literal notranslate"><span class="pre">`scikit</span> <span class="pre">hist</span></code> &lt;<a class="reference external" href="https://hist.readthedocs.io/en/latest/?badge=latest">https://hist.readthedocs.io/en/latest/?badge=latest</a>&gt;`__ package, as it is more general purpose, and coffea histogram will be depreciated in newer version of <code class="docutils literal notranslate"><span class="pre">coffea</span></code>. All the core functionalities would be the same, but <code class="docutils literal notranslate"><span class="pre">sckikit</span> <span class="pre">hist</span></code> (which
 we will refer to as just <code class="docutils literal notranslate"><span class="pre">hist</span></code> for the remainder of this tutorial) has more bells and whistles out of the box. A very good documentation on using <code class="docutils literal notranslate"><span class="pre">hist</span></code> is already provided by the developers <a class="reference external" href="https://hist.readthedocs.io/en/latest/?badge=latest">here</a>, so this documentation would mainly focus on going over the fundamental concepts of using histogram for physics analysis.</p>
 <p>One thing that will not be included in this documentation would be the plotting of histogram, as there are much too many customization options to go over. Here we will be using the in-built <code class="docutils literal notranslate"><span class="pre">Hist.plot1d</span></code> and <code class="docutils literal notranslate"><span class="pre">Hist.plot2d</span></code> with minimal styling settings, just to illustrate how the data in the histogram are being stored.</p>
@@ -308,7 +59,7 @@ we will refer to as just <code class="docutils literal notranslate"><span class=
 </div>
 </div>
 <section id="Histogram-construction-in-computation">
-<h2>Histogram construction in computation<a class="headerlink" href="#Histogram-construction-in-computation" title="Permalink to this headline">¶</a></h2>
+<h2>Histogram construction in computation<a class="headerlink" href="#Histogram-construction-in-computation" title="Link to this heading">¶</a></h2>
 <p>Histograms in the context of an analysis is typically used to tally the number of entities that fall under some “discrete” criteria. These criteria can either be some true discrete variable (like data sets/particle flavor), or some continuous variable that we explicitly discrete-ize (like for particle kinematic variables). Let use make a very simple histogram that represents the 3 particle kinematic variables used in HEP: <span class="math notranslate nohighlight">\(p_{T}\)</span>, <span class="math notranslate nohighlight">\(\eta\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>:</p>
 <p>The filling of the histogram can be done in parallel, supposing that you have arrays of identical dimensions.</p>
 <div class="nbinput docutils container">
@@ -374,7 +125,7 @@ Double() Σ=5334785.0 <em>(10000000.0 with flow)</em>
 </pre></div></div>
 </div>
 <p>Simply indicates the histogram value stored in the 0-th bin of the <span class="math notranslate nohighlight">\(p_T\)</span>-axis, the 50-th bin of the <span class="math notranslate nohighlight">\(\eta\)</span>-axis, and the 15-th bin of the <span class="math notranslate nohighlight">\(\phi\)</span> axis.</p>
-<p>As working with raw bin indices is rather cumbersome, the UHI notation allow the use of <code class="docutils literal notranslate"><span class="pre">j</span></code> as a postfix to indicate that one want the bin that contains some numerical value, for instance:</p>
+<p>As working with raw bin indices is rather cumbersome, the UHI notation allows the use of <code class="docutils literal notranslate"><span class="pre">j</span></code> as a postfix to indicate that one want the bin that contains some numerical value, for instance:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -415,7 +166,7 @@ Double() Σ=5334785.0 <em>(10000000.0 with flow)</em>
 <p>Means entirely the same UHI index, just one is much more human friendly with more explicitly notations of which bins are being requested without needed to tracking the axis ordering.</p>
 </section>
 <section id="Histogram-slicing-and-truncation">
-<h2>Histogram slicing and truncation<a class="headerlink" href="#Histogram-slicing-and-truncation" title="Permalink to this headline">¶</a></h2>
+<h2>Histogram slicing and truncation<a class="headerlink" href="#Histogram-slicing-and-truncation" title="Link to this heading">¶</a></h2>
 <p>Very rarely will we need to operate directly on raw histogram values. Most of the time, the rationale for using a high dimensional histogram like this would be that we can consider the most general distribution among all variables of interest, and retroactively zoom in on some region of phase space of interest. That is where the real power of thinking of histograms as arrays comes in: the same notation used to perform array slicing in <code class="docutils literal notranslate"><span class="pre">numpy</span></code> can be used here for histograms as well. Supposed
 we are only interested in the case where <span class="math notranslate nohighlight">\(\phi\)</span> of the particle lies in the same bin as some value (may that specific region of the detector is faulty), what we can so would be something like:</p>
 <div class="nbinput docutils container">
@@ -20524,8 +20275,8 @@ Double() Σ=5334785.0 <em>(10000000.0 with flow)</em>
 <p>In the analogy of function reduction, it is similar to an integration (or in this case, a summation) over the possible values in one of the axis:</p>
 <div class="math notranslate nohighlight">
 \[H'_{2D}(p_{T},\eta) = \sum_{\phi} H(p_T, \eta,\phi) \sim \int d\phi H(p_T, \eta, \phi)\]</div>
-<p>As a sanity check, one can see the histogram that has integrate over the <span class="math notranslate nohighlight">\(\phi\)</span> bins contain many more entires than that where we are “slicing” a particular <span class="math notranslate nohighlight">\(\phi\)</span> bin.</p>
-<p>Slicing can also work to zoom in on a region of the the histogram. Say for example we are only interested in the particles in the positive forward region, we can write something like:</p>
+<p>As a sanity check, one can see the histogram that has integrated over the <span class="math notranslate nohighlight">\(\phi\)</span> bins contain many more entries than that where we are “slicing” a particular <span class="math notranslate nohighlight">\(\phi\)</span> bin.</p>
+<p>Slicing can also work to zoom in on a region of the histogram. Say for example we are only interested in the particles in the positive forward region, we can write something like:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
@@ -23175,7 +22926,7 @@ Hist(Regular(100, 20, 100, name=&#39;pt&#39;, label=&#39;pt&#39;), storage=Doubl
 <p>Also notice how the axis underflow and overflow bins need to be accessed via a special index value <code class="docutils literal notranslate"><span class="pre">hist.underflow</span></code> and <code class="docutils literal notranslate"><span class="pre">hist.overflow</span></code>. This is to save more on the issue of whether the bin indices to break the computation convention of starting at 0 to account for the underflow bins, as it does with ROOT.</p>
 </section>
 <section id="More-axis-types">
-<h2>More axis types<a class="headerlink" href="#More-axis-types" title="Permalink to this headline">¶</a></h2>
+<h2>More axis types<a class="headerlink" href="#More-axis-types" title="Link to this heading">¶</a></h2>
 <p>Previously all, of our examples are done with the simple axis types of having regular interval binning. Here let us familiarize ourselves with the other axis types, and how these can also be used for the UHI notations:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
@@ -23194,7 +22945,7 @@ Hist(Regular(100, 20, 100, name=&#39;pt&#39;, label=&#39;pt&#39;), storage=Doubl
 hist.axis.Variable
 </pre></div></div>
 </div>
-<p>The user provides the binning scheme <span class="math notranslate nohighlight">\({x_i}\)</span> in array format to be used for a continues variable, a slight word on how the slicing using the <code class="docutils literal notranslate"><span class="pre">j</span></code> postfix interacts with the bin edges. For the slice request of <span class="math notranslate nohighlight">\(Aj\)</span>, the histogram will find bin index <span class="math notranslate nohighlight">\(B\)</span> such that <span class="math notranslate nohighlight">\(A \in [x_B, x_{B+1})\)</span>. Notice the boundary of the values in question.</p>
+<p>The user provides the binning scheme <span class="math notranslate nohighlight">\({x_i}\)</span> in array format to be used for a continuous variable, a slight word on how the slicing using the <code class="docutils literal notranslate"><span class="pre">j</span></code> postfix interacts with the bin edges. For the slice request of <span class="math notranslate nohighlight">\(Aj\)</span>, the histogram will find bin index <span class="math notranslate nohighlight">\(B\)</span> such that <span class="math notranslate nohighlight">\(A \in [x_B, x_{B+1})\)</span>. Notice the boundary of the values in question.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -23203,14 +22954,14 @@ hist.axis.Variable
 </pre></div>
 </div>
 </div>
-<p>The categorical axis. Notice that by default, the user should provide a list of categories that the histogram should attempt to classify, and entries that doesn’t match the provided list will be placed in the overflow bin. If you want the histogram to dynamically generate the categories on filling, declare with axis with the <code class="docutils literal notranslate"><span class="pre">growth=True</span></code> options. For value-based-slicing, the user can simply provide a single string or a list of string of the categories of interest. such as</p>
+<p>The categorical axis. Notice that by default, the user should provide a list of categories that the histogram should attempt to classify, and entries that do not match the provided list will be placed in the overflow bin. If you want the histogram to dynamically generate the categories on filling, declare with axis with the <code class="docutils literal notranslate"><span class="pre">growth=True</span></code> options. For value-based-slicing, the user can simply provide a single string or a list of string of the categories of interest. Such as</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="p">[{</span><span class="s1">&#39;cat&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">}]</span> <span class="c1"># The cat axis is discarded as we are looking a since bin entry</span>
 <span class="n">h</span><span class="p">[{</span><span class="s1">&#39;cat&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">]}]</span> <span class="c1"># The cat axis is kept, with just 2 valid entries  remaining.</span>
 </pre></div>
 </div>
 </section>
 <section id="More-fill-types">
-<h2>More fill types<a class="headerlink" href="#More-fill-types" title="Permalink to this headline">¶</a></h2>
+<h2>More fill types<a class="headerlink" href="#More-fill-types" title="Link to this heading">¶</a></h2>
 <p>Commonly in HEP analysis, we will need to construct histogram with weighted entries. So do this, you will need to explicitly specify the storage of the histogram to anticipate weights:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
@@ -23260,7 +23011,7 @@ Weight() Σ=WeightedSum(value=98773.4, variance=9977.51) <em>(WeightedSum(value=
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h</span><span class="p">[{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}]</span>
-<br/></pre></div>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -23280,7 +23031,7 @@ WeightedSum(value=609.873, variance=61.6699)
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">[{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">[{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}][</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">[{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}][</span><span class="s1">&#39;variance&#39;</span><span class="p">])</span>
-<br/></pre></div>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -23333,7 +23084,7 @@ WeightedSum(value=609.873, variance=61.6699)
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -23341,8 +23092,8 @@ WeightedSum(value=609.873, variance=61.6699)
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -23364,8 +23115,8 @@ WeightedSum(value=609.873, variance=61.6699)
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2021, UMDCMS.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

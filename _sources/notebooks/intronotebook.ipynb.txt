@@ -1,41 +1,22 @@
 {
- "metadata": {
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.9.1-final"
-  },
-  "orig_nbformat": 2,
-  "kernelspec": {
-   "name": "python3",
-   "display_name": "Python 3"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 2,
  "cells": [
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "# Navigating jupyter notebooks\n",
     "\n",
-    "The typical workflow for of coffea uses [notebooks](https://jupyter.org/), which\n",
-    "allows for rapid testing of code in developement, as well as having a window that\n",
-    "is can display analysis results without needing to switch a new window. The\n",
-    "[install and setup commands](../installation.html) already includes the command to\n",
-    "initialize a server for notebooks. Here is mainly to help people who are\n",
-    "unfamiliar with notebook to get started.\n",
+    "The typical workflow for of coffea uses [notebooks](https://jupyter.org/),\n",
+    "which allows for rapid testing of code in development, as well as having a\n",
+    "window that is can display analysis results without needing to switch a new\n",
+    "window. The [installation and setup commands](../installation.html) already includes\n",
+    "the command to initialize a server for notebooks. Here is mainly to help people\n",
+    "who are unfamiliar with notebook to get started.\n",
     "\n",
     "## More information regarding starting a notebook server\n",
     "\n",
-    "Notebooks servers generates the interface through network protocols, which can be\n",
-    "access via your favorite browser. If you are running the commands one your\n",
+    "Notebooks servers generate the interface through network protocols, which can\n",
+    "be access via your favorite browser. If you are running the commands one your\n",
     "personal machine, once you run the `jupy.sh` script, the command line should\n",
     "output something like:\n",
     "\n",
@@ -43,12 +24,11 @@
     "http://127.0.0.1:8888/?token=62bfe8d8e84fe97f8da20\n",
     "```\n",
     "\n",
-    "\n",
     "This line can be placed in your browsers URL bar to access the default jupyter\n",
-    "interface. For security reasons, jupyter servers only allows network access from\n",
-    "local connections. If you are using an LPC machine, you will need to setup ssh\n",
-    "tunneling to pass traffic from the network port of your local machine to the LPC\n",
-    "machine.\n",
+    "interface. For security reasons, jupyter servers only allows network access\n",
+    "from local connections. If you are using an LPC machine, you will need to setup\n",
+    "ssh tunneling to pass traffic from the network port of your local machine to\n",
+    "the LPC machine.\n",
     "\n",
     "```\n",
     "ssh -L localhost:8XXX:localhost:8XXX <user>@<machine>\n",
@@ -63,15 +43,15 @@
     "  LocalForward 8XXX <machine address>:<8XXX>\n",
     "```\n",
     "\n",
-    "Or if you are using the a GUI based ssh connector, find the setting under the\n",
+    "Or if you are using the GUI based ssh connector, find the setting under the\n",
     "name of Connection/Tunneling or similar and set\n",
     "\n",
     "- source port: 8XXX\n",
     "- Destination: 127.0.0.1:8XXX\n",
     "\n",
-    "Be sure to use these connections **before** starting the jupyter script! If note,\n",
-    "stop the server session with `Ctl+C`, disconnect out of the ssh session and\n",
-    "start again.\n",
+    "Be sure to use these connections **before** starting the jupyter script! If\n",
+    "not, stop the server session with `Ctl+C`, disconnect out of the ssh session\n",
+    "and start again.\n",
     "\n",
     "## Navigating a server and notebook session\n",
     "\n",
@@ -111,9 +91,7 @@
     "in the cell. This is extremely useful for alternative between documentation and code \n",
     "developments. Most of the pages in this tutorial will also follow a notebook style \n",
     "documentation: such as below\n"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -121,10 +99,11 @@
    "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
-      "This is a demonstration code cell in the tutorial\nHello world\n"
+      "This is a demonstration code cell in the tutorial\n",
+      "Hello world\n"
      ]
     }
    ],
@@ -134,14 +113,14 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "## Understanding cells\n",
     "\n",
     "A notebooks can be thought of a cells seperating various code statements that share \n",
     "a common memory pool. This means that variables can be defined in one cells:"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -153,11 +132,11 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "And be called and maipuated being sepeared by documentation or file cells"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -165,8 +144,8 @@
    "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
       "myvar is: This is a test\n"
      ]
@@ -177,11 +156,11 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "Cells can also be exceuted out of order. We can define the statement in the following cell:"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -193,25 +172,25 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "if reexecuted the cell containing the `print('myvar is:', myvar)` statement, it should now show:\n",
     "\n",
     "```\n",
     "myvar is: This is a test\n",
     "```"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "The small number to the left of the cell indicates the execution order, for the sake of reading clartiy\n",
     "it is usual practice to not abuse this function, but rather reserve it for code testing:\n",
     "\n",
     "Supposing we are currently developing a complicated function:\n"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -224,11 +203,11 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "We can isolate this complicated function in a cell and use a new cell to check the results of a function"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -236,8 +215,8 @@
    "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
       "This is a test.This is a test.This is a test.This is a test.This is a test.This is a test.This is a test.This is a test.This is a test.This is a test.\n"
      ]
@@ -248,24 +227,24 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "Now if we found a some alterations to the `my_difficult_calculation` function, we can simply rerun \n",
     "the cell containing the definition of the function, forcing the kernel to update what \n",
     "`my_difficult_calculation` means for python cells, and rerun all cells containing `my_difficult_calculation`"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "## Library and imports \n",
     "\n",
     "All notebook cells should have the same access to any python libraries as typical python \n",
     "session running in the same (virtual) environment. Any import command that would work in\n",
     "python should work here: "
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
@@ -273,10 +252,16 @@
    "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
-      "Help on function process in module coffea.processor.processor:\n\nprocess(self, df)\n    Processes a single DataFrame\n    \n    Returns a filled accumulator object which can be initialized via self.accumulator.identity()\n\n"
+      "Help on function process in module coffea.processor.processor:\n",
+      "\n",
+      "process(self, df)\n",
+      "    Processes a single DataFrame\n",
+      "    \n",
+      "    Returns a filled accumulator object which can be initialized via self.accumulator.identity()\n",
+      "\n"
      ]
     }
    ],
@@ -286,6 +271,8 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "Again, because memory is shared across all cells, import statements can be added to the first executed \n",
     "cell in the notebook, and all cell will have access to said package. \n",
@@ -331,9 +318,30 @@
     "should already be setup as such, so you can place python packages directly within your working \n",
     "directory, and the typical import commands should work as expected.\n",
     "\n"
-   ],
-   "cell_type": "markdown",
-   "metadata": {}
+   ]
   }
- ]
+ ],
+ "metadata": {
+  "jupytext": {
+   "main_language": "python"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.1-final"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
 }

@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Writting coffea Schema files &#8212; Unofficial Coffea Tutorial  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/nature.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nature.css?v=0f882399" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -43,256 +42,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Writting-coffea-Schema-files">
-<h1>Writting coffea Schema files<a class="headerlink" href="#Writting-coffea-Schema-files" title="Permalink to this headline">¶</a></h1>
+  <section id="Writting-coffea-Schema-files">
+<h1>Writting coffea Schema files<a class="headerlink" href="#Writting-coffea-Schema-files" title="Link to this heading">¶</a></h1>
 <p>The interpretation of the TTree data is configurable via schema objects.</p>
 <p>Schema teaches the event processor how to group variables into collections, so operations can be run over entire collection at once. And we can also define some handy <a class="reference external" href="https://awkward-array.readthedocs.io/en/latest/ak.behavior.html">behaviors</a> for a specific collection in a schema.</p>
 <p>In this demo, we will create our own dummy schema and implement our own dummy behavior.</p>
@@ -326,7 +77,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_form</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_form</span><span class="p">)</span>
@@ -346,7 +97,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>As you can see, this schema is so simple and it is not useful currently. If we call the events again with our own schema, we’ll find it contains nothing.</p>
+<p>As you can see, this schema is so simple it is not useful currently. If we call the events again with our own schema, we’ll find it contains nothing.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -369,9 +120,9 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <section id="Create-collections">
-<h2>Create collections<a class="headerlink" href="#Create-collections" title="Permalink to this headline">¶</a></h2>
+<h2>Create collections<a class="headerlink" href="#Create-collections" title="Link to this heading">¶</a></h2>
 <p>In schema, the <code class="docutils literal notranslate"><span class="pre">branch_forms</span></code> is a python dictionary used to define branch grouping.</p>
-<p>By default (<code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>), it will be completely flat:</p>
+<p>By default, using <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>, it will be completely flat:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">branch_forms</span><span class="o">=</span><span class="p">{</span>
   <span class="s2">&quot;particle_pt&quot;</span><span class="p">:{},</span>
   <span class="s2">&quot;particle_eta&quot;</span><span class="p">:{},</span>
@@ -382,7 +133,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <p>Just as you have seen when we open the dummy root file with <code class="docutils literal notranslate"><span class="pre">BaseSchema</span></code>, all the branches are listed when do <code class="docutils literal notranslate"><span class="pre">print(events.fields)</span></code>. These branches are independent to each other. For example when you do a selection on <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, the branch <code class="docutils literal notranslate"><span class="pre">particle_eta</span></code> will not be affected.</p>
-<p>We usually would like to do selections collectively. If some particles don’t pass the selection on <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, their <code class="docutils literal notranslate"><span class="pre">particle_eta</span></code> should also be eliminated from the list.</p>
+<p>We typically like to do selections collectively. If some particles don’t pass the selection on <code class="docutils literal notranslate"><span class="pre">particle_pt</span></code>, their <code class="docutils literal notranslate"><span class="pre">particle_eta</span></code> should also be eliminated from the list.</p>
 <p>I.e. We would like to put some branches into the same collection, as what follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_branch_forms</span><span class="o">=</span><span class="p">{</span>
   <span class="s2">&quot;particle&quot;</span><span class="p">:</span> <span class="n">schemas</span><span class="o">.</span><span class="n">zip_forms</span><span class="p">({</span>
@@ -403,7 +154,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">coffea.nanoevents.schemas</span> <span class="kn">import</span> <span class="n">zip_forms</span>
 <span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_form</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_form</span><span class="p">)</span>
@@ -456,7 +207,7 @@ div.rendered_html tbody tr:hover {
 [&#39;pt&#39;, &#39;eta&#39;, &#39;phi&#39;, &#39;mass&#39;]
 </pre></div></div>
 </div>
-<p>Congratualtions, it should work. We can use the mask and do selection on the whole collection at once now:</p>
+<p>Congratulations, we have now collected the fields related to an electron into a common collection! We can use the mask and do selection on the whole collection at once now:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -482,17 +233,17 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <p>Run the above code again, you will see:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>KeyError: <span class="s1">&#39;Electron_xx&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>KeyError:<span class="w"> </span><span class="s1">&#39;Electron_xx&#39;</span>
 </pre></div>
 </div>
-<p>Of course we can make a long list and manually group all the TBranches. But use naming convetions would enable you to write the schema in a very neat way. Like what we have in the dummy root file, branches are named as <code class="docutils literal notranslate"><span class="pre">object_varible</span></code>. So we can define some collections and put the corresponding TBranches into them.</p>
+<p>Of course, we can make a long list and manually group all the TBranches. But use naming conventions would enable you to write the schema in a very neat way. Like what we have in the dummy root file, branches are named as <code class="docutils literal notranslate"><span class="pre">object_varible</span></code>. So we can define some collections and put the corresponding TBranches into them.</p>
 <p>4 collections are defined below in <code class="docutils literal notranslate"><span class="pre">mixins</span></code>:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;Electron&#39;</span><span class="p">:</span> <span class="s2">&quot;PtEtaPhiMLorentzVector&quot;</span><span class="p">,</span>
@@ -528,7 +279,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>We defined <code class="docutils literal notranslate"><span class="pre">Electron,</span> <span class="pre">Muon,</span> <span class="pre">Jet,</span> <span class="pre">Subjet</span></code> in the above DummySchema and we used <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">branch_forms</span></code> to search all the braches start with <code class="docutils literal notranslate"><span class="pre">{collection}_</span></code> and put them into the corresponding collections. Now open the dummy root file again, we can see the defined collections.</p>
+<p>We defined <code class="docutils literal notranslate"><span class="pre">Electron,</span> <span class="pre">Muon,</span> <span class="pre">Jet,</span> <span class="pre">Subjet</span></code> in the above DummySchema, and we used <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">k</span> <span class="pre">in</span> <span class="pre">branch_forms</span></code> to search all the branches start with <code class="docutils literal notranslate"><span class="pre">{collection}_</span></code> and put them into the corresponding collections. Now open the dummy root file again, we can see the defined collections.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -555,9 +306,13 @@ div.rendered_html tbody tr:hover {
 [[1.21, 1.15], [1.42, 1.34, 1.12, 1.47], ... 1.56], [1.14, 0.805, 1.23, 1.42, 1.03]]
 </pre></div></div>
 </div>
-<p>Maybe you already noticed that we printed something called <code class="docutils literal notranslate"><span class="pre">events.Electron.px</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Electron.theta</span></code> in the previous block, which don’t exist in the dummy root file at all. How were thay created? This is actually the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> this collection has, which we’ll talk about right now.</p>
+<!-- #region --><p>Maybe you already noticed that we printed something called <code class="docutils literal notranslate"><span class="pre">events.Electron.px</span></code> and <code class="docutils literal notranslate"><span class="pre">events.Electron.theta</span></code> in the previous block, which don’t exist in the dummy root file at all. How were they created? This is actually the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> this collection has, which we’ll talk about right now.</p>
 <p>Look at the collection list:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;Electron&#39;</span><span class="p">:</span> <span class="s2">&quot;PtEtaPhiMLorentzVector&quot;</span><span class="p">,</span>
         <span class="s1">&#39;Muon&#39;</span><span class="p">:</span> <span class="s1">&#39;PtEtaPhiMLorentzVector&#39;</span><span class="p">,</span>
         <span class="s1">&#39;Jet&#39;</span><span class="p">:</span> <span class="s1">&#39;PtEtaPhiELorentzVector&#39;</span><span class="p">,</span>
@@ -565,10 +320,11 @@ div.rendered_html tbody tr:hover {
     <span class="p">}</span>
 </pre></div>
 </div>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">PtEtaPhiMLorentzVector</span></code> is the name of <code class="docutils literal notranslate"><span class="pre">behavior</span></code> that each collection has. It is defined <a class="reference external" href="https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/methods/vector.py#L497">here</a>. And we imported it through <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">coffea.nanoevents.methods</span> <span class="pre">import</span> <span class="pre">base,</span> <span class="pre">vector</span></code></p>
-</section>
+<!-- #endregion --></section>
 <section id="Create-behavior">
-<h2>Create behavior<a class="headerlink" href="#Create-behavior" title="Permalink to this headline">¶</a></h2>
+<h2>Create behavior<a class="headerlink" href="#Create-behavior" title="Link to this heading">¶</a></h2>
 <p>Aside from putting different branches into collections, we can also add <code class="docutils literal notranslate"><span class="pre">behavior</span></code> to collections. This means additional awkward arrays are generated on-the-fly via predefined algorithm. Like we can get <code class="docutils literal notranslate"><span class="pre">px,</span> <span class="pre">theta</span></code> previously.</p>
 <p>A bunch of other common physics behaviors are already provided in coffea, and you can find them in <a class="reference external" href="https://github.com/CoffeaTeam/coffea/tree/a95401cad91e88ceac47a4c693068bc4cbc7d338/coffea/nanoevents/methods">methods</a>.</p>
 <p>To write our own coffea behavior, we need to define the <code class="docutils literal notranslate"><span class="pre">behavior</span></code> class. In the following code, we create <code class="docutils literal notranslate"><span class="pre">DummyBehavior</span></code>, which has one function <code class="docutils literal notranslate"><span class="pre">plus1()</span></code>. It returns the <code class="docutils literal notranslate"><span class="pre">particle.mass+1</span></code> when you call <code class="docutils literal notranslate"><span class="pre">particle.plus1</span></code>.</p>
@@ -585,7 +341,7 @@ div.rendered_html tbody tr:hover {
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mass</span><span class="o">+</span><span class="mi">1</span>
 
 <span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;Electron&#39;</span><span class="p">:</span> <span class="s2">&quot;DummyBehavior&quot;</span><span class="p">,</span>
@@ -661,87 +417,87 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Nested-jagged-array-implementation">
-<h2>Nested jagged array implementation<a class="headerlink" href="#Nested-jagged-array-implementation" title="Permalink to this headline">¶</a></h2>
+<h2>Nested jagged array implementation<a class="headerlink" href="#Nested-jagged-array-implementation" title="Link to this heading">¶</a></h2>
 <p>A jagged array is an array of arrays. Each array is not guaranteed to be of the same size. You could have one parent array that each of its component is another array.</p>
 <p>But why do we need such kind of data structure? It will be clear after we take a look at the dummy_nanoevents.cc file. For convenience, I pasted the related codes below:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;TFile.h&quot;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;TRandom.h&quot;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;TTree.h&quot;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;TFile.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;TRandom.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;TTree.h&quot;</span>
 
-<span class="kt">void</span><span class="w"></span>
-<span class="nf">dummy_nanoevent</span><span class="p">()</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="n">UInt_t</span><span class="w"> </span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">luminosityBlock</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span>
+<span class="nf">dummy_nanoevent</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">UInt_t</span><span class="w"> </span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">luminosityBlock</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_Pt</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_Eta</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_Phi</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_E</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_ID</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_SubjetsCounts</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_Pt</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_Eta</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_Phi</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_E</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_Pt</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_Eta</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_Phi</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_E</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_ID</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_SubjetsCounts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_Pt</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_Eta</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_Phi</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Jets_subjet_E</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">TFile</span><span class="o">*</span><span class="w"> </span><span class="n">Tfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TFile</span><span class="o">::</span><span class="n">Open</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;dummy_nanoevents.root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RECREATE&quot;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">TTree</span><span class="o">*</span><span class="w"> </span><span class="n">ttree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TTree</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Events&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">TFile</span><span class="o">*</span><span class="w"> </span><span class="n">Tfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TFile</span><span class="o">::</span><span class="n">Open</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;dummy_nanoevents.root&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RECREATE&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">TTree</span><span class="o">*</span><span class="w"> </span><span class="n">ttree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TTree</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Events&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">);</span>
 
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;run&quot;</span><span class="p">,</span><span class="w">                </span><span class="o">&amp;</span><span class="n">run</span><span class="p">,</span><span class="w">             </span><span class="s">&quot;run/I&quot;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;luminosityBlock&quot;</span><span class="p">,</span><span class="w">    </span><span class="o">&amp;</span><span class="n">luminosityBlock</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;luminosityBlock/I&quot;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;event&quot;</span><span class="p">,</span><span class="w">              </span><span class="o">&amp;</span><span class="n">event</span><span class="p">,</span><span class="w">           </span><span class="s">&quot;event/I&quot;</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;run&quot;</span><span class="p">,</span><span class="w">                </span><span class="o">&amp;</span><span class="n">run</span><span class="p">,</span><span class="w">             </span><span class="s">&quot;run/I&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;luminosityBlock&quot;</span><span class="p">,</span><span class="w">    </span><span class="o">&amp;</span><span class="n">luminosityBlock</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;luminosityBlock/I&quot;</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;event&quot;</span><span class="p">,</span><span class="w">              </span><span class="o">&amp;</span><span class="n">event</span><span class="p">,</span><span class="w">           </span><span class="s">&quot;event/I&quot;</span><span class="w"> </span><span class="p">);</span>
 
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_pt&quot;</span><span class="p">,</span><span class="w">            </span><span class="o">&amp;</span><span class="n">Jets_Pt</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_eta&quot;</span><span class="p">,</span><span class="w">           </span><span class="o">&amp;</span><span class="n">Jets_Eta</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_phi&quot;</span><span class="p">,</span><span class="w">           </span><span class="o">&amp;</span><span class="n">Jets_Phi</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_energy&quot;</span><span class="p">,</span><span class="w">             </span><span class="o">&amp;</span><span class="n">Jets_E</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_ID&quot;</span><span class="p">,</span><span class="w">            </span><span class="o">&amp;</span><span class="n">Jets_ID</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_SubjetsCounts&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Jets_SubjetsCounts</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_pt&quot;</span><span class="p">,</span><span class="w">     </span><span class="o">&amp;</span><span class="n">Jets_subjet_Pt</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_eta&quot;</span><span class="p">,</span><span class="w">    </span><span class="o">&amp;</span><span class="n">Jets_subjet_Eta</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_phi&quot;</span><span class="p">,</span><span class="w">    </span><span class="o">&amp;</span><span class="n">Jets_subjet_Phi</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_energy&quot;</span><span class="p">,</span><span class="w">      </span><span class="o">&amp;</span><span class="n">Jets_subjet_E</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_pt&quot;</span><span class="p">,</span><span class="w">            </span><span class="o">&amp;</span><span class="n">Jets_Pt</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_eta&quot;</span><span class="p">,</span><span class="w">           </span><span class="o">&amp;</span><span class="n">Jets_Eta</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_phi&quot;</span><span class="p">,</span><span class="w">           </span><span class="o">&amp;</span><span class="n">Jets_Phi</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_energy&quot;</span><span class="p">,</span><span class="w">             </span><span class="o">&amp;</span><span class="n">Jets_E</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_ID&quot;</span><span class="p">,</span><span class="w">            </span><span class="o">&amp;</span><span class="n">Jets_ID</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Jet_SubjetsCounts&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Jets_SubjetsCounts</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_pt&quot;</span><span class="p">,</span><span class="w">     </span><span class="o">&amp;</span><span class="n">Jets_subjet_Pt</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_eta&quot;</span><span class="p">,</span><span class="w">    </span><span class="o">&amp;</span><span class="n">Jets_subjet_Eta</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_phi&quot;</span><span class="p">,</span><span class="w">    </span><span class="o">&amp;</span><span class="n">Jets_subjet_Phi</span><span class="w"> </span><span class="p">);</span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Branch</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Subjet_energy&quot;</span><span class="p">,</span><span class="w">      </span><span class="o">&amp;</span><span class="n">Jets_subjet_E</span><span class="w"> </span><span class="p">);</span>
 
-<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="w"> </span><span class="n">Int_t</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n">ev</span><span class="o">++</span><span class="w"> </span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="n">run</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">event</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">luminosityBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Int_t</span><span class="w"> </span><span class="n">njet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Int_t</span><span class="p">(</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="w"> </span><span class="n">Int_t</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n">ev</span><span class="o">++</span><span class="w"> </span><span class="p">){</span>
+<span class="w">    </span><span class="n">run</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">event</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span>
+<span class="w">    </span><span class="n">luminosityBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Int_t</span><span class="w"> </span><span class="n">njet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Int_t</span><span class="p">(</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span>
 
-<span class="w">    </span><span class="n">Jets_Pt</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_Eta</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_Phi</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_E</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_ID</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_SubjetsCounts</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_subjet_Pt</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_subjet_Eta</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_subjet_Phi</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="n">Jets_subjet_E</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">Jets_Pt</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_Eta</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_Phi</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_E</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_ID</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_SubjetsCounts</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_subjet_Pt</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_subjet_Eta</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_subjet_Phi</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Jets_subjet_E</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
 
-<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">njet</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="p">){</span><span class="w"></span>
-<span class="w">      </span><span class="n">Jets_Pt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="n">Jets_Eta</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="n">Jets_Phi</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="n">Jets_E</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Gaus</span><span class="p">(</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="n">Jets_ID</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="w"> </span><span class="mi">7</span><span class="o">*</span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">njet</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="p">){</span>
+<span class="w">      </span><span class="n">Jets_Pt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="n">Jets_Eta</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="n">Jets_Phi</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="n">Jets_E</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Gaus</span><span class="p">(</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="n">Jets_ID</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="w"> </span><span class="mi">7</span><span class="o">*</span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
 <span class="w">      </span><span class="c1">// subjets</span>
-<span class="w">      </span><span class="n">Int_t</span><span class="w"> </span><span class="n">jets_sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Int_t</span><span class="p">(</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="n">Jets_SubjetsCounts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">jets_sub</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="n">Int_t</span><span class="w"> </span><span class="n">jets_sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Int_t</span><span class="p">(</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="n">Jets_SubjetsCounts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">jets_sub</span><span class="w"> </span><span class="p">);</span>
 
-<span class="w">      </span><span class="k">for</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">jets_sub</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="p">){</span><span class="w"></span>
-<span class="w">        </span><span class="n">Jets_subjet_Pt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">Jets_subjet_Eta</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">Jets_subjet_Phi</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">Jets_subjet_E</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Gaus</span><span class="p">(</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
-<span class="w">      </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="k">for</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">jets_sub</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="p">){</span>
+<span class="w">        </span><span class="n">Jets_subjet_Pt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">Jets_subjet_Eta</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">Jets_subjet_Phi</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Rndm</span><span class="p">()</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">Jets_subjet_E</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="w"> </span><span class="n">gRandom</span><span class="o">-&gt;</span><span class="n">Gaus</span><span class="p">(</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Fill</span><span class="p">();</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Fill</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Write</span><span class="p">();</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="n">ttree</span><span class="o">-&gt;</span><span class="n">Write</span><span class="p">();</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>In the file, we generated <code class="docutils literal notranslate"><span class="pre">{njet}</span></code> jets and each jet has <code class="docutils literal notranslate"><span class="pre">{jets_sub}</span></code> subjets. So the structure looks like this:</p>
@@ -762,7 +518,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>We have <code class="docutils literal notranslate"><span class="pre">n</span></code> jets here and each jet has <code class="docutils literal notranslate"><span class="pre">m</span></code> subjets. <code class="docutils literal notranslate"><span class="pre">m</span></code> does not need to be the same for all the jets, that’s where the name <code class="docutils literal notranslate"><span class="pre">jagged</span></code> comes. <code class="docutils literal notranslate"><span class="pre">jet.pt</span></code> returns array with <code class="docutils literal notranslate"><span class="pre">n</span></code> numbers (<code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">...</span> <span class="pre">n-1]</span></code>), while <code class="docutils literal notranslate"><span class="pre">jet.subjets.pt</span></code> returns <code class="docutils literal notranslate"><span class="pre">n</span></code> arrays (<code class="docutils literal notranslate"><span class="pre">[[m0],</span> <span class="pre">[m1],</span> <span class="pre">...</span> <span class="pre">[m]]</span></code>).</p>
 <p>Note that when we create the TBranches, we can define it to store vector of vectors <code class="docutils literal notranslate"><span class="pre">vector&lt;</span> <span class="pre">vector&lt;double&gt;</span> <span class="pre">&gt;</span></code>, this is intuitively the same structure as we shown above. However, Coffea doesn’t recognize this structure. If you have this type of branch in the root file, you will need to make modifications to the generation codes.</p>
-<p>We can store the jets as a flat vector (length <code class="docutils literal notranslate"><span class="pre">n</span></code>) and use another flat vector to store all the subjets (length <code class="docutils literal notranslate"><span class="pre">N</span></code>). Since one jet at least has one subjet, <code class="docutils literal notranslate"><span class="pre">N&gt;=n</span></code> should be fulfilled. Additionally we need another Branch <code class="docutils literal notranslate"><span class="pre">Jet_SubjetsCounts</span></code> (with length <code class="docutils literal notranslate"><span class="pre">n</span></code>) to tell us how many subjets that each jet contains.</p>
+<p>We can store the jets as a flat vector (length <code class="docutils literal notranslate"><span class="pre">n</span></code>) and use another flat vector to store all the subjets (length <code class="docutils literal notranslate"><span class="pre">N</span></code>). Since one jet at least has one subjet, <code class="docutils literal notranslate"><span class="pre">N&gt;=n</span></code> should be fulfilled. Additionally, we need another Branch <code class="docutils literal notranslate"><span class="pre">Jet_SubjetsCounts</span></code> (with length <code class="docutils literal notranslate"><span class="pre">n</span></code>) to tell us how many subjets that each jet contains.</p>
 <p>So if we have the following vectors:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Jets_energy = [10, 10.1, 10.2];
 Jet_SubjetsCounts = [1, 3, 2];
@@ -770,7 +526,7 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
 </pre></div>
 </div>
 <p>It means we have 3 jets, the mapping is: <code class="docutils literal notranslate"><span class="pre">Jet:</span> <span class="pre">[10,</span> <span class="pre">10.1,</span> <span class="pre">10.2]</span>&#160; <span class="pre">-&gt;</span> <span class="pre">Subjets:</span> <span class="pre">[</span> <span class="pre">{10},</span> <span class="pre">{1.1,</span> <span class="pre">5,</span> <span class="pre">4},</span> <span class="pre">{5.1,</span> <span class="pre">5.1}]</span></code></p>
-<p>So how to implement this structure in coffea? It is actually very easy because we only need to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">nest_jagged_forms</span></code> and follow the rules of this predefined fuction:</p>
+<p>So how to implement this structure in coffea? It is actually very easy because we only need to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">nest_jagged_forms</span></code> and follow the rules of this predefined function:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -785,7 +541,7 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mass</span><span class="o">+</span><span class="mi">1</span>
 
 <span class="k">class</span> <span class="nc">DummySchema</span><span class="p">(</span><span class="n">BaseSchema</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mixins</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;Electron&#39;</span><span class="p">:</span> <span class="s2">&quot;DummyBehavior&quot;</span><span class="p">,</span>
@@ -827,9 +583,13 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
 </pre></div>
 </div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">`nest_jagged_forms</span></code> &lt;<a class="reference external" href="https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62">https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62</a>&gt;`__ is defined as follows. The first input parameter is the parent array, the second parameter is the child array. Then the third one is the counts array. The final one is the new name for the child array.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">nest_jagged_forms</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">counts_name</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Place child listarray inside parent listarray as a double-jagged array&quot;&quot;&quot;</span>
+<!-- #region --><p>i <code class="docutils literal notranslate"><span class="pre">`nest_jagged_forms</span></code> &lt;<a class="reference external" href="https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62">https://github.com/yihui-lai/coffea/blob/351cc727845ab83a8e31a193dc06e534bedb97fe/coffea/nanoevents/schemas/base.py#L62</a>&gt;`__ is defined as follows. The first input parameter is the parent array, the second parameter is the child array. Then the third one is the counts array. The final one is the new name for the child array.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">nest_jagged_forms</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">counts_name</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Place child listarray inside parent listarray as a double-jagged array&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ListOffsetArray&quot;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span>
     <span class="k">if</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;RecordArray&quot;</span><span class="p">:</span>
@@ -841,6 +601,7 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
     <span class="n">inner</span> <span class="o">=</span> <span class="n">listarray_form</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="n">offsets</span><span class="p">)</span>
     <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">][</span><span class="s2">&quot;contents&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">inner</span>
 </pre></div>
+</div>
 </div>
 <p>We can try this DummySchema now:</p>
 <div class="nbinput docutils container">
@@ -871,18 +632,10 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
 </div>
 </section>
 <section id="Inherit-from-NanoEvents">
-<h2>Inherit from NanoEvents<a class="headerlink" href="#Inherit-from-NanoEvents" title="Permalink to this headline">¶</a></h2>
+<h2>Inherit from NanoEvents<a class="headerlink" href="#Inherit-from-NanoEvents" title="Link to this heading">¶</a></h2>
 <p>So far we showed how to create customer collections and behaviors. Actually, if you don’t want to write a new schema, you can name the TBranch with the same naming convention as NanoAOD and use the <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>. Then it will be recognized automatically.</p>
 <p>Looking at the content of <a class="reference external" href="https://cms-nanoaod-integration.web.cern.ch/integration/master-cmsswmaster/mc102X_doc.html">NanoAOD file</a>, you will need to follow the same naming if you want to use <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code>.</p>
 <p>By doing so, you can also make use of the <code class="docutils literal notranslate"><span class="pre">behaviors</span></code> in <code class="docutils literal notranslate"><span class="pre">NanoAODSchema</span></code> automatically, which is very convenient.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
 </section>
 </section>
 
@@ -923,7 +676,7 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -931,8 +684,8 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -954,8 +707,8 @@ Jets_subjet_energy = [10, 1.1, 5, 4, 5.1, 5.1];
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, UMDCMS.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    &#169; Copyright 2021, UMDCMS.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>
